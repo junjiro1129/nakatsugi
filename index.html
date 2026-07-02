@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ナカツギ｜見積から入金まで、ひとつで。</title>
+<meta name="description" content="個人事業主・フリーランスのための見積・請求・決済。相手に住所を出さずに請求でき、役務が終わるまで代金はナカツギが間でお預かりします。">
+<style>
+  :root{
+    --ink:#16263F;          /* 紺 */
+    --ink-soft:#3A4A63;
+    --muted:#5C6675;
+    --green:#137A57;         /* 緑（フェア・完了） */
+    --green-deep:#0C5A40;
+    --paper:#F4F3ED;         /* 和紙のような温かい地 */
+    --surface:#FFFFFF;
+    --line:rgba(22,38,63,.12);
+    --line-soft:rgba(22,38,63,.07);
+    --radius:14px;
+    --maxw:1080px;
+    --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+    --mono:"SFMono-Regular",Menlo,Consolas,"Courier New",monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);
+    line-height:1.8;-webkit-font-smoothing:antialiased;font-size:16px}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .eyebrow{font-size:13px;letter-spacing:.14em;color:var(--green-deep);font-weight:600;
+    text-transform:none;margin:0 0 18px}
+  h2.title{font-size:clamp(24px,3.4vw,33px);line-height:1.4;font-weight:700;letter-spacing:.01em;margin:0 0 14px}
+  .lead{color:var(--muted);font-size:16px;max-width:42em;margin:0}
+  :focus-visible{outline:2.5px solid var(--green);outline-offset:3px;border-radius:4px}
+
+  /* nav */
+  .nav{position:sticky;top:0;z-index:50;background:rgba(244,243,237,.86);
+    backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line-soft)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px;letter-spacing:.02em}
+  .brand svg{display:block}
+  .nav-links{display:flex;align-items:center;gap:30px}
+  .nav-links a{font-size:14.5px;color:var(--ink-soft);font-weight:500}
+  .nav-links a:hover{color:var(--ink)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    font-family:var(--sans);font-size:15px;font-weight:600;cursor:pointer;border:none;
+    padding:12px 22px;border-radius:999px;transition:transform .15s ease,background .15s ease,box-shadow .15s ease}
+  .btn-primary{background:var(--ink);color:#fff}
+  .btn-primary:hover{background:#0E1B30;transform:translateY(-1px)}
+  .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--ink);transform:translateY(-1px)}
+  .nav .btn{padding:9px 20px}
+  .menu-btn{display:none;background:none;border:none;cursor:pointer;padding:6px}
+  .menu-btn span{display:block;width:24px;height:2px;background:var(--ink);margin:5px 0;transition:.25s}
+
+  /* hero */
+  .hero{padding:72px 0 36px}
+  .hero h1{font-size:clamp(34px,6vw,60px);line-height:1.22;font-weight:700;letter-spacing:.005em;
+    margin:0 0 22px}
+  .hero h1 .accent{color:var(--green-deep)}
+  .hero .lead{font-size:clamp(16px,1.7vw,18.5px);max-width:34em}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin:32px 0 10px}
+  .note{font-size:13px;color:var(--muted);margin:16px 0 0}
+
+  /* signature: relay band */
+  .relay{margin:54px 0 6px;background:var(--surface);border:1px solid var(--line);
+    border-radius:20px;padding:30px 26px;box-shadow:0 1px 0 rgba(22,38,63,.03)}
+  .relay-row{display:flex;align-items:stretch;gap:14px}
+  .party{flex:1;min-width:0;background:var(--paper);border:1px solid var(--line-soft);
+    border-radius:var(--radius);padding:18px 16px;text-align:center}
+  .party .who{font-weight:700;font-size:16px}
+  .party .what{font-size:12.5px;color:var(--muted);margin-top:4px}
+  .hub{flex:1.25;background:var(--ink);color:#fff;border-radius:var(--radius);
+    padding:18px 16px;text-align:center;position:relative}
+  .hub .who{font-weight:700;font-size:16px;letter-spacing:.02em}
+  .hub .what{font-size:12.5px;color:#BFC9DA;margin-top:4px}
+  .hub .pin{display:inline-block;font-size:11px;font-weight:600;color:var(--ink);
+    background:#fff;border-radius:999px;padding:2px 10px;margin-top:10px}
+  .conn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    color:var(--green-deep);min-width:62px}
+  .conn .lab{font-size:11px;font-weight:600;white-space:nowrap}
+  .conn svg{color:var(--green)}
+  .relay-back{display:flex;align-items:center;justify-content:center;gap:8px;
+    margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);
+    font-size:12.5px;color:var(--green-deep);font-weight:600}
+
+  /* generic section */
+  .sec{padding:74px 0}
+  .sec-paper{background:var(--paper)}
+  .sec-white{background:var(--surface);border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
+  .sec-ink{background:var(--ink);color:#fff}
+  .sec-ink .title,.sec-ink .eyebrow{color:#fff}
+  .sec-ink .eyebrow{color:#8FE0C4}
+  .sec-ink .lead{color:#C3CCDA}
+  .sec-head{margin-bottom:42px}
+
+  /* pain cards */
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 24px}
+  .sec-white .card{background:var(--paper)}
+  .card h3{font-size:17px;font-weight:700;margin:0 0 8px;line-height:1.5}
+  .card p{margin:0;color:var(--muted);font-size:14.5px}
+  .card .ic{width:34px;height:34px;color:var(--green-deep);margin-bottom:14px}
+
+  /* steps */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;counter-reset:s}
+  .step{position:relative;padding:22px 20px;background:var(--surface);border:1px solid var(--line);
+    border-radius:var(--radius)}
+  .step .num{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--green-deep);
+    letter-spacing:.05em}
+  .step h3{font-size:16.5px;font-weight:700;margin:10px 0 7px}
+  .step p{margin:0;color:var(--muted);font-size:14px}
+
+  /* features */
+  .feat{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .feat .f{padding:4px}
+  .feat .fic{width:40px;height:40px;color:var(--green);margin-bottom:14px}
+  .feat h3{font-size:18px;font-weight:700;margin:0 0 9px}
+  .feat p{margin:0;color:#C3CCDA;font-size:14.5px}
+  .feat .sub{display:block;color:#9BB0C9;font-size:12.5px;margin-top:8px}
+
+  /* pricing */
+  .price-row{display:flex;gap:34px;align-items:center;flex-wrap:wrap;
+    background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:38px 34px}
+  .price-big{font-size:clamp(40px,6vw,62px);font-weight:700;line-height:1;letter-spacing:-.01em}
+  .price-big .pct{color:var(--green-deep)}
+  .price-big .of{font-size:18px;color:var(--muted);font-weight:600;margin-left:6px}
+  .price-meta{flex:1;min-width:240px}
+  .price-meta strong{font-size:18px;display:block;margin-bottom:6px}
+  .price-meta p{margin:0;color:var(--muted);font-size:14.5px}
+
+  /* trust */
+  .trust{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .trust .t{background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--radius);
+    padding:22px 20px}
+  .trust .t h3{font-size:15.5px;margin:0 0 6px;font-weight:700}
+  .trust .t p{margin:0;color:var(--muted);font-size:14px}
+
+  /* faq */
+  .faq details{border-bottom:1px solid var(--line);padding:6px 0}
+  .faq summary{cursor:pointer;list-style:none;padding:18px 40px 18px 4px;font-weight:600;
+    font-size:16.5px;position:relative}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"+";position:absolute;right:8px;top:15px;font-size:24px;
+    color:var(--green-deep);font-weight:400;transition:transform .2s}
+  .faq details[open] summary::after{transform:rotate(45deg)}
+  .faq .ans{padding:0 4px 20px;color:var(--muted);font-size:15px;max-width:50em}
+
+  /* contact */
+  .contact-card{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:20px;
+    padding:34px;max-width:560px;margin:0 auto}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:14px;font-weight:600;margin-bottom:7px}
+  .field input,.field textarea,.field select{width:100%;font-family:var(--sans);font-size:15.5px;
+    padding:13px 15px;border:1.5px solid var(--line);border-radius:10px;background:var(--paper);
+    color:var(--ink)}
+  .field select{appearance:none;-webkit-appearance:none;padding-right:38px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%2316263F' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 15px center}
+  .field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--green)}
+  .contact-card .btn-primary{width:100%}
+  .form-note{font-size:12.5px;color:var(--muted);margin:12px 0 0;text-align:center}
+  .done-card{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:20px;
+    padding:42px 34px;max-width:560px;margin:0 auto;text-align:center}
+  .done-card h3{font-size:21px;font-weight:700;margin:14px 0 8px}
+  .done-card p{margin:0;color:var(--muted);font-size:14.5px}
+
+  /* footer */
+  .foot{background:var(--paper);border-top:1px solid var(--line);padding:46px 0 40px;font-size:13.5px;color:var(--muted)}
+  .foot-top{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-start}
+  .foot-links{display:flex;gap:22px;flex-wrap:wrap}
+  .foot-links a:hover{color:var(--ink)}
+  .foot .op{font-weight:700;color:var(--ink);font-size:15px}
+  .foot .cp{margin-top:24px;font-size:12.5px}
+
+  .reveal{opacity:0;transform:translateY(16px)}
+  @media (prefers-reduced-motion: no-preference){
+    .reveal{transition:opacity .6s ease,transform .6s ease}
+  }
+  .reveal.in{opacity:1;transform:none}
+
+  @media(max-width:860px){
+    .nav-links{position:fixed;inset:64px 0 auto 0;flex-direction:column;gap:0;
+      background:var(--paper);border-bottom:1px solid var(--line);padding:8px 0 18px;
+      transform:translateY(-130%);transition:transform .28s ease;align-items:stretch}
+    .nav-links.open{transform:none}
+    .nav-links a{padding:13px 24px}
+    .nav-links .btn{margin:10px 24px 0}
+    .menu-btn{display:block}
+    .grid3,.steps,.feat,.trust{grid-template-columns:1fr}
+    .relay-row{flex-direction:column}
+    .conn{flex-direction:row;min-width:0;padding:2px 0}
+    .conn svg{transform:rotate(90deg)}
+    .hero{padding:48px 0 24px}
+    .sec{padding:56px 0}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top" aria-label="ナカツギ ホーム">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <circle cx="5" cy="13" r="3.4" fill="#16263F"/>
+        <circle cx="21" cy="13" r="3.4" fill="#16263F"/>
+        <path d="M5 13 Q13 1 21 13" fill="none" stroke="#137A57" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      ナカツギ
+    </a>
+    <nav class="nav-links" id="navlinks">
+      <a href="#how">仕組み</a>
+      <a href="#features">特徴</a>
+      <a href="#price">料金</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn btn-primary" href="#contact">使ってみる</a>
+    </nav>
+    <button class="menu-btn" id="menubtn" aria-label="メニュー" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow">個人事業主・フリーランスのための、見積・請求・決済</p>
+      <h1>見積から入金まで、<br><span class="accent">ひとつで。</span></h1>
+      <p class="lead">相手に住所を出さずに、請求もカード決済も。役務が終わるまで、代金はナカツギが間でお預かりします。</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#contact">使ってみる</a>
+        <a class="btn btn-ghost" href="#how">仕組みを見る</a>
+      </div>
+      <p class="note">日本国内の事業者どうしのお取引が対象です。</p>
+
+      <div class="relay reveal" aria-label="ナカツギの受け渡しの流れ">
+        <div class="relay-row">
+          <div class="party">
+            <div class="who">あなた</div>
+            <div class="what">見積を出す</div>
+          </div>
+          <div class="conn" aria-hidden="true">
+            <span class="lab">見積</span>
+            <svg width="30" height="12" viewBox="0 0 30 12"><path d="M0 6h24m0 0l-5-5m5 5l-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="hub">
+            <div class="who">ナカツギ</div>
+            <div class="what">あいだに立つ</div>
+            <span class="pin">代金をお預かり</span>
+          </div>
+          <div class="conn" aria-hidden="true">
+            <span class="lab">支払い</span>
+            <svg width="30" height="12" viewBox="0 0 30 12"><path d="M30 6H6m0 0l5-5M6 6l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="party">
+            <div class="who">取引相手</div>
+            <div class="what">支払う</div>
+          </div>
+        </div>
+        <div class="relay-back">
+          <svg width="18" height="12" viewBox="0 0 30 12" style="color:var(--green)"><path d="M30 6H6m0 0l5-5M6 6l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          役務の完了が確認されたら、利用料を引いてあなたに入金します
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-white" id="pain">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">こんな場面、ありませんか</p>
+        <h2 class="title">請求と代金回収の、3つの不安。</h2>
+      </div>
+      <div class="grid3">
+        <div class="card reveal">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 11l9-8 9 8M5 10v10h14V10" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="15" r="2"/></svg>
+          <h3>自宅の住所を知られたくない</h3>
+          <p>特定商取引法の表記で、自宅の住所や氏名を取引相手に出すのが不安。</p>
+        </div>
+        <div class="card reveal">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3>「先に払って」と言いづらい</h3>
+          <p>未入金やドタキャンが怖い。かといって前払いをお願いするのも気が引ける。</p>
+        </div>
+        <div class="card reveal">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18" stroke-linecap="round"/></svg>
+          <h3>決済の導入が面倒、手数料も高い</h3>
+          <p>カード決済を一から用意するのは手間。マーケットの手数料も重い。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="how">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">ナカツギの仕組み</p>
+        <h2 class="title">受けて、預かって、渡す。</h2>
+        <p class="lead">あなたと相手のあいだにナカツギが立ち、役務が終わるまで代金を預かります。</p>
+      </div>
+      <div class="steps">
+        <div class="step reveal"><div class="num">01</div><h3>見積を送る</h3><p>あなたが見積をつくって相手に送ります。</p></div>
+        <div class="step reveal"><div class="num">02</div><h3>承認で取引成立</h3><p>相手が承認すると、ナカツギ上で取引が成立します。</p></div>
+        <div class="step reveal"><div class="num">03</div><h3>支払いを預かる</h3><p>相手の支払いを、役務が終わるまでナカツギが預かります。</p></div>
+        <div class="step reveal"><div class="num">04</div><h3>完了で入金</h3><p>完了が確認されたら、利用料を引いてあなたに入金します。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-ink" id="features">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">ナカツギが間でできること</p>
+        <h2 class="title">身元を出さず、安心して取引できる仕組み。</h2>
+      </div>
+      <div class="feat">
+        <div class="f reveal">
+          <svg class="fic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3>身元を相手に出さない</h3>
+          <p>取引相手には、あなたのお名前や住所を表示しません。請求も決済も、ナカツギの名義で行います。</p>
+          <span class="sub">※完全な匿名ではなく、ご本人を確認したうえでの非開示です。</span>
+        </div>
+        <div class="f reveal">
+          <svg class="fic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="9" width="16" height="11" rx="2"/><path d="M8 9V7a4 4 0 018 0v2" stroke-linecap="round"/></svg>
+          <h3>終わるまでお預かり</h3>
+          <p>代金は役務の完了までナカツギが預かります。だから未入金もドタキャンも起きにくい。</p>
+          <span class="sub">※完了後に、利用料を引いてあなたへ入金します。</span>
+        </div>
+        <div class="f reveal">
+          <svg class="fic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h4" stroke-linecap="round"/></svg>
+          <h3>決済はStripe</h3>
+          <p>決済と資金の管理は、決済事業者のStripeが行います。ナカツギが代金を自社で保有することはありません。</p>
+          <span class="sub">※カード情報はナカツギには保存されません。</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-white" id="price">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">料金</p>
+        <h2 class="title">売り手も買い手も、フェアに。</h2>
+        <p class="lead">取引が成立したときだけ、利用料をいただきます。登録も月額も0円。</p>
+      </div>
+      <div class="price-row reveal">
+        <div class="price-big">取引額の<span class="pct">8.6%</span><span class="of">のみ</span></div>
+        <div class="price-meta">
+          <strong>登録・月額 0円／成果報酬</strong>
+          <p>取引が成立して完了したときだけ、預かった代金から利用料を差し引きます。使わない月の費用はかかりません。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="trust">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">安心して使えるように</p>
+        <h2 class="title">誰が運営しているか、はっきりさせています。</h2>
+      </div>
+      <div class="trust">
+        <div class="t reveal"><h3>実在する事業者が運営</h3><p>運営は、宅地建物取引業者として実在する株式会社ナカホームズです。</p></div>
+        <div class="t reveal"><h3>本人確認を行います</h3><p>ご利用者の本人確認を行います。相手に出さないだけで、匿名ではありません。</p></div>
+        <div class="t reveal"><h3>国内の取引が対象</h3><p>当面は、日本国内の事業者どうしのお取引を対象としています。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-white" id="faq">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">よくある質問</p>
+        <h2 class="title">FAQ</h2>
+      </div>
+      <div class="faq">
+        <details class="reveal"><summary>匿名で使えますか？</summary><div class="ans">完全な匿名ではありません。ご本人を確認したうえで、取引相手にはお名前・住所などを表示しない仕組みです。</div></details>
+        <details class="reveal"><summary>お金は誰が持つのですか？</summary><div class="ans">決済と資金の保有・移動は、決済事業者のStripeが行います。ナカツギが代金を自社で保有することはありません。</div></details>
+        <details class="reveal"><summary>手数料はいくらですか？</summary><div class="ans">取引が成立して完了したときだけ、取引額の8.6％をいただきます。登録・月額は無料です。</div></details>
+        <details class="reveal"><summary>海外との取引にも使えますか？</summary><div class="ans">当面は、日本国内の事業者どうしのお取引が対象です。国境を跨ぐ取引には対応していません。</div></details>
+        <details class="reveal"><summary>支払いはどうやって預かるのですか？</summary><div class="ans">相手が支払った代金は、役務の完了が確認されるまで預かられます。完了後に、利用料を引いてあなたへ入金します。</div></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-ink" id="contact">
+    <div class="wrap">
+      <div class="sec-head" style="text-align:center">
+        <p class="eyebrow">お申し込み・お問い合わせ</p>
+        <h2 class="title">ナカツギを使ってみる。</h2>
+        <p class="lead" style="margin:0 auto">ご利用のお申し込み・ご質問はこちらから。担当より折り返しご連絡し、ご利用開始のご案内をします。</p>
+      </div>
+      <form class="contact-card" id="contactForm" action="https://formspree.io/f/xlgypvqa" method="POST">
+        <div class="field">
+          <label for="name">お名前 / 屋号</label>
+          <input id="name" name="name" type="text" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="email">メールアドレス</label>
+          <input id="email" name="email" type="email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="role">ご利用の立場（任意）</label>
+          <select id="role" name="role">
+            <option value="">選択してください</option>
+            <option value="出品者として使いたい">出品者として使いたい（請求・代金回収をしたい）</option>
+            <option value="利用者として支払う側">利用者として（支払う側）</option>
+            <option value="その他・未定">その他・未定</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="biz">事業内容・ご職業（任意）</label>
+          <input id="biz" name="business" type="text" placeholder="例：フリーランスのデザイナー">
+        </div>
+        <div class="field">
+          <label for="msg">お問い合わせ・ご相談内容（任意）</label>
+          <textarea id="msg" name="message" rows="4"></textarea>
+        </div>
+        <input type="hidden" name="_subject" value="ナカツギ お申し込み・お問い合わせ">
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+        <button class="btn btn-primary" type="submit" id="submitBtn">送信する</button>
+        <p class="form-note">送信いただいた内容は、お申し込み・お問い合わせへの対応のために使用します。詳しくは<a href="privacy.html" style="color:#8FE0C4;text-decoration:underline">プライバシーポリシー</a>をご覧ください。</p>
+      </form>
+      <div id="contactDone" hidden>
+        <div class="done-card">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#137A57" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3>送信しました</h3>
+          <p>お申し込み・お問い合わせを受け付けました。担当より折り返しご連絡します。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <div class="op">ナカツギ</div>
+        <div style="margin-top:6px">運営：株式会社ナカホームズ</div>
+      </div>
+      <nav class="foot-links" aria-label="フッター">
+        <a href="tokushoho.html">特定商取引法に基づく表記</a>
+        <a href="kiyaku.html">利用規約</a>
+        <a href="privacy.html">プライバシーポリシー</a>
+        <a href="#contact">お問い合わせ</a>
+      </nav>
+    </div>
+    <div class="cp">© 2026 株式会社ナカホームズ</div>
+  </div>
+</footer>
+
+<script>
+  var mb=document.getElementById('menubtn'),nl=document.getElementById('navlinks');
+  mb.addEventListener('click',function(){
+    var open=nl.classList.toggle('open');
+    mb.setAttribute('aria-expanded',open);
+  });
+  nl.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){nl.classList.remove('open');mb.setAttribute('aria-expanded',false);});});
+
+  var els=document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+    },{threshold:.12});
+    els.forEach(function(el){io.observe(el);});
+  }else{els.forEach(function(el){el.classList.add('in');});}
+
+  var cf=document.getElementById('contactForm');
+  if(cf){
+    cf.addEventListener('submit',function(e){
+      e.preventDefault();
+      var btn=document.getElementById('submitBtn');
+      btn.disabled=true;btn.textContent='送信中…';
+      fetch(cf.action,{method:'POST',body:new FormData(cf),headers:{'Accept':'application/json'}})
+        .then(function(r){
+          if(r.ok){
+            cf.hidden=true;
+            var done=document.getElementById('contactDone');
+            done.hidden=false;
+            done.scrollIntoView({behavior:'smooth',block:'center'});
+          }else{throw new Error('failed');}
+        })
+        .catch(function(){
+          btn.disabled=false;btn.textContent='送信する';
+          alert('送信に失敗しました。お手数ですが、時間をおいて再度お試しください。');
+        });
+    });
+  }
+</script>
+</body>
+</html>
