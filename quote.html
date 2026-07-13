@@ -50,7 +50,7 @@
 
 <script>
   /* ▼ ここにデプロイした Worker の URL を入れてください（末尾スラッシュなし） */
-  var WORKER_URL = "https://nakatsugi-stripe.junjiro1129.workers.dev";
+  var WORKER_URL = "https://nakatsugi-stripe.xxxx.workers.dev";
 
   var params = new URLSearchParams(location.search);
   var id = params.get("id");
@@ -67,12 +67,35 @@
     return data;
   }
 
-  function showPaid(){
+  function checkMark(){ return '<div class="check"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0C5A40" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'; }
+
+  // 支払い済み・受け取り確認待ち → 完了確認ボタン（＝送金トリガー）
+  function showAwaiting(q){
+    content.innerHTML =
+      '<div class="eyebrow">お取引の状況</div>'+
+      '<h1 class="title">'+escapeHtml(q.title)+'</h1>'+
+      '<div class="amount"><div class="l">お預かり中の代金</div><div class="v">'+yen(q.amount)+'</div></div>'+
+      '<p class="note">お支払いは完了し、代金はナカツギがお預かりしています。役務を受け取り、内容にご納得いただけたら、下のボタンで完了を確定してください。確定すると、代金が提供者へお渡しされます。</p>'+
+      '<button id="done">役務を受け取りました（提供者へお支払い）</button>'+
+      '<p class="msg">まだ受け取っていない・内容に問題がある場合は、確定せずに提供者または運営へご連絡ください。</p>';
+    document.getElementById("done").addEventListener("click", completeQuote);
+  }
+
+  // 完了済み
+  function showDone(){
+    content.innerHTML =
+      '<div class="state ok">'+checkMark()+
+      '<div class="big">お取引が完了しました</div>'+
+      '<div class="msg">ありがとうございました。代金は提供者へお渡しされました。</div>'+
+      '</div>';
+  }
+
+  // 返金済み
+  function showRefunded(){
     content.innerHTML =
       '<div class="state ok">'+
-      '<div class="check"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0C5A40" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'+
-      '<div class="big">お支払いが完了しました</div>'+
-      '<div class="msg">ありがとうございます。役務の完了後、代金が提供者へお渡しされます。<br>それまでナカツギが代金をお預かりします。</div>'+
+      '<div class="big">返金されました</div>'+
+      '<div class="msg">お預かりしていた代金は、お客様へ返金されました。</div>'+
       '</div>';
   }
   function showError(m){
@@ -82,7 +105,9 @@
   async function renderQuote(){
     try{
       var q = await api("/quotes/get?id="+encodeURIComponent(id), null, "GET");
-      if(q.status === "paid" || q.status === "released"){ showPaid(); return; }
+      if(q.status === "paid"){ showAwaiting(q); return; }
+      if(q.status === "released"){ showDone(); return; }
+      if(q.status === "refunded"){ showRefunded(); return; }
       content.innerHTML =
         '<div class="eyebrow">お見積内容</div>'+
         '<h1 class="title">'+escapeHtml(q.title)+'</h1>'+
@@ -107,12 +132,25 @@
     }
   }
 
+  async function completeQuote(){
+    if(!confirm("役務を受け取ったことを確認し、提供者へお支払いを実行します。\nこの操作は取り消せません。よろしいですか？")) return;
+    var btn = document.getElementById("done");
+    if(btn){ btn.disabled = true; btn.textContent = "処理中…"; }
+    try{
+      var d = await api("/quotes/complete", { id: id });
+      if(d.status === "released") showDone();
+      else renderQuote();
+    }catch(e){
+      if(btn){ btn.disabled = false; btn.textContent = "役務を受け取りました（提供者へお支払い）"; }
+      content.insertAdjacentHTML("beforeend", '<div class="msg" style="color:#A3352B">'+e.message+'</div>');
+    }
+  }
+
   async function confirmPaid(){
     content.innerHTML = '<div class="msg">お支払いを確認しています…</div>';
     try{
-      var d = await api("/quotes/confirm", { id: id, session_id: params.get("session_id") });
-      if(d.status === "paid" || d.status === "released") showPaid();
-      else renderQuote();
+      await api("/quotes/confirm", { id: id, session_id: params.get("session_id") });
+      renderQuote();   // paid になれば「完了待ち」画面が出る
     }catch(e){ showError(e.message); }
   }
 
