@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お見積 ｜ ナカツギ</title>
+<style>
+  :root{
+    --ink:#16263F;--muted:#5C6675;--green:#137A57;--green-deep:#0C5A40;--green-soft:#E4F0EA;
+    --paper:#F4F3ED;--surface:#FFFFFF;--line:rgba(22,38,63,.12);
+    --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.65;
+    display:flex;min-height:100vh;align-items:flex-start;justify-content:center;padding:36px 18px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:20px;max-width:480px;width:100%;
+    padding:30px;box-shadow:0 12px 40px rgba(22,38,63,.07)}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:16px;margin-bottom:22px}
+  .eyebrow{font-size:12px;color:var(--muted);letter-spacing:.04em;margin-bottom:4px}
+  .title{font-size:20px;font-weight:700;margin:0 0 14px}
+  .desc{font-size:14px;color:var(--ink);white-space:pre-wrap;margin:0 0 22px}
+  .amount{background:var(--green-soft);border-radius:14px;padding:18px 20px;text-align:center;margin-bottom:8px}
+  .amount .l{font-size:12px;color:var(--green-deep);font-weight:600}
+  .amount .v{font-size:32px;font-weight:700;color:var(--green-deep);line-height:1.2}
+  .note{font-size:12px;color:var(--muted);margin:14px 0 22px;line-height:1.6}
+  button{width:100%;font-family:var(--sans);font-size:15px;font-weight:700;cursor:pointer;
+    background:var(--ink);color:#fff;border:none;padding:15px;border-radius:12px}
+  button:hover{background:#0E1B30}
+  button:disabled{opacity:.55;cursor:default}
+  .state{text-align:center;padding:14px 0}
+  .state .big{font-size:19px;font-weight:700;margin:10px 0 6px}
+  .state.ok .big{color:var(--green-deep)}
+  .state.err .big{color:#A3352B}
+  .msg{font-size:13px;color:var(--muted);text-align:center;margin-top:14px}
+  .check{width:52px;height:52px;border-radius:50%;background:var(--green-soft);display:inline-flex;
+    align-items:center;justify-content:center;margin-bottom:4px}
+</style>
+</head>
+<body>
+  <div class="card" id="card">
+    <div class="brand">
+      <svg width="20" height="20" viewBox="0 0 26 26" aria-hidden="true">
+        <circle cx="5" cy="13" r="3.4" fill="#16263F"/><circle cx="21" cy="13" r="3.4" fill="#16263F"/>
+        <path d="M5 13 Q13 1 21 13" fill="none" stroke="#137A57" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      ナカツギ
+    </div>
+    <div id="content"><div class="msg">読み込み中…</div></div>
+  </div>
+
+<script>
+  /* ▼ ここにデプロイした Worker の URL を入れてください（末尾スラッシュなし） */
+  var WORKER_URL = "https://nakatsugi-stripe.xxxx.workers.dev";
+
+  var params = new URLSearchParams(location.search);
+  var id = params.get("id");
+  var content = document.getElementById("content");
+
+  function yen(n){ return "¥" + Number(n).toLocaleString("ja-JP"); }
+
+  async function api(path, payload, method){
+    var opts = { method: method || "POST", headers: {} };
+    if(payload){ opts.headers["Content-Type"]="application/json"; opts.body=JSON.stringify(payload); }
+    var res = await fetch(WORKER_URL.replace(/\/+$/,"") + path, opts);
+    var data = await res.json();
+    if(!res.ok) throw new Error(data.error || "エラー");
+    return data;
+  }
+
+  function showPaid(){
+    content.innerHTML =
+      '<div class="state ok">'+
+      '<div class="check"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0C5A40" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'+
+      '<div class="big">お支払いが完了しました</div>'+
+      '<div class="msg">ありがとうございます。役務の完了後、代金が提供者へお渡しされます。<br>それまでナカツギが代金をお預かりします。</div>'+
+      '</div>';
+  }
+  function showError(m){
+    content.innerHTML = '<div class="state err"><div class="big">表示できません</div><div class="msg">'+m+'</div></div>';
+  }
+
+  async function renderQuote(){
+    try{
+      var q = await api("/quotes/get?id="+encodeURIComponent(id), null, "GET");
+      if(q.status === "paid" || q.status === "released"){ showPaid(); return; }
+      content.innerHTML =
+        '<div class="eyebrow">お見積内容</div>'+
+        '<h1 class="title">'+escapeHtml(q.title)+'</h1>'+
+        (q.description ? '<p class="desc">'+escapeHtml(q.description)+'</p>' : '')+
+        '<div class="amount"><div class="l">お支払い金額（税込）</div><div class="v">'+yen(q.amount)+'</div></div>'+
+        '<p class="note">お支払いいただいた代金は、役務の提供が完了するまでナカツギがお預かりします。完了の確認後に提供者へお渡しするため、前払いのご不安なくお取引いただけます。</p>'+
+        '<button id="pay">承認して支払う</button>';
+      document.getElementById("pay").addEventListener("click", pay);
+    }catch(e){ showError(e.message); }
+  }
+
+  async function pay(){
+    var btn = document.getElementById("pay");
+    btn.disabled = true; btn.textContent = "決済ページへ移動中…";
+    try{
+      var origin = location.origin + location.pathname;
+      var d = await api("/quotes/checkout", { id: id, origin: origin });
+      location.href = d.url;      // Stripe Checkout へ
+    }catch(e){
+      btn.disabled = false; btn.textContent = "承認して支払う";
+      content.insertAdjacentHTML("beforeend", '<div class="msg" style="color:#A3352B">'+e.message+'</div>');
+    }
+  }
+
+  async function confirmPaid(){
+    content.innerHTML = '<div class="msg">お支払いを確認しています…</div>';
+    try{
+      var d = await api("/quotes/confirm", { id: id, session_id: params.get("session_id") });
+      if(d.status === "paid" || d.status === "released") showPaid();
+      else renderQuote();
+    }catch(e){ showError(e.message); }
+  }
+
+  function escapeHtml(s){ return String(s||"").replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+
+  if(!id){ showError("見積IDが指定されていません。"); }
+  else if(params.get("paid")==="1" && params.get("session_id")){ confirmPaid(); }
+  else if(params.get("canceled")==="1"){ renderQuote(); }
+  else { renderQuote(); }
+</script>
+</body>
+</html>
