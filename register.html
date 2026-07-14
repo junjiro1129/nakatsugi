@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>出品者登録｜ナカツギ</title>
+<style>
+  :root{
+    --ink:#16263F;--ink-soft:#3A4A63;--muted:#5C6675;
+    --green:#137A57;--green-deep:#0C5A40;--green-soft:#E4F0EA;
+    --amber:#9A6B12;--amber-soft:#F7EDD6;--amber-bd:#E4C879;
+    --red:#A3352B;
+    --paper:#F4F3ED;--surface:#FFFFFF;--line:rgba(22,38,63,.14);--line-soft:rgba(22,38,63,.07);
+    --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.8;font-size:15px}
+  .wrap{max-width:680px;margin:0 auto;padding:0 22px 80px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:18px;padding:28px 0 4px}
+  .head{padding:8px 0 22px}
+  .eyebrow{font-size:12.5px;letter-spacing:.12em;color:var(--green-deep);font-weight:600;margin:0 0 8px}
+  h1{font-size:24px;margin:0 0 8px}
+  .lead{color:var(--muted);font-size:14px;margin:0}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;margin-top:16px}
+  .note{background:var(--green-soft);border:1px solid rgba(19,122,87,.22);border-radius:12px;padding:13px 15px;font-size:13px;color:var(--green-deep);margin:0 0 20px}
+
+  .fld{margin-bottom:18px}
+  .fld > label{display:block;font-size:13.5px;font-weight:700;margin-bottom:5px}
+  .req{color:var(--red);font-size:12px;margin-left:5px}
+  .hint{font-size:12px;color:var(--muted);margin:3px 0 7px;font-weight:400;line-height:1.6}
+  input[type=text],input[type=email],input[type=tel],textarea,select{
+    width:100%;font-family:var(--sans);font-size:15px;padding:10px 12px;
+    border:1.5px solid var(--line);border-radius:9px;background:var(--paper);color:var(--ink)}
+  textarea{min-height:70px;resize:vertical}
+  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--green)}
+  .radio{display:flex;gap:10px;flex-wrap:wrap}
+  .radio label{flex:1;min-width:120px;display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);
+    border-radius:9px;padding:10px 13px;cursor:pointer;font-size:14px;background:var(--paper)}
+  .radio label:has(input:checked){border-color:var(--green);background:var(--green-soft)}
+  .chk{display:flex;gap:10px;align-items:flex-start;margin-bottom:12px;font-size:13.5px;color:var(--ink-soft)}
+  .chk input{margin-top:4px;flex-shrink:0;width:17px;height:17px;accent-color:var(--green)}
+  .chk a{color:var(--green-deep);text-decoration:underline}
+
+  button{font-family:var(--sans);font-size:15px;font-weight:700;cursor:pointer;border:none;
+    background:var(--ink);color:#fff;padding:13px 22px;border-radius:999px;width:100%}
+  button:hover{background:#0E1B30}
+  button:disabled{opacity:.5;cursor:default}
+
+  .state{text-align:center;padding:40px 20px}
+  .state .big{font-size:19px;font-weight:700;margin-bottom:8px}
+  .state .msg{color:var(--muted);font-size:14px}
+  .check{width:52px;height:52px;border-radius:50%;background:var(--green-soft);display:flex;
+    align-items:center;justify-content:center;margin:0 auto 16px}
+  .err{color:var(--red);font-size:13px;margin-top:10px;text-align:center}
+  .warn{background:var(--amber-soft);border:1px solid var(--amber-bd);color:var(--amber);
+    border-radius:10px;padding:11px 13px;font-size:12.5px;margin-top:7px;display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <svg width="24" height="24" viewBox="0 0 26 26" aria-hidden="true">
+      <circle cx="5" cy="13" r="3.4" fill="#16263F"/><circle cx="21" cy="13" r="3.4" fill="#16263F"/>
+      <path d="M5 13 Q13 1 21 13" fill="none" stroke="#137A57" stroke-width="2.4" stroke-linecap="round"/>
+    </svg>
+    ナカツギ
+  </div>
+  <div id="content"></div>
+</div>
+
+<script>
+  // ▼ここをデプロイ済みWorkerのURLに変更（末尾スラッシュなし）
+  var WORKER_URL = "https://nakatsugi-stripe.junjiro1129.workers.dev";
+
+  var $ = function(id){ return document.getElementById(id); };
+  var content = $("content");
+  var params = new URLSearchParams(location.search);
+  var token = params.get("token");
+
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+
+  async function api(path, payload, method){
+    var opts = { method: method||"POST", headers:{} };
+    if(payload){ opts.headers["Content-Type"]="application/json"; opts.body=JSON.stringify(payload); }
+    var res = await fetch(WORKER_URL.replace(/\/+$/,"")+path, opts);
+    var data = await res.json();
+    if(!res.ok) throw new Error(data.error || "エラーが発生しました");
+    return data;
+  }
+
+  function showError(m){
+    content.innerHTML = '<div class="card"><div class="state"><div class="big">開けません</div><div class="msg">'+esc(m)+'</div></div></div>';
+  }
+  function showDone(){
+    content.innerHTML =
+      '<div class="card"><div class="state">'+
+      '<div class="check"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0C5A40" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'+
+      '<div class="big">ご登録ありがとうございました</div>'+
+      '<div class="msg">内容を確認のうえ、運営より次のご案内（本人確認・振込口座の登録）を、ご連絡先へお送りします。<br>今しばらくお待ちください。</div>'+
+      '</div></div>';
+  }
+
+  function showForm(){
+    content.innerHTML =
+      '<div class="head">'+
+        '<p class="eyebrow">出品者登録</p>'+
+        '<h1>ご登録情報の入力</h1>'+
+        '<p class="lead">お申し込みありがとうございます。以下をご入力ください。所要 2〜3分です。</p>'+
+      '</div>'+
+      '<div class="note">氏名や振込口座などの本人確認情報は、この画面では入力しません。運営の確認後、決済事業者（Stripe）の安全な画面で別途ご登録いただきます。</div>'+
+      '<div class="card">'+
+
+        '<div class="fld"><label>屋号／法人名・個人事業主名<span class="req">必須</span></label>'+
+        '<div class="hint">購入者に表示される表示名としても使います。</div>'+
+        '<input type="text" id="business_name" placeholder="例：スタジオ○○／株式会社○○"></div>'+
+
+        '<div class="fld"><label>代表者氏名<span class="req">必須</span></label>'+
+        '<div class="hint">本人確認と、適格請求書の名義確認に使います。購入者には公開されません。</div>'+
+        '<input type="text" id="rep_name" placeholder="例：那賀 潤二郎"></div>'+
+
+        '<div class="fld"><label>連絡先メール<span class="req">必須</span></label>'+
+        '<input type="email" id="contact_email" placeholder="you@example.com"></div>'+
+
+        '<div class="fld"><label>連絡先電話（任意）</label>'+
+        '<input type="tel" id="contact_phone" placeholder="090-0000-0000"></div>'+
+
+        '<div class="fld"><label>事業内容<span class="req">必須</span></label>'+
+        '<div class="hint">どのような役務を提供されるか。決済画面の説明や請求書の品目にも使われます。</div>'+
+        '<textarea id="business_desc" placeholder="例：ロゴ・グラフィックデザインの制作"></textarea></div>'+
+
+        '<div class="fld"><label>適格請求書発行事業者（インボイス）の登録<span class="req">必須</span></label>'+
+        '<div class="hint">登録済みの場合、購入者へ適格請求書を発行できます（あなたの登録番号は購入者に開示されません）。</div>'+
+        '<div class="radio">'+
+          '<label><input type="radio" name="inv" value="yes" onchange="onInv()">登録している</label>'+
+          '<label><input type="radio" name="inv" value="no" onchange="onInv()">登録していない</label>'+
+        '</div>'+
+        '<div class="warn" id="invWarn">未登録の場合、あなたの役務についての適格請求書は発行できません（購入者が仕入税額控除を受けられない場合があります）。事業者向けのお取引が多い場合は、登録をご検討ください。</div>'+
+        '</div>'+
+
+        '<div class="fld" id="invNumFld" style="display:none"><label>インボイス登録番号（T＋13桁）<span class="req">必須</span></label>'+
+        '<input type="text" id="invoice_number" placeholder="T1234567890123" maxlength="14"></div>'+
+
+        '<div class="fld"><label>事業者であることの確認書類<span class="req">必須</span></label>'+
+        '<div class="hint">いずれかを選択してください。②③は、後ほど運営よりご案内する方法（メール等）でご提出いただきます。</div>'+
+        '<select id="evidence_type">'+
+          '<option value="">選択してください</option>'+
+          '<option value="invoice">① インボイス登録番号（上記の番号で確認）</option>'+
+          '<option value="kaigyo">② 開業届の控え（後日提出）</option>'+
+          '<option value="kakutei">③ 確定申告書の控え（後日提出）</option>'+
+        '</select></div>'+
+
+        '<div style="border-top:1px solid var(--line-soft);margin:22px 0 16px"></div>'+
+
+        '<div class="chk"><input type="checkbox" id="agree_terms">'+
+        '<span><a href="kiyaku.html" target="_blank">利用規約</a>および<a href="privacy.html" target="_blank">プライバシーポリシー</a>に同意します。</span></div>'+
+
+        '<div class="chk"><input type="checkbox" id="agree_invoice">'+
+        '<span>適格請求書について、媒介者交付特例に基づき、株式会社ナカホームズが自社の登録番号で、私に代わって購入者へ適格請求書を発行することに同意します。また、私のインボイス登録状況に変更があった場合は、遅滞なく運営へ通知します。</span></div>'+
+
+        '<div class="err" id="err" style="display:none"></div>'+
+        '<button id="submit">この内容で登録する</button>'+
+      '</div>';
+
+    $("submit").addEventListener("click", submitForm);
+  }
+
+  window.onInv = function(){
+    var yes = document.querySelector('input[name=inv]:checked');
+    var v = yes ? yes.value : "";
+    $("invNumFld").style.display = (v === "yes") ? "" : "none";
+    $("invWarn").style.display = (v === "no") ? "block" : "none";
+  };
+
+  function fail(m){ var e=$("err"); e.textContent=m; e.style.display="block"; }
+
+  async function submitForm(){
+    $("err").style.display="none";
+    var inv = document.querySelector('input[name=inv]:checked');
+    var payload = {
+      token: token,
+      business_name: $("business_name").value.trim(),
+      rep_name: $("rep_name").value.trim(),
+      contact_email: $("contact_email").value.trim(),
+      contact_phone: $("contact_phone").value.trim(),
+      business_desc: $("business_desc").value.trim(),
+      invoice_registered: inv ? inv.value === "yes" : false,
+      invoice_number: $("invoice_number").value.trim(),
+      evidence_type: $("evidence_type").value,
+      agree_terms: $("agree_terms").checked,
+      agree_invoice: $("agree_invoice").checked,
+    };
+
+    if(!payload.business_name) return fail("屋号／名称をご入力ください。");
+    if(!payload.rep_name) return fail("代表者氏名をご入力ください。");
+    if(!payload.contact_email) return fail("連絡先メールをご入力ください。");
+    if(!payload.business_desc) return fail("事業内容をご入力ください。");
+    if(!inv) return fail("インボイス登録の有無をお選びください。");
+    if(payload.invoice_registered && !/^T\d{13}$/.test(payload.invoice_number))
+      return fail("登録番号は T＋13桁でご入力ください（例：T1234567890123）。");
+    if(!payload.evidence_type) return fail("確認書類の種類をお選びください。");
+    if(payload.evidence_type === "invoice" && !payload.invoice_registered)
+      return fail("確認書類で「インボイス登録番号」を選ぶ場合は、上でインボイス登録「している」をお選びください。");
+    if(!payload.agree_terms) return fail("利用規約への同意が必要です。");
+    if(!payload.agree_invoice) return fail("適格請求書の取扱いへの同意が必要です。");
+
+    var btn = $("submit"); btn.disabled=true; btn.textContent="送信中…";
+    try{
+      await api("/registrations/submit", payload);
+      showDone();
+    }catch(e){
+      btn.disabled=false; btn.textContent="この内容で登録する";
+      fail(e.message);
+    }
+  }
+
+  async function init(){
+    if(!token){ showError("登録用のリンクが正しくありません。運営からお送りしたリンクをご確認ください。"); return; }
+    try{
+      var d = await api("/registrations/get?token="+encodeURIComponent(token), null, "GET");
+      var st = d.registration && d.registration.status;
+      if(st === "invited"){ showForm(); }
+      else if(st){ showError("このリンクは既にご登録が完了しています。ご不明な点は運営へお問い合わせください。"); }
+      else { showError("無効なリンクです。"); }
+    }catch(e){ showError(e.message); }
+  }
+  init();
+</script>
+</body>
+</html>
