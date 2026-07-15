@@ -216,6 +216,27 @@
 
   async function init(){
     if(!token){ showError("登録用のリンクが正しくありません。運営からお送りしたリンクをご確認ください。"); return; }
+
+    // Stripeの本人確認から戻ってきたとき
+    if(params.get("done")){
+      content.innerHTML =
+        '<div class="card"><div class="state">'+
+        '<div class="check"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0C5A40" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'+
+        '<div class="big">お手続きありがとうございました</div>'+
+        '<div class="msg">ご入力いただいた内容を確認しています。<br>確認が取れ次第、運営よりご利用開始のご連絡をいたします。</div>'+
+        '</div></div>';
+      return;
+    }
+    // オンボーディングのリンクが期限切れになったとき
+    if(params.get("reauth")){
+      content.innerHTML =
+        '<div class="card"><div class="state">'+
+        '<div class="big">リンクの有効期限が切れています</div>'+
+        '<div class="msg">お手数ですが、運営までご連絡ください。新しいお手続き用リンクをお送りします。</div>'+
+        '</div></div>';
+      return;
+    }
+
     try{
       var d = await api("/registrations/get?token="+encodeURIComponent(token), null, "GET");
       var st = d.registration && d.registration.status;

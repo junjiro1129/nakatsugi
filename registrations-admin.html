@@ -64,9 +64,19 @@
   .badge{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:999px;white-space:nowrap}
   .b-invited{background:var(--blue-soft);color:var(--blue)}
   .b-submitted{background:var(--amber-soft);color:var(--amber)}
-  .b-approved{background:var(--green-soft);color:var(--green-deep)}
+  .b-approved{background:var(--blue-soft);color:var(--blue)}
+  .b-onboarding{background:var(--amber-soft);color:var(--amber)}
+  .b-active{background:var(--green-soft);color:var(--green-deep)}
   .b-rejected{background:var(--red-soft);color:var(--red)}
   .b-reviewing{background:var(--line-soft);color:var(--ink-soft)}
+  .stripe-box{margin-top:14px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .stripe-box .ttl{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:6px}
+  .acct{font-family:var(--mono);font-size:12.5px;color:var(--ink);word-break:break-all}
+  .onbo-link{margin-top:9px;background:var(--green-soft);border:1px solid rgba(19,122,87,.25);border-radius:8px;padding:10px 12px;font-family:var(--mono);font-size:11.5px;word-break:break-all;color:var(--green-deep);display:none}
+  .due{font-size:12px;color:var(--amber);margin-top:6px}
+  .biztype{display:flex;gap:7px;margin-bottom:9px}
+  .biztype label{display:flex;align-items:center;gap:6px;font-size:12.5px;border:1.5px solid var(--line);border-radius:8px;padding:6px 11px;cursor:pointer;background:var(--surface)}
+  .biztype label:has(input:checked){border-color:var(--green);background:var(--green-soft)}
   .kv{margin-top:12px;display:grid;grid-template-columns:120px 1fr;gap:5px 14px;font-size:13.5px}
   .kv dt{color:var(--muted)}
   .kv dd{margin:0;color:var(--ink)}
@@ -127,18 +137,22 @@
   var regs = [], filter = "all", lastLink = "";
 
   var STATUS = {
-    invited:   { label:"招待済・未提出", cls:"b-invited" },
-    submitted: { label:"要審査",         cls:"b-submitted" },
-    approved:  { label:"承認済",         cls:"b-approved" },
-    rejected:  { label:"却下",           cls:"b-rejected" },
-    reviewing: { label:"審査中",         cls:"b-reviewing" },
+    invited:    { label:"招待済・未提出", cls:"b-invited" },
+    submitted:  { label:"要審査",         cls:"b-submitted" },
+    approved:   { label:"承認済・Stripe未作成", cls:"b-approved" },
+    onboarding: { label:"本人確認・口座 待ち", cls:"b-onboarding" },
+    active:     { label:"有効（取引可）", cls:"b-active" },
+    rejected:   { label:"却下",           cls:"b-rejected" },
+    reviewing:  { label:"審査中",         cls:"b-reviewing" },
   };
   var TABS = [
-    { key:"all",       label:"すべて" },
-    { key:"submitted", label:"要審査" },
-    { key:"approved",  label:"承認済" },
-    { key:"invited",   label:"招待済・未提出" },
-    { key:"rejected",  label:"却下" },
+    { key:"all",        label:"すべて" },
+    { key:"submitted",  label:"要審査" },
+    { key:"approved",   label:"Stripe未作成" },
+    { key:"onboarding", label:"本人確認待ち" },
+    { key:"active",     label:"有効" },
+    { key:"invited",    label:"招待済・未提出" },
+    { key:"rejected",   label:"却下" },
   ];
 
   try{ $("worker").value=localStorage.getItem(LSK.w)||""; $("regbase").value=localStorage.getItem(LSK.b)||""; }catch(e){}
@@ -192,7 +206,7 @@
   }
 
   function counts(){
-    var c={all:regs.length,invited:0,submitted:0,approved:0,rejected:0,reviewing:0};
+    var c={all:regs.length,invited:0,submitted:0,approved:0,onboarding:0,active:0,rejected:0,reviewing:0};
     regs.forEach(function(r){ if(c[r.status]!=null)c[r.status]++; });
     return c;
   }
@@ -200,7 +214,8 @@
   function render(){
     var c=counts();
     $("summary").innerHTML =
-      stat(c.all,"総数",false)+stat(c.submitted,"要審査",true)+stat(c.approved,"承認済",false)+stat(c.invited,"招待済・未提出",false)+stat(c.rejected,"却下",false);
+      stat(c.all,"総数",false)+stat(c.submitted,"要審査",true)+stat(c.approved,"Stripe未作成",false)+
+      stat(c.onboarding,"本人確認待ち",false)+stat(c.active,"有効",false)+stat(c.invited,"未提出",false);
     $("tabs").innerHTML = TABS.map(function(t){
       var n=t.key==="all"?c.all:c[t.key];
       return '<div class="tab'+(filter===t.key?" active":"")+'" data-tab="'+t.key+'">'+t.label+'<span class="c">'+n+'</span></div>';
@@ -226,6 +241,62 @@
         await copy(lk); toast("招待リンクをコピーしました");
       });
     });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-copyacct]"), function(b){
+      b.addEventListener("click", async function(){ await copy(b.getAttribute("data-copyacct")); toast("アカウントIDをコピーしました"); });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-mkacct]"), function(b){
+      b.addEventListener("click", function(){ makeAccount(b.getAttribute("data-mkacct"), b); });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-mklink]"), function(b){
+      b.addEventListener("click", function(){ makeLink(b.getAttribute("data-mklink"), b); });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-chk]"), function(b){
+      b.addEventListener("click", function(){ checkAccount(b.getAttribute("data-chk"), b); });
+    });
+  }
+
+  async function makeAccount(token, btn){
+    var sel = document.querySelector('input[name=bt_'+token+']:checked');
+    var bt = sel ? sel.value : "individual";
+    if(!confirm("Stripeの受取人アカウントを作成します（"+(bt==="company"?"法人":"個人事業主")+"）。\n事業者確認は完了していますか？")) return;
+    btn.disabled=true; btn.textContent="作成中…";
+    var d = await api("/registrations/account/create", { token: token, business_type: bt });
+    if(d && d.account) toast("アカウントを作成しました："+d.account);
+    load();
+  }
+
+  async function makeLink(token, btn){
+    btn.disabled=true; btn.textContent="発行中…";
+    var b = regBase(), urls = {};
+    if(b){
+      var sep = b.indexOf("?")>=0 ? "&" : "?";
+      urls.return_url  = b+sep+"token="+encodeURIComponent(token)+"&done=1";   // 完了後に戻る先
+      urls.refresh_url = b+sep+"token="+encodeURIComponent(token)+"&reauth=1"; // 期限切れ時
+    }
+    var d = await api("/registrations/account/link", Object.assign({ token: token }, urls));
+    btn.disabled=false; btn.textContent="オンボーディングURLを発行してコピー";
+    if(d && d.url){
+      await copy(d.url);
+      var box = $("lk_"+token);
+      if(box){ box.textContent = d.url; box.style.display="block"; }
+      toast("オンボーディングURLをコピーしました（出品者へ送付してください）");
+    }
+  }
+
+  async function checkAccount(token, btn){
+    btn.disabled=true; btn.textContent="確認中…";
+    var d = await api("/registrations/account/status?token="+encodeURIComponent(token), null, "GET");
+    btn.disabled=false; btn.textContent="STEP 3／3　有効化を確認";
+    if(!d) return;
+    if(d.ready){ toast("有効になりました（送金を受け取れます）"); load(); return; }
+    var due = $("due_"+token);
+    if(due){
+      var msg = "まだ有効ではありません（送金受取 "+d.transfers+"／出金 "+(d.payouts_enabled?"可":"不可")+"）。";
+      if(d.currently_due && d.currently_due.length) msg += " 未提出："+d.currently_due.join(", ");
+      else if(!d.details_submitted) msg += " 出品者の入力が未完了です。";
+      due.textContent = msg;
+    }
+    toast("まだ有効ではありません", true);
   }
   function stat(n,l,attn){ return '<div class="stat'+(attn?" attn":"")+'"><div class="n">'+n+'</div><div class="l">'+l+'</div></div>'; }
 
@@ -264,10 +335,39 @@
     if(r.status==="submitted" || r.status==="reviewing"){
       out += '<div class="acts"><button class="sm go" data-approve="'+r.token+'">承認する</button>'+
              '<button class="sm warn" data-reject="'+r.token+'">却下する</button></div>';
-    } else if(r.status==="approved"){
-      out += '<div class="acts"><span class="reg-sub">承認済み。次はStripeの連結アカウント作成とオンボーディングURLの発行へ。</span></div>';
+    } else if(r.status==="approved" || r.status==="onboarding" || r.status==="active"){
+      out += renderStripe(r);
     }
     return out+'</div>';
+  }
+
+  // 承認後のStripe接続（作成 → オンボーディングURL → 有効化確認）
+  function renderStripe(r){
+    var s = '<div class="stripe-box">';
+    if(!r.account){
+      s += '<div class="ttl">STEP 1／3　受取人アカウントの作成</div>'+
+           '<div class="biztype">'+
+             '<label><input type="radio" name="bt_'+r.token+'" value="individual" checked>個人事業主</label>'+
+             '<label><input type="radio" name="bt_'+r.token+'" value="company">法人</label>'+
+           '</div>'+
+           '<button class="sm go" data-mkacct="'+r.token+'">Stripeアカウントを作成</button>';
+      return s+'</div>';
+    }
+    s += '<div class="ttl">Stripe 受取人アカウント</div>'+
+         '<div class="acct">'+esc(r.account)+' <button class="sm" data-copyacct="'+esc(r.account)+'" style="margin-left:6px">コピー</button></div>';
+
+    if(r.status !== "active"){
+      s += '<div style="margin-top:12px" class="ttl">STEP 2／3　本人確認・振込口座の登録リンクを送る</div>'+
+           '<div class="acts" style="margin-top:0">'+
+             '<button class="sm go" data-mklink="'+r.token+'">オンボーディングURLを発行してコピー</button>'+
+             '<button class="sm" data-chk="'+r.token+'">STEP 3／3　有効化を確認</button>'+
+           '</div>'+
+           '<div class="onbo-link" id="lk_'+r.token+'"></div>'+
+           '<div class="due" id="due_'+r.token+'"></div>';
+    } else {
+      s += '<div class="due" style="color:var(--green-deep);margin-top:9px">✓ 本人確認・口座登録が完了し、送金を受け取れる状態です。上のアカウントIDを見積作成に使えます。</div>';
+    }
+    return s+'</div>';
   }
 
   async function setStatus(token, status, msg){
