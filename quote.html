@@ -50,7 +50,7 @@
 
 <script>
   /* ▼ ここにデプロイした Worker の URL を入れてください（末尾スラッシュなし） */
-  var WORKER_URL = "https://nakatsugi-stripe.junjiro1129.workers.dev";
+  var WORKER_URL = "https://nakatsugi-stripe.xxxx.workers.dev";
 
   var params = new URLSearchParams(location.search);
   var id = params.get("id");
@@ -121,8 +121,13 @@
       content.innerHTML =
         '<div class="eyebrow">お見積内容</div>'+
         '<h1 class="title">'+escapeHtml(q.title)+'</h1>'+
+        (q.buyer_name ? '<p class="desc">'+escapeHtml(q.buyer_name)+' 様</p>' : '')+
         (q.description ? '<p class="desc">'+escapeHtml(q.description)+'</p>' : '')+
-        '<div class="amount"><div class="l">お支払い金額（税込）</div><div class="v">'+yen(q.amount)+'</div></div>'+
+        '<div class="amount"><div class="v">'+yen(q.amount_inc!=null?q.amount_inc:q.amount)+'</div>'+
+        (q.amount_ex!=null
+          ? '<div class="l" style="margin-top:6px">税抜 '+yen(q.amount_ex)+'　＋　消費税(10%) '+yen(q.tax)+'　＝　税込 '+yen(q.amount_inc)+'</div>'
+          : '<div class="l">お支払い金額（税込）</div>')+
+        '</div>'+
         '<p class="note">お支払いいただいた代金は、役務の提供が完了するまでナカツギがお預かりします。完了の確認後に提供者へお渡しするため、前払いのご不安なくお取引いただけます。</p>'+
         '<button id="pay">承認して支払う</button>';
       document.getElementById("pay").addEventListener("click", pay);
