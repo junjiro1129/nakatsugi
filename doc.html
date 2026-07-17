@@ -71,8 +71,9 @@
   .legal{margin-top:26px;border-top:1px solid var(--line-soft);padding-top:14px;
     font-size:10.5px;color:var(--muted);line-height:1.75}
   .legal b{color:var(--ink)}
-  .stamp{position:absolute;right:16mm;top:16mm;font-size:11px;font-weight:700;color:var(--green-deep);
-    border:1.5px solid var(--green);border-radius:6px;padding:4px 10px}
+  .stamp{display:inline-block;font-size:11px;font-weight:700;color:var(--green-deep);
+    border:1.5px solid var(--green);border-radius:6px;padding:3px 10px;margin:0 0 7px;
+    letter-spacing:.06em;vertical-align:middle}
   .state{text-align:center;padding:60px 20px;color:var(--muted)}
   .state .big{font-size:18px;font-weight:700;color:var(--ink);margin-bottom:8px}
 
@@ -126,10 +127,11 @@
     var toName = isStm ? d.seller_name : (d.buyer_name || d.buyer_email || "お取引先");
 
     var html = '<div class="sheet">';
-    if (isInv) html += '<div class="stamp">適格請求書</div>';
 
     // 見出し
-    html += '<div class="head"><div><h1>'+TITLES[d.kind]+'</h1><div class="no">No. '+esc(d.id)+'</div></div>'+
+    html += '<div class="head"><div><h1>'+TITLES[d.kind]+'</h1>'+
+      (isInv ? '<div><span class="stamp">適格請求書</span></div>' : '')+
+      '<div class="no">No. '+esc(d.id)+'</div></div>'+
       '<div class="dates">';
     if (d.kind === "quote") {
       html += '発行日：<b>'+ymd(d.created)+'</b><br>有効期限：<b>'+ymd(d.valid_until)+'</b>';
@@ -157,7 +159,7 @@
         esc(d.issuer.addr)+'<br>TEL '+esc(d.issuer.tel)+'　'+esc(d.issuer.mail)+'</div></div>';
     if (!isStm) {
       html += '<div class="pt"><div class="k">役務提供者</div><div class="v">'+esc(d.seller_name)+'</div>'+
-        '<div class="m">本取引の役務提供者です。ご請求・決済は上記発行者が行います。</div></div>';
+        '<div class="m">本取引の役務提供者です。ご請求・決済は発行者が行います。</div></div>';
     }
     html += '</div>';
 
