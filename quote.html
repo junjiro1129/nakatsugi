@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>お見積 ｜ ナカツギ</title>
+<title>お取引 ｜ ナカツギ</title>
 <style>
   :root{
     --ink:#16263F;--muted:#5C6675;--green:#137A57;--green-deep:#0C5A40;--green-soft:#E4F0EA;
@@ -63,6 +63,18 @@
   function ymd(s){ if(!s) return ""; var d=new Date(s);
     return d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日"; }
 
+  // このリンクは見積から完了まで買い手が何度も開く。タブだけで進捗と「次にすること」が分かるようにする。
+  var TAB_TITLES = {
+    pending:        "お見積のご確認",
+    awaiting_funds: "お振込みのお願い",
+    paid:           "完了確認のお願い",
+    released:       "お取引完了",
+    refunded:       "返金済み",
+  };
+  function setTitle(status){
+    document.title = (TAB_TITLES[status] || "お取引") + " ｜ ナカツギ";
+  }
+
   async function api(path, payload, method){
     var opts = { method: method || "POST", headers: {} };
     if(payload){ opts.headers["Content-Type"]="application/json"; opts.body=JSON.stringify(payload); }
@@ -88,6 +100,7 @@
 
   // 完了済み
   function showDone(){
+    setTitle("released");
     content.innerHTML =
       '<div class="state ok">'+checkMark()+
       '<div class="big">お取引が完了しました</div>'+
@@ -120,12 +133,14 @@
     if(r) r.addEventListener("click", function(){ window.open(q.instructions_url, "_blank"); });
   }
   function showError(m){
+    setTitle("");
     content.innerHTML = '<div class="state err"><div class="big">表示できません</div><div class="msg">'+m+'</div></div>';
   }
 
   async function renderQuote(){
     try{
       var q = await api("/quotes/get?id="+encodeURIComponent(id), null, "GET");
+      setTitle(q.status); // タブに進捗を反映
       if(q.status === "awaiting_funds"){ showAwaitingFunds(q); return; }
       if(q.status === "paid"){ showAwaiting(q); return; }
       if(q.status === "released"){ showDone(); return; }
