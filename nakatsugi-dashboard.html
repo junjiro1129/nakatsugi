@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ナカツギ 運営ダッシュボード</title>
+<style>
+  :root{
+    --ink:#16263F;--ink-soft:#3A4A63;--muted:#5C6675;
+    --green:#137A57;--green-deep:#0C5A40;--green-soft:#E4F0EA;
+    --amber:#9A6B12;--amber-soft:#F7EDD6;--amber-bd:#E4C879;
+    --red:#A3352B;--red-soft:#F5E1DE;
+    --paper:#F4F3ED;--surface:#FFFFFF;--line:rgba(22,38,63,.12);--line-soft:rgba(22,38,63,.07);
+    --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+    --mono:"SFMono-Regular",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.6;font-size:15px;padding:0 0 70px}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+  .top{padding:30px 0 6px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:17px;margin-bottom:12px}
+  h1{font-size:23px;margin:0 0 4px}
+  .sub{color:var(--muted);font-size:13.5px;margin:0}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:16px}
+  .card h2{font-size:13.5px;margin:0 0 13px;color:var(--green-deep)}
+  details.card summary{font-size:13.5px;color:var(--green-deep);font-weight:700;cursor:pointer;list-style:none}
+  details.card summary::-webkit-details-marker{display:none}
+  details.card summary::before{content:"＋ ";}
+  details[open].card summary::before{content:"− ";}
+
+  .fld{margin-bottom:12px}
+  .fld label{display:block;font-size:12.5px;font-weight:600;margin-bottom:5px;color:var(--ink-soft)}
+  .fld input,.fld textarea{width:100%;font-family:var(--sans);font-size:14px;padding:9px 11px;
+    border:1.5px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}
+  .fld textarea{min-height:54px;resize:vertical}
+  .fld input:focus,.fld textarea:focus{outline:none;border-color:var(--green)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+  button{font-family:var(--sans);font-size:13.5px;font-weight:600;cursor:pointer;border:1.5px solid var(--line);
+    background:var(--surface);color:var(--ink);padding:9px 15px;border-radius:999px}
+  button:hover{border-color:var(--ink)}
+  button:disabled{opacity:.5;cursor:default}
+  button.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+  button.primary:hover{background:#0E1B30}
+  button.sm{font-size:12.5px;padding:6px 12px}
+  button.go{background:var(--green);color:#fff;border-color:var(--green)}
+  button.go:hover{background:var(--green-deep)}
+  button.warn{background:#fff;color:var(--red);border-color:rgba(163,53,43,.4)}
+
+  .summary{display:flex;gap:11px;flex-wrap:wrap;margin-top:16px}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 16px;flex:1;min-width:110px}
+  .stat.attn{background:var(--amber-soft);border-color:var(--amber-bd)}
+  .stat .n{font-size:23px;font-weight:700;line-height:1}
+  .stat.attn .n{color:var(--amber)}
+  .stat .l{font-size:11.5px;color:var(--muted);margin-top:3px}
+  .stat.attn .l{color:var(--amber);font-weight:600}
+
+  .bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:18px 0 8px}
+  .tabs{display:flex;gap:7px;flex-wrap:wrap}
+  .tab{font-size:13px;padding:7px 13px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;color:var(--ink-soft)}
+  .tab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .tab .c{opacity:.7;margin-left:5px;font-size:11.5px}
+
+  table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  thead th{background:var(--paper);text-align:left;font-size:12px;color:var(--muted);padding:11px 13px;border-bottom:1px solid var(--line);font-weight:700;white-space:nowrap}
+  tbody td{padding:12px 13px;border-bottom:1px solid var(--line-soft);font-size:13.5px;vertical-align:middle}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr.attn{background:#FDF8EC}
+  .ttl{font-weight:600}
+  .amt{font-family:var(--mono);white-space:nowrap}
+  .sub2{font-size:11.5px;color:var(--muted)}
+  .badge{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:999px;white-space:nowrap}
+  .b-pending{background:var(--line-soft);color:var(--ink-soft)}
+  .b-awaiting{background:#E1E9F5;color:#2B5A9A}
+  .b-paid{background:var(--amber-soft);color:var(--amber)}
+  .b-released{background:var(--green-soft);color:var(--green-deep)}
+  .b-refunded{background:var(--red-soft);color:var(--red)}
+  .acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  .empty{text-align:center;color:var(--muted);padding:34px 20px;font-size:14px}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;
+    padding:11px 20px;border-radius:999px;font-size:13.5px;box-shadow:0 8px 30px rgba(22,38,63,.3);opacity:0;
+    transition:opacity .2s;pointer-events:none;z-index:50}
+  .toast.show{opacity:1}
+  .toast.err{background:var(--red)}
+  @media(max-width:640px){.row2{grid-template-columns:1fr}.hide-sp{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg width="22" height="22" viewBox="0 0 26 26" aria-hidden="true">
+        <circle cx="5" cy="13" r="3.4" fill="#16263F"/><circle cx="21" cy="13" r="3.4" fill="#16263F"/>
+        <path d="M5 13 Q13 1 21 13" fill="none" stroke="#137A57" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      ナカツギ
+    </div>
+    <h1>運営ダッシュボード</h1>
+    <p class="sub">見積の状態を一元管理し、送金もれ・二重送金を防ぎます。テストモード用。</p>
+  </header>
+
+  <div class="card">
+    <h2>接続情報</h2>
+    <div class="row2">
+      <div class="fld">
+        <label>Worker の URL</label>
+        <input id="worker" placeholder="https://nakatsugi-stripe.xxxx.workers.dev">
+      </div>
+      <div class="fld">
+        <label>買い手ページ（quote.html）の URL</label>
+        <input id="buyerbase" placeholder="https://＜あなたのサイト＞/quote.html">
+      </div>
+    </div>
+  </div>
+
+  <details class="card">
+    <summary>新規見積を作成</summary>
+    <div style="margin-top:14px">
+      <div class="row2">
+        <div class="fld"><label>受取人アカウント（出品者 acct_）</label><input id="c_seller" placeholder="acct_xxxxxxxx"></div>
+        <div class="fld"><label>買い手のメール（任意）</label><input id="c_mail" placeholder="buyer@example.com"></div>
+      </div>
+      <div class="fld"><label>買い手の宛名（適格請求書の交付先・任意）</label><input id="c_buyer" placeholder="例：株式会社○○／○○ 太郎"></div>
+      <div class="row2">
+        <div class="fld"><label>出品者の屋号（空欄なら登録情報から自動取得）</label><input id="c_sname" placeholder="例：スタジオ○○"></div>
+        <div class="fld" style="max-width:200px"><label>見積の有効期限（日数）</label><input id="c_days" type="number" value="14"></div>
+      </div>
+      <div class="fld"><label>件名</label><input id="c_title" placeholder="例：ロゴデザイン制作一式"></div>
+      <div class="fld"><label>内容の説明（任意）</label><textarea id="c_desc" placeholder="例：ロゴ2案・修正2回・データ納品"></textarea></div>
+      <div class="fld" style="max-width:360px"><label>金額（円）</label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input id="c_amount" type="number" value="10000" style="max-width:160px">
+          <label style="display:flex;align-items:center;gap:5px;font-size:13px;font-weight:600;cursor:pointer"><input type="radio" name="c_tax" value="ex" checked> 税抜で入力</label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:13px;font-weight:600;cursor:pointer"><input type="radio" name="c_tax" value="inc"> 税込で入力</label>
+        </div>
+        <div id="c_preview" style="font-size:12.5px;color:var(--muted);margin-top:6px"></div>
+      </div>
+      <button class="primary" id="create">見積を作成</button>
+    </div>
+  </details>
+
+  <div class="summary" id="summary"></div>
+
+  <div class="bar">
+    <div class="tabs" id="tabs"></div>
+    <button class="sm" id="refresh">再読み込み</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>件名</th>
+        <th>金額</th>
+        <th class="hide-sp">買い手</th>
+        <th>状態</th>
+        <th class="hide-sp">作成日</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <div class="empty" id="empty" hidden>まだ見積がありません。「新規見積を作成」から始めてください。</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  var $ = function(id){ return document.getElementById(id); };
+  var LSK = { w:"nakatsugi_dash_worker", b:"nakatsugi_dash_buyerbase" };
+  var quotes = [], filter = "all";
+
+  // ▼ Worker と完全に同一の整数演算。小数の掛け算は誤差が出るため使わない
+  //   （例：11000*0.086 は 945.9999999999999 になり、切り捨てで1円ズレる）
+  var FEE_NUM=86, FEE_DEN=1000, TAX_NUM=10, TAX_DEN=100;
+  function calcFee(inc){
+    var fe = Math.floor(inc*FEE_NUM/FEE_DEN);
+    var ft = Math.floor(fe*TAX_NUM/TAX_DEN);
+    return { fee_ex:fe, fee_tax:ft, fee_inc:fe+ft, payout:inc-fe-ft };
+  }
+  function taxBreakdown(v, mode){
+    if(mode==="inc"){ var ex=Math.round(v*TAX_DEN/(TAX_DEN+TAX_NUM)); return {ex:ex, tax:v-ex, inc:v}; }
+    var t=Math.floor(v*TAX_NUM/TAX_DEN); return {ex:v, tax:t, inc:v+t};
+  }
+
+  var STATUS = {
+    pending:        { label:"未払い",           cls:"b-pending" },
+    awaiting_funds: { label:"入金待ち（振込）",  cls:"b-awaiting" },
+    paid:           { label:"入金済・要送金",    cls:"b-paid" },
+    released:       { label:"送金済",           cls:"b-released" },
+    refunded:       { label:"返金済",           cls:"b-refunded" },
+  };
+  var TABS = [
+    { key:"all",      label:"すべて" },
+    { key:"pending",  label:"未払い" },
+    { key:"awaiting_funds", label:"入金待ち（振込）" },
+    { key:"paid",     label:"要対応（入金済・未送金）" },
+    { key:"released", label:"送金済" },
+    { key:"refunded", label:"返金済" },
+  ];
+
+  /* --- config persistence --- */
+  try{ $("worker").value = localStorage.getItem(LSK.w) || ""; $("buyerbase").value = localStorage.getItem(LSK.b) || ""; }catch(e){}
+  $("worker").addEventListener("change", function(){ try{ localStorage.setItem(LSK.w, $("worker").value.trim()); }catch(e){} });
+  $("buyerbase").addEventListener("change", function(){ try{ localStorage.setItem(LSK.b, $("buyerbase").value.trim()); }catch(e){} });
+
+  function base(){ return ($("worker").value||"").trim().replace(/\/+$/,""); }
+  function buyerBase(){ return ($("buyerbase").value||"").trim(); }
+  function yen(n){ return "¥" + Number(n||0).toLocaleString("ja-JP"); }
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  function buyerLink(id){ var b=buyerBase(); if(!b) return ""; return b + (b.indexOf("?")>=0?"&":"?") + "id=" + encodeURIComponent(id); }
+
+  var toastT;
+  function toast(msg, err){ var t=$("toast"); t.textContent=msg; t.className="toast show"+(err?" err":""); clearTimeout(toastT); toastT=setTimeout(function(){ t.className="toast"; }, 2600); }
+
+  async function api(path, payload, method){
+    var url = base();
+    if(!url){ toast("Worker の URL を入力してください", true); return null; }
+    try{
+      var opts={ method: method||"POST", headers:{} };
+      if(payload){ opts.headers["Content-Type"]="application/json"; opts.body=JSON.stringify(payload); }
+      var res = await fetch(url+path, opts);
+      var data = await res.json();
+      if(!res.ok){ toast(data.error || "エラー", true); return null; }
+      return data;
+    }catch(e){ toast("通信失敗："+e.message, true); return null; }
+  }
+
+  async function load(){
+    var d = await api("/quotes/list", null, "GET");
+    if(!d) return;
+    quotes = d.quotes || [];
+    render();
+  }
+
+  function counts(){
+    var c = { all:quotes.length, pending:0, awaiting_funds:0, paid:0, released:0, refunded:0 };
+    quotes.forEach(function(q){ if(c[q.status]!=null) c[q.status]++; });
+    return c;
+  }
+
+  function render(){
+    var c = counts();
+    $("summary").innerHTML =
+      stat(c.all,"総数",false) +
+      stat(c.paid,"要対応（入金済・未送金）",true) +
+      stat(c.released,"送金済",false) +
+      stat(c.pending,"未払い",false) +
+      stat(c.refunded,"返金済",false);
+
+    $("tabs").innerHTML = TABS.map(function(t){
+      var n = t.key==="all"?c.all:c[t.key];
+      return '<div class="tab'+(filter===t.key?" active":"")+'" data-tab="'+t.key+'">'+t.label+'<span class="c">'+n+'</span></div>';
+    }).join("");
+
+    var list = filter==="all" ? quotes : quotes.filter(function(q){ return q.status===filter; });
+    var tb = $("rows"); tb.innerHTML="";
+    $("empty").hidden = list.length>0;
+
+    list.forEach(function(q){
+      var s = STATUS[q.status] || { label:q.status, cls:"b-pending" };
+      var created = q.created ? new Date(q.created).toLocaleDateString("ja-JP",{month:"numeric",day:"numeric"}) : "";
+      // Workerと同一の計算（整数演算）
+      var inc = q.amount_inc!=null ? q.amount_inc : q.amount;
+      var cf = calcFee(inc);
+      var payout = q.payout!=null ? q.payout : cf.payout;
+      var fee = q.fee_inc!=null ? q.fee_inc : cf.fee_inc;
+      var tr = document.createElement("tr");
+      if(q.status==="paid") tr.className="attn";
+
+      var acts = '';
+      if(q.status==="pending"){
+        acts = '<button class="sm" data-copy="'+q.id+'">リンクをコピー</button>';
+      }else if(q.status==="awaiting_funds"){
+        acts = '<span class="sub2">買い手の振込を待っています</span>';
+      }else if(q.status==="paid"){
+        acts = '<button class="sm go" data-release="'+q.id+'">送金（'+yen(payout)+'）</button>'+
+               '<button class="sm warn" data-refund="'+q.id+'">返金</button>';
+      }else if(q.status==="released"){
+        acts = '<span class="sub2">出品者 '+yen(payout)+' ／ 利用料 '+yen(fee)+'</span>';
+      }else if(q.status==="refunded"){
+        acts = '<span class="sub2">返金済み</span>';
+      }
+      // 書類（状態に応じて出せるものだけ）
+      var docs = '<button class="sm" data-doc="quote:'+q.id+'">見積書</button>';
+      if(q.status==="paid" || q.status==="released") docs += '<button class="sm" data-doc="invoice:'+q.id+'">請求書</button>';
+      if(q.status==="released") docs += '<button class="sm" data-doc="statement:'+q.id+'">精算書</button>';
+      acts += '<div style="margin-top:6px">'+docs+'</div>';
+
+      tr.innerHTML =
+        '<td><div class="ttl">'+esc(q.title)+'</div><div class="sub2">'+esc(q.id)+'</div></td>'+
+        '<td class="amt">'+yen(inc)+(q.amount_ex!=null?'<div class="sub2">税抜 '+yen(q.amount_ex)+'＋税 '+yen(q.tax)+'</div>':'')+'</td>'+
+        '<td class="hide-sp sub2">'+esc(q.buyer_name||"")+(q.buyer_name&&q.buyer_email?'<br>':'')+esc(q.buyer_email||(q.buyer_name?"":"—"))+'</td>'+
+        '<td><span class="badge '+s.cls+'">'+s.label+'</span></td>'+
+        '<td class="hide-sp sub2">'+created+'</td>'+
+        '<td><div class="acts">'+acts+'</div></td>';
+      tb.appendChild(tr);
+    });
+  }
+  function stat(n,l,attn){ return '<div class="stat'+(attn?" attn":"")+'"><div class="n">'+n+'</div><div class="l">'+l+'</div></div>'; }
+
+  /* --- events --- */
+  $("tabs").addEventListener("click", function(e){
+    var t = e.target.closest("[data-tab]"); if(!t) return;
+    filter = t.getAttribute("data-tab"); render();
+  });
+  $("refresh").addEventListener("click", load);
+
+  $("rows").addEventListener("click", async function(e){
+    var btn = e.target.closest("button"); if(!btn) return;
+
+    // 書類を開く（見積書・請求書・精算書）
+    var doc = btn.getAttribute("data-doc");
+    if(doc){
+      var parts = doc.split(":"), kind = parts[0], did = parts[1];
+      var base = ($("buyerbase").value || "").trim();
+      if(!base){ toast("買い手ページのURLを入力してください", true); return; }
+      var docUrl = base.replace(/\/[^\/]*$/, "/doc.html"); // 同じ場所の doc.html を開く
+      window.open(docUrl+"?id="+encodeURIComponent(did)+"&kind="+encodeURIComponent(kind), "_blank");
+      return;
+    }
+
+    var copyId = btn.getAttribute("data-copy");
+    if(copyId){
+      var link = buyerLink(copyId);
+      if(!link){ toast("買い手ページのURLを入力してください", true); return; }
+      try{ await navigator.clipboard.writeText(link); }catch(_){ }
+      toast("買い手リンクをコピーしました"); return;
+    }
+
+    var relId = btn.getAttribute("data-release");
+    if(relId){
+      var q = quotes.find(function(x){return x.id===relId;});
+      var qi = q.amount_inc!=null ? q.amount_inc : q.amount;
+      if(!confirm("この見積を送金します。\n出品者へ "+yen(calcFee(qi).payout)+"（利用料8.6%＋消費税を控除後）。\nよろしいですか？")) return;
+      btn.disabled = true; btn.textContent = "送金中…";
+      var d = await api("/quotes/release", { id: relId });
+      if(d && d.transfer){ toast("送金しました（出品者 "+yen(d.payout)+"）"); }
+      await load();   // ← 即リロードでボタンが消える＝二重送金を画面でも防止
+      return;
+    }
+
+    var refId = btn.getAttribute("data-refund");
+    if(refId){
+      if(!confirm("この見積を買い手へ返金します。よろしいですか？")) return;
+      btn.disabled = true; btn.textContent = "返金中…";
+      var r = await api("/quotes/refund", { id: refId });
+      if(r && r.status==="refunded"){ toast("返金しました"); }
+      await load();
+      return;
+    }
+  });
+
+  $("create").addEventListener("click", async function(){
+    var payload = {
+      seller: $("c_seller").value.trim(),
+      buyer_email: $("c_mail").value.trim(),
+      buyer_name: $("c_buyer").value.trim(),
+      seller_name: $("c_sname").value.trim(),
+      valid_days: parseInt($("c_days").value,10) || 14,
+      tax_mode: (document.querySelector('input[name=c_tax]:checked')||{}).value || "ex",
+      title: $("c_title").value.trim() || "役務の対価",
+      description: $("c_desc").value.trim(),
+      amount: parseInt($("c_amount").value,10),
+    };
+    if(!payload.seller){ toast("受取人アカウント（acct_）を入力してください", true); return; }
+    if(!payload.amount){ toast("金額を入力してください", true); return; }
+    var d = await api("/quotes/create", payload);
+    if(d && d.id){
+      var link = buyerLink(d.id);
+      if(link){ try{ await navigator.clipboard.writeText(link); }catch(_){ } toast("見積を作成し、買い手リンクをコピーしました"); }
+      else toast("見積を作成しました（買い手ページURL未設定）");
+      $("c_title").value=""; $("c_desc").value="";
+      await load();
+    }
+  });
+
+  // 金額入力の内訳プレビュー（Workerと同一の計算）
+  function updPreview(){
+    var v = parseInt($("c_amount").value,10);
+    var el = $("c_preview");
+    if(!v || v<1){ el.textContent=""; return; }
+    var mode = (document.querySelector('input[name=c_tax]:checked')||{}).value || "ex";
+    var t = taxBreakdown(v, mode);
+    var cf = calcFee(t.inc);
+    el.textContent = "税抜 "+yen(t.ex)+" ＋ 消費税 "+yen(t.tax)+" ＝ 税込 "+yen(t.inc)
+      +"　→　買い手の支払い "+yen(t.inc)+"／利用料 "+yen(cf.fee_inc)+"（税込）／出品者へ "+yen(cf.payout);
+  }
+  $("c_amount").addEventListener("input", updPreview);
+  Array.prototype.forEach.call(document.querySelectorAll('input[name=c_tax]'), function(r){ r.addEventListener("change", updPreview); });
+  updPreview();
+
+  load();
+</script>
+</body>
+</html>

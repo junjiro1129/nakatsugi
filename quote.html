@@ -27,6 +27,9 @@
     background:var(--ink);color:#fff;border:none;padding:15px;border-radius:12px}
   button:hover{background:#0E1B30}
   button:disabled{opacity:.55;cursor:default}
+  button.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);
+    font-weight:600;margin-top:10px;padding:13px}
+  button.ghost:hover{background:var(--paper);border-color:var(--ink)}
   .state{text-align:center;padding:14px 0}
   .state .big{font-size:19px;font-weight:700;margin:10px 0 6px}
   .state.ok .big{color:var(--green-deep)}
@@ -57,6 +60,8 @@
   var content = document.getElementById("content");
 
   function yen(n){ return "¥" + Number(n).toLocaleString("ja-JP"); }
+  function ymd(s){ if(!s) return ""; var d=new Date(s);
+    return d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日"; }
 
   async function api(path, payload, method){
     var opts = { method: method || "POST", headers: {} };
@@ -87,7 +92,11 @@
       '<div class="state ok">'+checkMark()+
       '<div class="big">お取引が完了しました</div>'+
       '<div class="msg">ありがとうございました。代金は提供者へお渡しされました。</div>'+
-      '</div>';
+      '</div>'+
+      '<button id="inv" class="ghost">適格請求書を保存・印刷（PDF可）</button>';
+    document.getElementById("inv").addEventListener("click", function(){
+      window.open("doc.html?id="+encodeURIComponent(id)+"&kind=invoice", "_blank");
+    });
   }
 
   // 返金済み
@@ -125,14 +134,20 @@
         '<div class="eyebrow">お見積内容</div>'+
         '<h1 class="title">'+escapeHtml(q.title)+'</h1>'+
         (q.buyer_name ? '<p class="desc">'+escapeHtml(q.buyer_name)+' 様</p>' : '')+
+        (q.seller_name ? '<p class="desc"><b>役務提供者：'+escapeHtml(q.seller_name)+'</b></p>' : '')+
         (q.description ? '<p class="desc">'+escapeHtml(q.description)+'</p>' : '')+
         '<div class="amount"><div class="v">'+yen(q.amount_inc!=null?q.amount_inc:q.amount)+'</div>'+
         (q.amount_ex!=null
           ? '<div class="l" style="margin-top:6px">税抜 '+yen(q.amount_ex)+'　＋　消費税(10%) '+yen(q.tax)+'　＝　税込 '+yen(q.amount_inc)+'</div>'
           : '<div class="l">お支払い金額（税込）</div>')+
         '</div>'+
+        (q.valid_until ? '<p class="msg" style="text-align:center">有効期限：'+ymd(q.valid_until)+'</p>' : '')+
         '<p class="note">お支払いいただいた代金は、役務の提供が完了するまでナカツギがお預かりします。完了の確認後に提供者へお渡しするため、前払いのご不安なくお取引いただけます。</p>'+
-        '<button id="pay">承認して支払う</button>';
+        '<button id="pay">承認して支払う</button>'+
+        '<button id="doc" class="ghost">見積書を保存・印刷（PDF可）</button>';
+      document.getElementById("doc").addEventListener("click", function(){
+        window.open("doc.html?id="+encodeURIComponent(q.id)+"&kind=quote", "_blank");
+      });
       document.getElementById("pay").addEventListener("click", pay);
     }catch(e){ showError(e.message); }
   }
