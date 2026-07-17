@@ -103,9 +103,12 @@
     content.innerHTML =
       '<div class="eyebrow">お取引の状況</div>'+
       '<h1 class="title">'+escapeHtml(q.title)+'</h1>'+
-      '<div class="amount"><div class="l">お振込み金額</div><div class="v">'+yen(q.amount)+'</div></div>'+
+      '<div class="amount"><div class="l">お振込み金額</div><div class="v">'+yen(q.amount_inc!=null?q.amount_inc:q.amount)+'</div></div>'+
       '<p class="note">銀行振込をお選びいただきました。決済画面に表示された<b>専用の振込先</b>へ、上記の金額をお振込みください。入金が確認され次第、自動でお取引が進みます（反映まで時間がかかる場合があります）。</p>'+
-      '<p class="msg">このページは入金確認後に自動で切り替わります。時間をおいて再度お開きください。振込先が分からなくなった場合は、運営へお問い合わせください。</p>';
+      (q.instructions_url ? '<button id="reshow">振込先をもう一度表示する</button>' : '')+
+      '<p class="msg">このページは入金確認後に自動で切り替わります。時間をおいて再度お開きください。ご不明な点は運営へお問い合わせください。</p>';
+    var r = document.getElementById("reshow");
+    if(r) r.addEventListener("click", function(){ window.open(q.instructions_url, "_blank"); });
   }
   function showError(m){
     content.innerHTML = '<div class="state err"><div class="big">表示できません</div><div class="msg">'+m+'</div></div>';
