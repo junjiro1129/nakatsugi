@@ -39,7 +39,7 @@
   .to .nm{font-size:19px;font-weight:700}
   .to .sub{font-size:11.5px;color:var(--muted);margin-top:2px}
 
-  .total{background:var(--paper);border-radius:10px;padding:16px 20px;margin-bottom:22px;
+  .total{background:var(--paper);border-radius:10px;padding:15px 20px;margin-bottom:20px;
     display:flex;align-items:baseline;justify-content:space-between}
   .total .lab{font-size:13px;font-weight:700}
   .total .val{font-size:27px;font-weight:700;font-family:var(--mono);letter-spacing:-.01em}
@@ -92,9 +92,18 @@
 
   @media print{
     @page{size:A4;margin:0}
-    body{background:#fff}
+    body{background:#fff;font-size:13px}
     .bar{display:none}
-    .sheet{width:auto;min-height:auto;margin:0;padding:16mm 14mm;box-shadow:none}
+    .sheet{width:auto;min-height:0;height:auto;margin:0;padding:11mm 13mm;box-shadow:none;page-break-inside:auto}
+    .head{margin-bottom:16px}
+    .to{margin-bottom:14px;padding-bottom:9px}
+    .total{margin-bottom:14px;padding:12px 18px}
+    .parties{margin-bottom:14px}
+    table{margin-bottom:12px}
+    tbody td{padding:8px 12px}
+    .taxbox{margin-top:14px}
+    .tb-row{padding:8px 15px}
+    .legal{margin-top:16px;padding-top:11px}
     .total,.sums .row.sub{background:#F4F3ED !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
     thead th,.sums .row.g{background:#16263F !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
     .sums .row.g.pay{background:#0C5A40 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -150,10 +159,12 @@
     if (d.kind === "quote") {
       html += '発行日：<b>'+ymd(d.created)+'</b><br>有効期限：<b>'+ymd(d.valid_until)+'</b>';
     } else if (isInv) {
-      html += '発行日：<b>'+ymd(d.completed_at || d.paid_at || d.created)+'</b><br>'+
-              '取引年月日：<b>'+ymd(d.completed_at || d.paid_at)+'</b>';
+      var invDate = d.completed_at || d.paid_at || d.created;
+      html += '発行日：<b>'+ymd(invDate)+'</b><br>'+
+              '取引年月日：<b>'+ymd(invDate)+'</b>';
     } else {
-      html += '発行日：<b>'+ymd(d.completed_at || d.created)+'</b><br>送金日：<b>'+ymd(d.completed_at)+'</b>';
+      var stmDate = d.completed_at || d.paid_at || d.created;
+      html += '発行日：<b>'+ymd(stmDate)+'</b><br>送金日：<b>'+ymd(stmDate)+'</b>';
     }
     html += '</div></div>';
 
