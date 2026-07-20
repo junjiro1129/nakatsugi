@@ -92,18 +92,28 @@
 
   @media print{
     @page{size:A4;margin:0}
-    body{background:#fff;font-size:13px}
+    body{background:#fff;font-size:12.5px;line-height:1.5}
     .bar{display:none}
-    .sheet{width:auto;min-height:0;height:auto;margin:0;padding:11mm 13mm;box-shadow:none;page-break-inside:auto}
-    .head{margin-bottom:16px}
-    .to{margin-bottom:14px;padding-bottom:9px}
-    .total{margin-bottom:14px;padding:12px 18px}
-    .parties{margin-bottom:14px}
-    table{margin-bottom:12px}
-    tbody td{padding:8px 12px}
-    .taxbox{margin-top:14px}
-    .tb-row{padding:8px 15px}
-    .legal{margin-top:16px;padding-top:11px}
+    .sheet{width:auto;min-height:0;height:auto;margin:0;padding:9mm 13mm;box-shadow:none;page-break-inside:auto}
+    h1{font-size:20px;margin:0 0 4px}
+    .head{margin-bottom:11px}
+    .to{margin-bottom:10px;padding-bottom:7px}
+    .to .nm{font-size:17px}
+    .total{margin-bottom:10px;padding:9px 18px}
+    .total .val{font-size:23px}
+    .parties{margin-bottom:10px}
+    .pt{padding:9px 13px}
+    .pt .m{line-height:1.45;margin-top:2px}
+    table{margin-bottom:8px}
+    thead th{padding:6px 12px}
+    tbody td{padding:6px 12px}
+    tbody .dsc{margin-top:1px}
+    .sums .row{padding:6px 15px}
+    .taxbox{margin-top:10px}
+    .tb-h{padding:6px 15px}
+    .tb-row{padding:6px 15px}
+    .tb-row .n{font-size:14px}
+    .legal{margin-top:11px;padding-top:8px;line-height:1.55}
     .total,.sums .row.sub{background:#F4F3ED !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
     thead th,.sums .row.g{background:#16263F !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
     .sums .row.g.pay{background:#0C5A40 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -178,10 +188,13 @@
     html += '<div class="total"><div class="lab">'+totalLabel+'</div><div class="val">'+yen(totalVal)+'</div></div>';
 
     // 当事者
+    var issuerContact = isStm
+      ? esc(d.issuer.addr)+'　TEL '+esc(d.issuer.tel)+'　'+esc(d.issuer.mail)  // 精算書は1行に圧縮
+      : esc(d.issuer.addr)+'<br>TEL '+esc(d.issuer.tel)+'　'+esc(d.issuer.mail);
     html += '<div class="parties">'+
       '<div class="pt"><div class="k">発行者</div><div class="v">'+esc(d.issuer.name)+'</div>'+
         '<div class="m">登録番号：<span class="rn">'+esc(d.issuer.invoice_no)+'</span><br>'+
-        esc(d.issuer.addr)+'<br>TEL '+esc(d.issuer.tel)+'　'+esc(d.issuer.mail)+'</div></div>';
+        issuerContact+'</div></div>';
     if (!isStm) {
       html += '<div class="pt"><div class="k">役務提供者</div><div class="v">'+esc(d.seller_name)+'</div>'+
         '<div class="m">本取引の役務提供者です。ご請求・決済は発行者が行います。</div></div>';
