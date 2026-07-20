@@ -71,6 +71,19 @@
   .legal{margin-top:26px;border-top:1px solid var(--line-soft);padding-top:14px;
     font-size:10.5px;color:var(--muted);line-height:1.75}
   .legal b{color:var(--ink)}
+
+  /* 出品者向け：消費税の内訳（申告の一次資料） */
+  .taxbox{margin-top:20px;border:1.5px solid var(--green);border-radius:10px;overflow:hidden}
+  .tb-h{background:var(--green-deep);color:#fff;font-size:11.5px;font-weight:700;
+    padding:8px 15px;letter-spacing:.05em}
+  .tb-row{display:flex;justify-content:space-between;align-items:center;gap:14px;
+    padding:11px 15px;border-bottom:1px solid var(--line-soft);font-size:13px}
+  .tb-row:last-child{border-bottom:none}
+  .tb-row .k{font-weight:600}
+  .tb-row .k small{display:block;font-size:10.5px;color:var(--muted);font-weight:400;margin-top:1px}
+  .tb-row .n{font-family:var(--mono);font-weight:700;font-size:16px;white-space:nowrap}
+  .tb-row .n.up{color:var(--green-deep)}
+  .tb-row .n.dn{color:#A3352B}
   .stamp{display:inline-block;font-size:11px;font-weight:700;color:var(--green-deep);
     border:1.5px solid var(--green);border-radius:6px;padding:3px 10px;margin:0 0 7px;
     letter-spacing:.06em;vertical-align:middle}
@@ -85,6 +98,7 @@
     .total,.sums .row.sub{background:#F4F3ED !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
     thead th,.sums .row.g{background:#16263F !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
     .sums .row.g.pay{background:#0C5A40 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .tb-h{background:#0C5A40 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   }
   @media(max-width:820px){ .sheet{width:auto;padding:22px 18px} .parties{flex-direction:column} .sums{width:100%} }
 </style>
@@ -191,13 +205,29 @@
     }
     html += '</div>';
 
+    // 出品者向け：消費税の内訳（申告の一次資料）。預かった税＝納める側、払った税＝控除できる側。
+    if (isStm) {
+      html += '<div class="taxbox">'+
+        '<div class="tb-h">消費税の内訳（確定申告のご参考に）</div>'+
+        '<div class="tb-row"><div class="k">お預かりした消費税'+
+          '<small>お取引金額に含まれる消費税。お客様が申告・納付します。</small></div>'+
+          '<div class="n up">'+yen(d.tax)+'</div></div>'+
+        '<div class="tb-row"><div class="k">お支払いになった消費税'+
+          '<small>ナカツギ利用料に含まれる消費税。仕入税額控除の対象です。</small></div>'+
+          '<div class="n dn">'+yen(d.fee_tax)+'</div></div>'+
+        '<div class="tb-row"><div class="k">差引'+
+          '<small>本取引に係る消費税の差引額（目安）</small></div>'+
+          '<div class="n">'+yen(d.tax - d.fee_tax)+'</div></div>'+
+        '</div>';
+    }
+
     // 注記
     html += '<div class="legal">';
     if (isStm) {
       html += '<b>本書は、ナカツギ利用料に係る適格請求書です。</b>上記の利用料について、発行者の登録番号にて交付します。<br>'+
         '<b>また本書は、当社が購入者へ交付した適格請求書の写しの交付に代えて交付するものです。</b>'+
         '（消費税法施行令第70条の12第1項に定める媒介者交付特例）。法令に定める期間、保存してください。<br>'+
-        'お取引金額の消費税（'+yen(d.tax)+'）は、お客様が申告・納付するものです。';
+        'お取引金額・利用料それぞれの消費税額は、上記「消費税の内訳」欄をご確認ください。';
     } else {
       html += '<b>本書は、'+esc(d.issuer.name)+'が、上記の役務提供者から委託を受け、媒介者交付特例（消費税法施行令第70条の12第1項）に基づき交付するものです。</b>'+
         '役務提供契約の当事者は役務提供者であり、当社は当該契約の当事者ではありません。<br>';
