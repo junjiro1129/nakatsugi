@@ -185,7 +185,9 @@
     html += '</div></div>';
 
     // 宛名
-    html += '<div class="to"><div class="nm">'+esc(toName)+'　御中</div>'+
+    // 敬称：個人事業主本人宛の精算書のみ「様」、それ以外（法人・屋号・買い手組織）は「御中」
+    var honor = (isStm && d.seller_type === "individual") ? "様" : "御中";
+    html += '<div class="to"><div class="nm">'+esc(toName)+'　'+honor+'</div>'+
       '<div class="sub">'+(isStm ? '出品者さま' : 'お取引先さま')+'</div></div>';
 
     // 合計
