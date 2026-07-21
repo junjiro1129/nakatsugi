@@ -111,13 +111,20 @@
       '<div class="note">氏名や振込口座などの本人確認情報は、この画面では入力しません。運営の確認後、決済事業者（Stripe）の安全な画面で別途ご登録いただきます。</div>'+
       '<div class="card">'+
 
-        '<div class="fld"><label>屋号／法人名・個人事業主名<span class="req">必須</span></label>'+
-        '<div class="hint"><b>見積書・適格請求書・精算書に記載されるのは、この屋号のみです。</b>お客様の氏名・住所・インボイス登録番号が購入者に開示されることはありません。取引先に伝わる唯一の名称ですので、実際にお使いの正確な表記でご入力ください。</div>'+
-        '<input type="text" id="business_name" placeholder="例：スタジオ○○／株式会社○○"></div>'+
+        '<div class="fld"><label>事業者の区分<span class="req">必須</span></label>'+
+        '<div class="hint">区分によって、ご入力いただく名称が変わります。</div>'+
+        '<div class="radio">'+
+          '<label><input type="radio" name="biz_type" value="individual" checked> 個人事業主</label>'+
+          '<label><input type="radio" name="biz_type" value="company"> 法人</label>'+
+        '</div></div>'+
 
-        '<div class="fld"><label>代表者氏名<span class="req">必須</span></label>'+
-        '<div class="hint">本人確認と、適格請求書の名義確認に使います。購入者には公開されません。</div>'+
-        '<input type="text" id="rep_name" placeholder="例：中継 二郎"></div>'+
+        '<div class="fld"><label id="lbl_public"><span id="lbl_public_t">屋号</span><span class="req">必須</span></label>'+
+        '<div class="hint"><b>見積書・適格請求書・精算書に記載され、取引先（買い手）に表示されるのは、この名称のみです。</b>ご担当者の氏名・住所・インボイス登録番号が購入者に開示されることはありません。取引先に伝わる唯一の名称ですので、正確な表記でご入力ください。</div>'+
+        '<input type="text" id="business_name" placeholder="例：スタジオ○○"></div>'+
+
+        '<div class="fld"><label id="lbl_person"><span id="lbl_person_t">事業主のお名前</span><span class="req">必須</span></label>'+
+        '<div class="hint" id="hint_person">本人確認と、適格請求書の名義確認に使います。<b>購入者には公開されません。</b></div>'+
+        '<input type="text" id="rep_name" placeholder="例：那賀 潤二郎"></div>'+
 
         '<div class="fld"><label>連絡先メール<span class="req">必須</span></label>'+
         '<input type="email" id="contact_email" placeholder="you@example.com"></div>'+
@@ -163,6 +170,28 @@
       '</div>';
 
     $("submit").addEventListener("click", submitForm);
+    // 事業者区分の切り替え：ラベルとプレースホルダを法人/個人で出し分ける
+    Array.prototype.forEach.call(document.querySelectorAll('input[name=biz_type]'), function(r){
+      r.addEventListener("change", applyBizType);
+    });
+    applyBizType();
+  }
+
+  function applyBizType(){
+    var t = (document.querySelector('input[name=biz_type]:checked')||{}).value || "individual";
+    if(t === "company"){
+      $("lbl_public_t").textContent = "法人名";
+      $("business_name").placeholder = "例：株式会社○○";
+      $("lbl_person_t").textContent = "代表者氏名";
+      $("rep_name").placeholder = "例：那賀 潤二郎";
+      $("hint_person").innerHTML = "本人確認と、適格請求書の名義確認に使います。<b>購入者には公開されません。</b>";
+    }else{
+      $("lbl_public_t").textContent = "屋号";
+      $("business_name").placeholder = "例：スタジオ○○";
+      $("lbl_person_t").textContent = "事業主のお名前";
+      $("rep_name").placeholder = "例：那賀 潤二郎";
+      $("hint_person").innerHTML = "本人確認と、適格請求書の名義確認に使います。<b>購入者には公開されません。</b>屋号をお持ちでない場合も、取引先には屋号欄の名称のみが表示され、お名前は表示されません。";
+    }
   }
 
   window.onInv = function(){
@@ -177,10 +206,12 @@
   async function submitForm(){
     $("err").style.display="none";
     var inv = document.querySelector('input[name=inv]:checked');
+    var bizType = (document.querySelector('input[name=biz_type]:checked')||{}).value || "individual";
     var payload = {
       token: token,
-      business_name: $("business_name").value.trim(),
-      rep_name: $("rep_name").value.trim(),
+      business_type: bizType,                        // individual | company
+      business_name: $("business_name").value.trim(), // 買い手に見せる名称（屋号 or 法人名）
+      rep_name: $("rep_name").value.trim(),           // 本人確認用（非公開・事業主本名 or 代表者氏名）
       contact_email: $("contact_email").value.trim(),
       contact_phone: $("contact_phone").value.trim(),
       business_desc: $("business_desc").value.trim(),
@@ -191,8 +222,8 @@
       agree_invoice: $("agree_invoice").checked,
     };
 
-    if(!payload.business_name) return fail("屋号／名称をご入力ください。");
-    if(!payload.rep_name) return fail("代表者氏名をご入力ください。");
+    if(!payload.business_name) return fail(bizType==="company" ? "法人名をご入力ください。" : "屋号をご入力ください。");
+    if(!payload.rep_name) return fail(bizType==="company" ? "代表者氏名をご入力ください。" : "事業主のお名前をご入力ください。");
     if(!payload.contact_email) return fail("連絡先メールをご入力ください。");
     if(!payload.business_desc) return fail("事業内容をご入力ください。");
     if(!inv) return fail("インボイス登録の有無をお選びください。");

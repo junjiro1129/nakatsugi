@@ -330,8 +330,10 @@
       ? ' <a class="verify" target="_blank" href="https://www.invoice-kohyo.nta.go.jp/regno-search/detail?selRegNo='+encodeURIComponent((r.invoice_number||"").replace(/^T/,""))+'">国税庁で確認</a>'
       : '';
 
+    var isCompany = r.business_type === "company";
     out += '<dl class="kv">'+
-      '<dt>代表者</dt><dd>'+esc(r.rep_name||"—")+'</dd>'+
+      '<dt>区分</dt><dd>'+(isCompany?'法人':'個人事業主')+'　<span class="sub2">買い手に表示：'+esc(r.business_name||"—")+'</span></dd>'+
+      '<dt>'+(isCompany?'代表者氏名':'事業主氏名（非公開）')+'</dt><dd>'+esc(r.rep_name||"—")+'</dd>'+
       '<dt>連絡先</dt><dd>'+esc(r.contact_email||"—")+(r.contact_phone?' ／ '+esc(r.contact_phone):'')+'</dd>'+
       '<dt>事業内容</dt><dd>'+esc(r.business_desc||"—")+'</dd>'+
       '<dt>インボイス</dt><dd>'+inv+verify+'</dd>'+
