@@ -202,23 +202,45 @@
       Array.prototype.forEach.call(document.querySelectorAll("[data-copy-quote]"),function(b){
         b.addEventListener("click",function(){ copy(quoteLink(b.getAttribute("data-copy-quote")),"請書（買い手用）リンクをコピーしました"); });
       });
+      Array.prototype.forEach.call(document.querySelectorAll("[data-statement]"),function(b){
+        b.addEventListener("click",function(){ window.open(docBase()+"?id="+encodeURIComponent(b.getAttribute("data-statement"))+"&kind=statement","_blank"); });
+      });
     }catch(e){ $("list").innerHTML='<div class="empty">'+esc(e.message)+'</div>'; }
   }
 
+  var QSTATUS = {
+    pending:        { label:"買い手の承認待ち", cls:"b-open" },
+    awaiting_funds: { label:"入金待ち",        cls:"b-open" },
+    paid:           { label:"役務提供中",      cls:"b-open" },
+    released:       { label:"完了",            cls:"b-done" },
+    refunded:       { label:"返金済み",        cls:"b-open" },
+  };
+
   function renderEst(e){
     var done = !!e.converted_quote;
+    var qs = e.quote_status || "";
+    var statusBadge;
+    if(!done){ statusBadge = '<span class="badge b-open">商談中</span>'; }
+    else if(QSTATUS[qs]){ statusBadge = '<span class="badge '+QSTATUS[qs].cls+'">'+QSTATUS[qs].label+'</span>'; }
+    else { statusBadge = '<span class="badge b-done">請書にしました</span>'; }
+
     var h='<div class="est"><div class="r1"><div>'+
-      '<div class="ti">'+esc(e.title)+(done?'<span class="badge b-done">請書にしました</span>':'<span class="badge b-open">商談中</span>')+'</div>'+
+      '<div class="ti">'+esc(e.title)+statusBadge+'</div>'+
       '<div class="by">'+(e.buyer_name?esc(e.buyer_name)+' 様':'（宛名なし）')+'</div>'+
       '</div><div class="am">'+yen(e.amount_inc)+'</div></div>'+
-      '<div class="meta">作成 '+ymd(e.created)+'　／　有効期限 '+ymd(e.valid_until)+'</div>'+
+      '<div class="meta">作成 '+ymd(e.created)+'　／　有効期限 '+ymd(e.valid_until)+
+        (qs==="released"&&e.payout?'　／　お振込 '+yen(e.payout):'')+'</div>'+
       '<div class="acts">'+
         '<button class="sm" data-open-est="'+e.id+'">見積書を開く</button>'+
         '<button class="sm" data-copy-est="'+e.id+'">見積書リンクをコピー</button>';
     if(!done){
       h+='<button class="sm go" data-convert="'+e.id+'">この見積書を請書にする</button>';
     }else{
-      h+='<button class="sm go" data-copy-quote="'+e.converted_quote+'">請書リンクをコピー（買い手へ）</button>';
+      h+='<button class="sm" data-copy-quote="'+e.converted_quote+'">請書リンクをコピー（買い手へ）</button>';
+      // 完了（送金済み）なら、出品者が自分で精算書を取得できる
+      if(qs==="released"){
+        h+='<button class="sm go" data-statement="'+e.converted_quote+'">精算書を取得</button>';
+      }
     }
     h+='</div></div>';
     return h;

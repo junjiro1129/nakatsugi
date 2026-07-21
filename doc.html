@@ -210,7 +210,7 @@
     // 明細
     html += '<table><thead><tr><th>内容</th><th class="r">税率</th><th class="r">金額（税抜）</th></tr></thead><tbody>';
     if (isStm) {
-      html += '<tr><td>'+esc(d.title)+'<div class="dsc">お取引の対価（お預かり金額 '+yen(d.amount_inc)+'）</div></td>'+
+      html += '<tr><td>'+esc(d.title)+'<div class="dsc">'+(d.buyer_name?'役務利用者：'+esc(d.buyer_name)+'　／　':'')+'お取引の対価（お預かり金額 '+yen(d.amount_inc)+'）</div></td>'+
         '<td class="r">'+d.tax_rate+'%</td><td class="r">'+yen(d.amount_ex)+'</td></tr>'+
         '<tr><td>ナカツギ利用料（'+d.fee_rate+'%）<div class="dsc">お取引金額（税込）に対する利用料です</div></td>'+
         '<td class="r">'+d.tax_rate+'%</td><td class="r">-'+yen(d.fee_ex).slice(1)+'</td></tr>';
