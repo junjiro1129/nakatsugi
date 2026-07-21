@@ -161,7 +161,9 @@
     var isStm = d.kind === "statement";
     var isEst = d.kind === "estimate";
     // 精算書は出品者宛（当社→出品者の利用料請求）。それ以外は買い手宛。
-    var toName = isStm ? d.seller_name : (d.buyer_name || d.buyer_email || "お取引先");
+    // 精算書は本人向け書類。個人事業主は申告主体である本人名、法人は法人名を宛名にする（Workerが statement_to で返す）。
+    // それ以外（買い手向け）は従来どおり買い手名。
+    var toName = isStm ? (d.statement_to || d.seller_name) : (d.buyer_name || d.buyer_email || "お取引先");
 
     var html = '<div class="sheet">';
 
