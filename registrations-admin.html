@@ -244,6 +244,14 @@
     Array.prototype.forEach.call(document.querySelectorAll("[data-copyacct]"), function(b){
       b.addEventListener("click", async function(){ await copy(b.getAttribute("data-copyacct")); toast("アカウントIDをコピーしました"); });
     });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-esttool]"), function(b){
+      b.addEventListener("click", async function(){
+        // この管理画面と同じ場所にある estimate.html を指す
+        var base = location.origin + location.pathname.replace(/\/[^\/]*$/, "/estimate.html");
+        var url = base + "?seller=" + encodeURIComponent(b.getAttribute("data-esttool"));
+        await copy(url); toast("見積書ツールのURLをコピーしました（出品者へ送付）");
+      });
+    });
     Array.prototype.forEach.call(document.querySelectorAll("[data-mkacct]"), function(b){
       b.addEventListener("click", function(){ makeAccount(b.getAttribute("data-mkacct"), b); });
     });
@@ -365,7 +373,14 @@
            '<div class="onbo-link" id="lk_'+r.token+'"></div>'+
            '<div class="due" id="due_'+r.token+'"></div>';
     } else {
-      s += '<div class="due" style="color:var(--green-deep);margin-top:9px">✓ 本人確認・口座登録が完了し、送金を受け取れる状態です。上のアカウントIDを見積作成に使えます。</div>';
+      s += '<div class="due" style="color:var(--green-deep);margin-top:9px">✓ 本人確認・口座登録が完了し、送金を受け取れる状態です。上のアカウントIDを請書作成に使えます。</div>';
+    }
+    // 見積書ツールURL（承認時に発行される est_ トークン。出品者に渡すと自分で見積書を作れる）
+    if(r.est_token){
+      s += '<div style="margin-top:12px" class="ttl">見積書ツール（出品者に渡す）</div>'+
+           '<div class="acts" style="margin-top:0">'+
+             '<button class="sm go" data-esttool="'+esc(r.est_token)+'">見積書ツールのURLをコピー</button>'+
+           '</div>';
     }
     return s+'</div>';
   }

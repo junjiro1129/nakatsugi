@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>見積書ツール｜ナカツギ</title>
+<style>
+  :root{
+    --ink:#16263F;--ink-soft:#3A4A63;--muted:#5C6675;--green:#137A57;--green-deep:#0C5A40;
+    --paper:#F4F3ED;--surface:#FFFFFF;--line:rgba(22,38,63,.14);--line-soft:rgba(22,38,63,.07);
+    --amber:#9A6B12;--amber-soft:rgba(154,107,18,.1);--blue:#2B5A9A;--blue-soft:#E1E9F5;
+    --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+    --mono:"SFMono-Regular",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);
+    line-height:1.7;font-size:15px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px}
+  a{color:inherit}
+
+  .top{background:var(--surface);border-bottom:1px solid var(--line);padding:18px 0}
+  .top .in{max-width:820px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:18px}
+  .who{font-size:13px;color:var(--muted)}
+  .who b{color:var(--ink)}
+
+  h1{font-size:20px;margin:26px 0 4px}
+  .sub{color:var(--muted);font-size:14px;margin:0 0 22px}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:20px}
+  .card h2{font-size:16px;margin:0 0 16px}
+  .fld{margin-bottom:14px}
+  .fld label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}
+  .fld input,.fld textarea{width:100%;font-family:var(--sans);font-size:15px;padding:11px 13px;
+    border:1.5px solid var(--line);border-radius:9px;background:var(--paper);color:var(--ink)}
+  .fld textarea{min-height:70px;resize:vertical}
+  .fld input:focus,.fld textarea:focus{outline:none;border-color:var(--green)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .taxrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .taxrow label{display:flex;align-items:center;gap:5px;font-size:13px;font-weight:600;cursor:pointer}
+  .taxrow input[type=number]{max-width:150px}
+  .preview{font-size:13px;color:var(--muted);margin-top:8px;min-height:20px}
+  button{font-family:var(--sans);font-weight:700;cursor:pointer;border:none;border-radius:999px}
+  .primary{background:var(--ink);color:#fff;font-size:15px;padding:12px 26px}
+  .primary:hover{background:#0E1B30}
+  .primary:disabled{opacity:.5;cursor:default}
+  .sm{font-size:13px;font-weight:600;padding:7px 14px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+  .sm:hover{border-color:var(--ink)}
+  .sm.go{background:var(--green);color:#fff;border-color:var(--green)}
+  .sm.go:hover{background:var(--green-deep)}
+
+  .empty{text-align:center;color:var(--muted);padding:30px;font-size:14px}
+  .est{border:1px solid var(--line);border-radius:11px;padding:15px 17px;margin-bottom:12px}
+  .est .r1{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .est .ti{font-weight:700;font-size:15px}
+  .est .by{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .est .am{font-family:var(--mono);font-weight:700;font-size:16px;white-space:nowrap}
+  .est .meta{font-size:12px;color:var(--muted);margin-top:6px}
+  .est .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;margin-left:8px}
+  .b-open{background:var(--blue-soft);color:var(--blue)}
+  .b-done{background:rgba(19,122,87,.12);color:var(--green-deep)}
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);opacity:0;
+    background:var(--ink);color:#fff;font-size:14px;padding:12px 22px;border-radius:999px;transition:.25s;pointer-events:none;z-index:50}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast.err{background:#A3352B}
+  .gate{text-align:center;padding:70px 20px;color:var(--muted)}
+  .gate .big{font-size:19px;font-weight:700;color:var(--ink);margin-bottom:8px}
+  @media(max-width:640px){.row2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="top"><div class="in">
+  <div class="brand">
+    <svg width="24" height="24" viewBox="0 0 26 26"><circle cx="5" cy="13" r="3.4" fill="#16263F"/><circle cx="21" cy="13" r="3.4" fill="#16263F"/><path d="M5 13 Q13 1 21 13" fill="none" stroke="#137A57" stroke-width="2.4" stroke-linecap="round"/></svg>
+    ナカツギ 見積書ツール
+  </div>
+  <div class="who" id="who"></div>
+</div></div>
+
+<div class="wrap" id="app"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+  var WORKER_URL = "https://nakatsugi-stripe.junjiro1129.workers.dev";
+  var p = new URLSearchParams(location.search);
+  var SELLER = p.get("seller") || "";
+  var app = document.getElementById("app");
+  var bizName = "";
+
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  function yen(n){ return "¥" + Number(n||0).toLocaleString("ja-JP"); }
+  function ymd(s){ if(!s) return "—"; var d=new Date(s); return d.getFullYear()+"/"+(d.getMonth()+1)+"/"+d.getDate(); }
+  var tmo;
+  function toast(m,err){ var t=$("toast"); t.textContent=m; t.className="toast on"+(err?" err":""); clearTimeout(tmo); tmo=setTimeout(function(){t.className="toast";},2600); }
+
+  async function api(path, body, method){
+    var opts={ method: method||"POST", headers:{"Content-Type":"application/json"} };
+    if(body) opts.body=JSON.stringify(body);
+    var res=await fetch(WORKER_URL.replace(/\/+$/,"")+path, opts);
+    var d=await res.json();
+    if(!res.ok) throw new Error(d.error||"エラーが発生しました");
+    return d;
+  }
+
+  // 税・利用料の計算（表示用。Workerと同じ整数演算）
+  var TAX_NUM=10,TAX_DEN=100;
+  function bd(v,mode){ if(mode==="inc"){var ex=Math.round(v*TAX_DEN/(TAX_DEN+TAX_NUM));return{ex:ex,tax:v-ex,inc:v};}
+    var t=Math.floor(v*TAX_NUM/TAX_DEN);return{ex:v,tax:t,inc:v+t}; }
+
+  function gate(msg){
+    app.innerHTML='<div class="gate"><div class="big">ご利用いただけません</div><div>'+esc(msg)+'</div></div>';
+  }
+
+  function docBase(){ return location.pathname.replace(/\/[^\/]*$/, "/doc.html"); }
+  function estimateLink(id){ return location.origin + docBase() + "?id=" + encodeURIComponent(id) + "&kind=estimate"; }
+  function quoteLink(qid){
+    // 買い手が請書を見るページ。quote.html を同じ場所に置いている前提。
+    return location.origin + location.pathname.replace(/\/[^\/]*$/, "/quote.html") + "?id=" + encodeURIComponent(qid);
+  }
+
+  function renderApp(){
+    app.innerHTML =
+      '<h1>見積書をつくる</h1>'+
+      '<p class="sub">お客さまへの提案用の見積書です。何枚でも自由に作れます。商談がまとまったら、そのまま「請書にする」で正式なご契約へ進めます。</p>'+
+      '<div class="card"><h2>新しい見積書</h2>'+
+        '<div class="fld"><label>お客さまの宛名</label><input id="f_buyer" placeholder="例：株式会社ミライ"></div>'+
+        '<div class="fld"><label>件名</label><input id="f_title" placeholder="例：ロゴデザイン制作一式"></div>'+
+        '<div class="fld"><label>内容の説明（任意）</label><input id="f_desc" placeholder="例：ロゴ3案・修正2回・データ納品"></div>'+
+        '<div class="fld"><label>金額</label>'+
+          '<div class="taxrow">'+
+            '<input id="f_amount" type="number" placeholder="50000">'+
+            '<label><input type="radio" name="tax" value="ex" checked> 税抜で入力</label>'+
+            '<label><input type="radio" name="tax" value="inc"> 税込で入力</label>'+
+          '</div>'+
+          '<div class="preview" id="prev"></div>'+
+        '</div>'+
+        '<div class="row2">'+
+          '<div class="fld"><label>有効期限（日数）</label><input id="f_days" type="number" value="14"></div>'+
+        '</div>'+
+        '<div class="fld"><label>備考（納期・条件など・任意）</label><textarea id="f_note" placeholder="例：納期はご発注から2週間／お支払いはご承認後の前払いとなります"></textarea></div>'+
+        '<button class="primary" id="make">見積書を作成</button>'+
+      '</div>'+
+      '<h2 style="font-size:16px;margin:26px 0 12px">作成した見積書</h2>'+
+      '<div id="list"><div class="empty">読み込み中…</div></div>';
+
+    $("f_amount").addEventListener("input", updPrev);
+    Array.prototype.forEach.call(document.querySelectorAll('input[name=tax]'), function(r){ r.addEventListener("change", updPrev); });
+    $("make").addEventListener("click", createEstimate);
+    loadList();
+  }
+
+  function updPrev(){
+    var v=parseInt($("f_amount").value,10);
+    if(!v||v<1){ $("prev").textContent=""; return; }
+    var mode=(document.querySelector('input[name=tax]:checked')||{}).value||"ex";
+    var t=bd(v,mode);
+    $("prev").textContent="税抜 "+yen(t.ex)+" ＋ 消費税 "+yen(t.tax)+" ＝ 税込 "+yen(t.inc);
+  }
+
+  async function createEstimate(){
+    var amount=parseInt($("f_amount").value,10);
+    if(!amount||amount<1){ toast("金額を入力してください",true); return; }
+    if(!$("f_title").value.trim()){ toast("件名を入力してください",true); return; }
+    var btn=$("make"); btn.disabled=true; btn.textContent="作成中…";
+    try{
+      await api("/estimates/create", {
+        seller: SELLER,
+        buyer_name: $("f_buyer").value.trim(),
+        title: $("f_title").value.trim(),
+        description: $("f_desc").value.trim(),
+        amount: amount,
+        tax_mode: (document.querySelector('input[name=tax]:checked')||{}).value||"ex",
+        valid_days: parseInt($("f_days").value,10)||14,
+        note: $("f_note").value.trim(),
+      });
+      toast("見積書を作成しました");
+      ["f_buyer","f_title","f_desc","f_amount","f_note"].forEach(function(i){ $(i).value=""; });
+      $("prev").textContent="";
+      loadList();
+    }catch(e){ toast(e.message,true); }
+    btn.disabled=false; btn.textContent="見積書を作成";
+  }
+
+  async function loadList(){
+    try{
+      var d=await api("/estimates/list?seller="+encodeURIComponent(SELLER), null, "GET");
+      var list=$("list");
+      if(!d.estimates.length){ list.innerHTML='<div class="empty">まだ見積書はありません。上のフォームから作成してください。</div>'; return; }
+      list.innerHTML=d.estimates.map(renderEst).join("");
+      // 配線
+      Array.prototype.forEach.call(document.querySelectorAll("[data-copy-est]"),function(b){
+        b.addEventListener("click",function(){ copy(estimateLink(b.getAttribute("data-copy-est")),"見積書リンクをコピーしました"); });
+      });
+      Array.prototype.forEach.call(document.querySelectorAll("[data-open-est]"),function(b){
+        b.addEventListener("click",function(){ window.open(estimateLink(b.getAttribute("data-open-est")),"_blank"); });
+      });
+      Array.prototype.forEach.call(document.querySelectorAll("[data-convert]"),function(b){
+        b.addEventListener("click",function(){ convert(b.getAttribute("data-convert"), b); });
+      });
+      Array.prototype.forEach.call(document.querySelectorAll("[data-copy-quote]"),function(b){
+        b.addEventListener("click",function(){ copy(quoteLink(b.getAttribute("data-copy-quote")),"請書（買い手用）リンクをコピーしました"); });
+      });
+    }catch(e){ $("list").innerHTML='<div class="empty">'+esc(e.message)+'</div>'; }
+  }
+
+  function renderEst(e){
+    var done = !!e.converted_quote;
+    var h='<div class="est"><div class="r1"><div>'+
+      '<div class="ti">'+esc(e.title)+(done?'<span class="badge b-done">請書にしました</span>':'<span class="badge b-open">商談中</span>')+'</div>'+
+      '<div class="by">'+(e.buyer_name?esc(e.buyer_name)+' 様':'（宛名なし）')+'</div>'+
+      '</div><div class="am">'+yen(e.amount_inc)+'</div></div>'+
+      '<div class="meta">作成 '+ymd(e.created)+'　／　有効期限 '+ymd(e.valid_until)+'</div>'+
+      '<div class="acts">'+
+        '<button class="sm" data-open-est="'+e.id+'">見積書を開く</button>'+
+        '<button class="sm" data-copy-est="'+e.id+'">見積書リンクをコピー</button>';
+    if(!done){
+      h+='<button class="sm go" data-convert="'+e.id+'">この見積書を請書にする</button>';
+    }else{
+      h+='<button class="sm go" data-copy-quote="'+e.converted_quote+'">請書リンクをコピー（買い手へ）</button>';
+    }
+    h+='</div></div>';
+    return h;
+  }
+
+  async function convert(id, btn){
+    if(!confirm("この見積書を請書にします。\n請書は、買い手が承認すると契約成立・お支払いに進む正式な書類です。\nよろしいですか？")) return;
+    btn.disabled=true; btn.textContent="作成中…";
+    try{
+      var d=await api("/estimates/convert", { seller: SELLER, id: id });
+      toast(d.already?"すでに請書にしています":"請書を作成しました");
+      loadList();
+    }catch(e){ toast(e.message,true); btn.disabled=false; btn.textContent="この見積書を請書にする"; }
+  }
+
+  async function copy(text,msg){
+    try{ await navigator.clipboard.writeText(text); toast(msg); }
+    catch(_){ prompt("以下をコピーしてください：", text); }
+  }
+
+  // 起動：est_トークンを検証して屋号を取得
+  (async function(){
+    if(!SELLER){ gate("見積書ツールのリンクが正しくありません。運営からお送りしたURLをご確認ください。"); return; }
+    try{
+      var me=await api("/estimates/me?seller="+encodeURIComponent(SELLER), null, "GET");
+      bizName=me.business_name||"";
+      $("who").innerHTML = bizName ? '<b>'+esc(bizName)+'</b> 様' : '';
+      renderApp();
+    }catch(e){ gate(e.message); }
+  })();
+</script>
+</body>
+</html>

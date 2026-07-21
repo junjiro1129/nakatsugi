@@ -6,7 +6,7 @@
 <title>書類｜ナカツギ</title>
 <style>
   :root{
-    --ink:#16263F;--muted:#5C6675;--green:#137A57;--green-deep:#0C5A40;
+    --ink:#16263F;--ink-soft:#3A4A63;--muted:#5C6675;--green:#137A57;--green-deep:#0C5A40;
     --paper:#F4F3ED;--surface:#FFFFFF;--line:rgba(22,38,63,.16);--line-soft:rgba(22,38,63,.08);
     --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
     --mono:"SFMono-Regular",Menlo,Consolas,monospace;
@@ -74,6 +74,9 @@
 
   /* 出品者向け：消費税の内訳（申告の一次資料） */
   .taxbox{margin-top:20px;border:1.5px solid var(--green);border-radius:10px;overflow:hidden}
+  .notebox{margin-top:18px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .nb-h{background:var(--paper);font-size:11.5px;font-weight:700;padding:7px 15px;color:var(--ink)}
+  .nb-b{padding:11px 15px;font-size:13px;color:var(--ink-soft);line-height:1.7}
   .tb-h{background:var(--green-deep);color:#fff;font-size:11.5px;font-weight:700;
     padding:8px 15px;letter-spacing:.05em}
   .tb-row{display:flex;justify-content:space-between;align-items:center;gap:14px;
@@ -138,8 +141,8 @@
   var id = p.get("id"), kind = p.get("kind") || "quote";
   var app = document.getElementById("app");
 
-  var TITLES = { quote:"請 書", invoice:"請 求 書", statement:"精 算 書" };
-  var BARTTL = { quote:"請書", invoice:"適格請求書", statement:"精算書（お支払い明細）" };
+  var TITLES = { estimate:"御 見 積 書", quote:"請 書", invoice:"請 求 書", statement:"精 算 書" };
+  var BARTTL = { estimate:"見積書", quote:"請書", invoice:"適格請求書", statement:"精算書（お支払い明細）" };
 
   function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
   function yen(n){ return "¥" + Number(n||0).toLocaleString("ja-JP"); }
@@ -156,6 +159,7 @@
 
     var isInv = d.kind === "invoice";
     var isStm = d.kind === "statement";
+    var isEst = d.kind === "estimate";
     // 精算書は出品者宛（当社→出品者の利用料請求）。それ以外は買い手宛。
     var toName = isStm ? d.seller_name : (d.buyer_name || d.buyer_email || "お取引先");
 
@@ -166,7 +170,7 @@
       (isInv ? '<div><span class="stamp">適格請求書</span></div>' : '')+
       '<div class="no">No. '+esc(d.id)+'</div></div>'+
       '<div class="dates">';
-    if (d.kind === "quote") {
+    if (d.kind === "quote" || isEst) {
       html += '発行日：<b>'+ymd(d.created)+'</b><br>有効期限：<b>'+ymd(d.valid_until)+'</b>';
     } else if (isInv) {
       var invDate = d.completed_at || d.paid_at || d.created;
@@ -183,7 +187,7 @@
       '<div class="sub">'+(isStm ? '出品者さま' : 'お取引先さま')+'</div></div>';
 
     // 合計
-    var totalLabel = isStm ? "お振込金額" : (isInv ? "ご請求金額（税込）" : "ご注文金額（税込）");
+    var totalLabel = isStm ? "お振込金額" : (isInv ? "ご請求金額（税込）" : (isEst ? "お見積金額（税込）" : "ご注文金額（税込）"));
     var totalVal   = isStm ? d.payout : d.amount_inc;
     html += '<div class="total"><div class="lab">'+totalLabel+'</div><div class="val">'+yen(totalVal)+'</div></div>';
 
@@ -197,7 +201,9 @@
         issuerContact+'</div></div>';
     if (!isStm) {
       html += '<div class="pt"><div class="k">役務提供者</div><div class="v">'+esc(d.seller_name)+'</div>'+
-        '<div class="m">本取引の役務提供者です。ご請求・決済は発行者が行います。</div></div>';
+        '<div class="m">'+(isEst
+          ? '本見積の役務提供者です。ご発注の際は、当サービスを通じてお手続きいただきます。'
+          : '本取引の役務提供者です。ご請求・決済は発行者が行います。')+'</div></div>';
     }
     html += '</div>';
 
@@ -229,6 +235,11 @@
     }
     html += '</div>';
 
+    // 見積書の備考（納期・条件など）
+    if (isEst && d.note) {
+      html += '<div class="notebox"><div class="nb-h">備考</div><div class="nb-b">'+esc(d.note).replace(/\n/g,'<br>')+'</div></div>';
+    }
+
     // 出品者向け：消費税の内訳（申告の一次資料）。預かった税＝納める側、払った税＝控除できる側。
     if (isStm) {
       html += '<div class="taxbox">'+
@@ -247,7 +258,10 @@
 
     // 注記
     html += '<div class="legal">';
-    if (isStm) {
+    if (isEst) {
+      html += '<b>本書は御見積書です。</b>本見積の有効期限は '+ymd(d.valid_until)+' です。金額・内容は変更となる場合があります。<br>'+
+        'ご発注の際は、役務提供者より「請書」をお送りします。請書をご承認いただいた時点で契約が成立し、以降のご請求・お支払い・代金のお預かりは、ナカツギ（'+esc(d.issuer.name)+'）を通じて行われます。';
+    } else if (isStm) {
       html += '<b>本書は、ナカツギ利用料に係る適格請求書です。</b>上記の利用料について、発行者の登録番号にて交付します。<br>'+
         '<b>また本書は、当社が購入者へ交付した適格請求書の写しの交付に代えて交付するものです。</b>'+
         '（消費税法施行令第70条の12第1項に定める媒介者交付特例）。法令に定める期間、保存してください。<br>'+
