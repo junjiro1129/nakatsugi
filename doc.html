@@ -138,8 +138,8 @@
   var id = p.get("id"), kind = p.get("kind") || "quote";
   var app = document.getElementById("app");
 
-  var TITLES = { quote:"見 積 書", invoice:"請 求 書", statement:"精 算 書" };
-  var BARTTL = { quote:"見積書", invoice:"適格請求書", statement:"精算書（お支払い明細）" };
+  var TITLES = { quote:"請 書", invoice:"請 求 書", statement:"精 算 書" };
+  var BARTTL = { quote:"請書", invoice:"適格請求書", statement:"精算書（お支払い明細）" };
 
   function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
   function yen(n){ return "¥" + Number(n||0).toLocaleString("ja-JP"); }
@@ -183,7 +183,7 @@
       '<div class="sub">'+(isStm ? '出品者さま' : 'お取引先さま')+'</div></div>';
 
     // 合計
-    var totalLabel = isStm ? "お振込金額" : (isInv ? "ご請求金額（税込）" : "お見積金額（税込）");
+    var totalLabel = isStm ? "お振込金額" : (isInv ? "ご請求金額（税込）" : "ご注文金額（税込）");
     var totalVal   = isStm ? d.payout : d.amount_inc;
     html += '<div class="total"><div class="lab">'+totalLabel+'</div><div class="val">'+yen(totalVal)+'</div></div>';
 
@@ -256,7 +256,7 @@
       html += '<b>本書は、'+esc(d.issuer.name)+'が、上記の役務提供者から委託を受け、媒介者交付特例（消費税法施行令第70条の12第1項）に基づき交付するものです。</b>'+
         '役務提供契約の当事者は役務提供者であり、当社は当該契約の当事者ではありません。<br>';
       if (isInv) html += '本書は適格請求書です。仕入税額控除の適用にあたっては、法令に定める期間、保存してください。<br>';
-      if (d.kind === "quote") html += '本見積の有効期限は '+ymd(d.valid_until)+' です。お支払い後、役務の完了が確認されるまで、代金は決済事業者にて留保されます。<br>';
+      if (d.kind === "quote") html += '本書は請書です。ご承認いただいた時点で、記載の内容により役務提供契約が成立します。有効期限は '+ymd(d.valid_until)+' です。お支払い後、役務の完了が確認されるまで、代金は決済事業者にて留保されます。<br>';
       html += 'お支払いいただいた代金は、役務の完了が確認された後に役務提供者へ引き渡されます。';
     }
     html += '</div></div>';

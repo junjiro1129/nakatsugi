@@ -63,9 +63,9 @@
   function ymd(s){ if(!s) return ""; var d=new Date(s);
     return d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日"; }
 
-  // このリンクは見積から完了まで買い手が何度も開く。タブだけで進捗と「次にすること」が分かるようにする。
+  // このリンクは注文確認から完了まで買い手が何度も開く。タブだけで進捗と「次にすること」が分かるようにする。
   var TAB_TITLES = {
-    pending:        "お見積のご確認",
+    pending:        "ご注文内容のご確認",
     awaiting_funds: "ご入金のお願い",
     paid:           "完了確認のお願い",
     released:       "お取引完了",
@@ -146,7 +146,7 @@
       if(q.status === "released"){ showDone(); return; }
       if(q.status === "refunded"){ showRefunded(); return; }
       content.innerHTML =
-        '<div class="eyebrow">お見積内容</div>'+
+        '<div class="eyebrow">ご注文内容</div>'+
         '<h1 class="title">'+escapeHtml(q.title)+'</h1>'+
         (q.buyer_name ? '<p class="desc">'+escapeHtml(q.buyer_name)+' 様</p>' : '')+
         (q.seller_name ? '<p class="desc"><b>役務提供者：'+escapeHtml(q.seller_name)+'</b></p>' : '')+
@@ -159,7 +159,7 @@
         (q.valid_until ? '<p class="msg" style="text-align:center">有効期限：'+ymd(q.valid_until)+'</p>' : '')+
         '<p class="note">お支払いいただいた代金は、役務の提供が完了するまでナカツギがお預かりします。完了の確認後に提供者へお渡しするため、前払いのご不安なくお取引いただけます。</p>'+
         '<button id="pay">承認して支払う</button>'+
-        '<button id="doc" class="ghost">見積書を保存・印刷（PDF可）</button>';
+        '<button id="doc" class="ghost">請書を保存・印刷（PDF可）</button>';
       document.getElementById("doc").addEventListener("click", function(){
         window.open("doc.html?id="+encodeURIComponent(q.id)+"&kind=quote", "_blank");
       });
@@ -204,7 +204,7 @@
 
   function escapeHtml(s){ return String(s||"").replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
 
-  if(!id){ showError("見積IDが指定されていません。"); }
+  if(!id){ showError("請書IDが指定されていません。"); }
   else if(params.get("paid")==="1" && params.get("session_id")){ confirmPaid(); }
   else if(params.get("canceled")==="1"){ renderQuote(); }
   else { renderQuote(); }
