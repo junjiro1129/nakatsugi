@@ -110,6 +110,7 @@
     <div class="row2">
       <div class="fld"><label>Worker の URL</label><input id="worker" placeholder="https://nakatsugi-stripe.xxxx.workers.dev"></div>
       <div class="fld"><label>登録フォーム（register.html）の URL</label><input id="regbase" placeholder="https://＜あなたのサイト＞/register.html"></div>
+      <div class="fld"><label>運営シークレット（ADMIN_SECRET）</label><input id="admsec" type="password" placeholder="Cloudflareに登録した ADMIN_SECRET を入力（このブラウザに保存されます）"></div>
     </div>
     <button class="primary" id="invite">招待リンクを発行してコピー</button>
     <div class="invite-out" id="inviteOut">
@@ -133,7 +134,7 @@
 
 <script>
   var $ = function(id){ return document.getElementById(id); };
-  var LSK = { w:"nakatsugi_reg_worker", b:"nakatsugi_reg_base" };
+  var LSK = { w:"nakatsugi_reg_worker", b:"nakatsugi_reg_base", s:"nakatsugi_admin_secret" };
   var regs = [], filter = "all", lastLink = "";
 
   var STATUS = {
@@ -155,9 +156,10 @@
     { key:"rejected",   label:"却下" },
   ];
 
-  try{ $("worker").value=localStorage.getItem(LSK.w)||""; $("regbase").value=localStorage.getItem(LSK.b)||""; }catch(e){}
+  try{ $("worker").value=localStorage.getItem(LSK.w)||""; $("regbase").value=localStorage.getItem(LSK.b)||""; $("admsec").value=localStorage.getItem(LSK.s)||""; }catch(e){}
   $("worker").addEventListener("change", function(){ try{localStorage.setItem(LSK.w,$("worker").value.trim());}catch(e){} });
   $("regbase").addEventListener("change", function(){ try{localStorage.setItem(LSK.b,$("regbase").value.trim());}catch(e){} });
+  $("admsec").addEventListener("change", function(){ try{localStorage.setItem(LSK.s,$("admsec").value.trim());}catch(e){} });
 
   function base(){ return ($("worker").value||"").trim().replace(/\/+$/,""); }
   function regBase(){ return ($("regbase").value||"").trim(); }
@@ -171,8 +173,11 @@
     var url=base(); if(!url){ toast("Worker の URL を入力してください",true); return null; }
     try{
       var opts={method:method||"POST",headers:{}};
+      var sec=""; try{ sec=localStorage.getItem(LSK.s)||$("admsec").value.trim(); }catch(e){}
+      if(sec) opts.headers["X-Admin-Secret"]=sec;
       if(payload){ opts.headers["Content-Type"]="application/json"; opts.body=JSON.stringify(payload); }
       var res=await fetch(url+path,opts); var data=await res.json();
+      if(res.status===401){ toast("運営シークレットが未入力または不一致です。上の欄をご確認ください。",true); return null; }
       if(!res.ok){ toast(data.error||"エラー",true); return null; }
       return data;
     }catch(e){ toast("通信失敗："+e.message,true); return null; }

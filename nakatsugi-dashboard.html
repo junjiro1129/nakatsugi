@@ -96,7 +96,7 @@
       ナカツギ
     </div>
     <h1>運営ダッシュボード</h1>
-    <p class="sub">見積の状態を一元管理し、送金もれ・二重送金を防ぎます。テストモード用。</p>
+    <p class="sub">請書の状態を一元管理し、送金もれ・二重送金を防ぎます。テストモード用。</p>
   </header>
 
   <div class="card">
@@ -111,10 +111,14 @@
         <input id="buyerbase" placeholder="https://＜あなたのサイト＞/quote.html">
       </div>
     </div>
+    <div class="fld" style="margin-top:12px">
+      <label>運営シークレット（ADMIN_SECRET）</label>
+      <input id="admsec" type="password" placeholder="Cloudflareに登録した ADMIN_SECRET を入力（このブラウザに保存されます）">
+    </div>
   </div>
 
   <details class="card">
-    <summary>新規見積を作成</summary>
+    <summary>新規請書を作成</summary>
     <div style="margin-top:14px">
       <div class="row2">
         <div class="fld"><label>受取人アカウント（出品者 acct_）</label><input id="c_seller" placeholder="acct_xxxxxxxx"></div>
@@ -123,7 +127,7 @@
       <div class="fld"><label>買い手の宛名（適格請求書の交付先・任意）</label><input id="c_buyer" placeholder="例：株式会社○○／○○ 太郎"></div>
       <div class="row2">
         <div class="fld"><label>出品者の屋号（空欄なら登録情報から自動取得）</label><input id="c_sname" placeholder="例：スタジオ○○"></div>
-        <div class="fld" style="max-width:200px"><label>見積の有効期限（日数）</label><input id="c_days" type="number" value="14"></div>
+        <div class="fld" style="max-width:200px"><label>請書の有効期限（日数）</label><input id="c_days" type="number" value="14"></div>
       </div>
       <div class="fld"><label>件名</label><input id="c_title" placeholder="例：ロゴデザイン制作一式"></div>
       <div class="fld"><label>内容の説明（任意）</label><textarea id="c_desc" placeholder="例：ロゴ2案・修正2回・データ納品"></textarea></div>
@@ -135,7 +139,7 @@
         </div>
         <div id="c_preview" style="font-size:12.5px;color:var(--muted);margin-top:6px"></div>
       </div>
-      <button class="primary" id="create">見積を作成</button>
+      <button class="primary" id="create">請書を作成</button>
     </div>
   </details>
 
@@ -159,14 +163,14 @@
     </thead>
     <tbody id="rows"></tbody>
   </table>
-  <div class="empty" id="empty" hidden>まだ見積がありません。「新規見積を作成」から始めてください。</div>
+  <div class="empty" id="empty" hidden>まだ請書がありません。「新規請書を作成」から始めてください。</div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
   var $ = function(id){ return document.getElementById(id); };
-  var LSK = { w:"nakatsugi_dash_worker", b:"nakatsugi_dash_buyerbase" };
+  var LSK = { w:"nakatsugi_dash_worker", b:"nakatsugi_dash_buyerbase", s:"nakatsugi_admin_secret" };
   var quotes = [], filter = "all";
 
   // ▼ Worker と完全に同一の整数演算。小数の掛け算は誤差が出るため使わない
@@ -199,9 +203,10 @@
   ];
 
   /* --- config persistence --- */
-  try{ $("worker").value = localStorage.getItem(LSK.w) || ""; $("buyerbase").value = localStorage.getItem(LSK.b) || ""; }catch(e){}
+  try{ $("worker").value = localStorage.getItem(LSK.w) || ""; $("buyerbase").value = localStorage.getItem(LSK.b) || ""; $("admsec").value = localStorage.getItem(LSK.s) || ""; }catch(e){}
   $("worker").addEventListener("change", function(){ try{ localStorage.setItem(LSK.w, $("worker").value.trim()); }catch(e){} });
   $("buyerbase").addEventListener("change", function(){ try{ localStorage.setItem(LSK.b, $("buyerbase").value.trim()); }catch(e){} });
+  $("admsec").addEventListener("change", function(){ try{ localStorage.setItem(LSK.s, $("admsec").value.trim()); }catch(e){} });
 
   function base(){ return ($("worker").value||"").trim().replace(/\/+$/,""); }
   function buyerBase(){ return ($("buyerbase").value||"").trim(); }
@@ -217,9 +222,12 @@
     if(!url){ toast("Worker の URL を入力してください", true); return null; }
     try{
       var opts={ method: method||"POST", headers:{} };
+      var sec=""; try{ sec = localStorage.getItem(LSK.s) || $("admsec").value.trim(); }catch(e){}
+      if(sec) opts.headers["X-Admin-Secret"]=sec;
       if(payload){ opts.headers["Content-Type"]="application/json"; opts.body=JSON.stringify(payload); }
       var res = await fetch(url+path, opts);
       var data = await res.json();
+      if(res.status===401){ toast("運営シークレットが未入力または不一致です。接続情報の欄をご確認ください。", true); return null; }
       if(!res.ok){ toast(data.error || "エラー", true); return null; }
       return data;
     }catch(e){ toast("通信失敗："+e.message, true); return null; }
@@ -281,7 +289,7 @@
         acts = '<span class="sub2">返金済み</span>';
       }
       // 書類（状態に応じて出せるものだけ）
-      var docs = '<button class="sm" data-doc="quote:'+q.id+'">見積書</button>';
+      var docs = '<button class="sm" data-doc="quote:'+q.id+'">請書</button>';
       if(q.status==="paid" || q.status==="released") docs += '<button class="sm" data-doc="invoice:'+q.id+'">請求書</button>';
       if(q.status==="released") docs += '<button class="sm" data-doc="statement:'+q.id+'">精算書</button>';
       acts += '<div style="margin-top:6px">'+docs+'</div>';
@@ -308,7 +316,7 @@
   $("rows").addEventListener("click", async function(e){
     var btn = e.target.closest("button"); if(!btn) return;
 
-    // 書類を開く（見積書・請求書・精算書）
+    // 書類を開く（請書・請求書・精算書）
     var doc = btn.getAttribute("data-doc");
     if(doc){
       var parts = doc.split(":"), kind = parts[0], did = parts[1];
@@ -331,7 +339,7 @@
     if(relId){
       var q = quotes.find(function(x){return x.id===relId;});
       var qi = q.amount_inc!=null ? q.amount_inc : q.amount;
-      if(!confirm("この見積を送金します。\n出品者へ "+yen(calcFee(qi).payout)+"（利用料8.6%＋消費税を控除後）。\nよろしいですか？")) return;
+      if(!confirm("この請書を送金します。\n出品者へ "+yen(calcFee(qi).payout)+"（利用料8.6%＋消費税を控除後）。\nよろしいですか？")) return;
       btn.disabled = true; btn.textContent = "送金中…";
       var d = await api("/quotes/release", { id: relId });
       if(d && d.transfer){ toast("送金しました（出品者 "+yen(d.payout)+"）"); }
@@ -341,7 +349,7 @@
 
     var refId = btn.getAttribute("data-refund");
     if(refId){
-      if(!confirm("この見積を買い手へ返金します。よろしいですか？")) return;
+      if(!confirm("この請書を買い手へ返金します。よろしいですか？")) return;
       btn.disabled = true; btn.textContent = "返金中…";
       var r = await api("/quotes/refund", { id: refId });
       if(r && r.status==="refunded"){ toast("返金しました"); }
@@ -367,8 +375,8 @@
     var d = await api("/quotes/create", payload);
     if(d && d.id){
       var link = buyerLink(d.id);
-      if(link){ try{ await navigator.clipboard.writeText(link); }catch(_){ } toast("見積を作成し、買い手リンクをコピーしました"); }
-      else toast("見積を作成しました（買い手ページURL未設定）");
+      if(link){ try{ await navigator.clipboard.writeText(link); }catch(_){ } toast("請書を作成し、買い手リンクをコピーしました"); }
+      else toast("請書を作成しました（買い手ページURL未設定）");
       $("c_title").value=""; $("c_desc").value="";
       await load();
     }
