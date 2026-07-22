@@ -47,6 +47,10 @@
   .sm{font-size:13px;font-weight:600;padding:7px 14px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
   .sm:hover{border-color:var(--ink)}
   .sm.go{background:var(--green);color:#fff;border-color:var(--green)}
+  .sm.del{color:#A3352B;border-color:rgba(163,53,43,.3)}
+  .sm.del:hover{background:rgba(163,53,43,.07);border-color:#A3352B}
+  .listhead{display:flex;align-items:center;justify-content:space-between;margin:26px 0 12px}
+  .listhead h2{font-size:16px;margin:0}
   .sm.go:hover{background:var(--green-deep)}
 
   .empty{text-align:center;color:var(--muted);padding:30px;font-size:14px}
@@ -142,12 +146,13 @@
         '<div class="fld"><label>備考（納期・条件など・任意）</label><textarea id="f_note" placeholder="例：納期はご発注から2週間／お支払いはご承認後の前払いとなります"></textarea></div>'+
         '<button class="primary" id="make">見積書を作成</button>'+
       '</div>'+
-      '<h2 style="font-size:16px;margin:26px 0 12px">作成した見積書</h2>'+
+      '<div class="listhead"><h2>作成した見積書</h2><button class="sm" id="reload">再読み込み</button></div>'+
       '<div id="list"><div class="empty">読み込み中…</div></div>';
 
     $("f_amount").addEventListener("input", updPrev);
     Array.prototype.forEach.call(document.querySelectorAll('input[name=tax]'), function(r){ r.addEventListener("change", updPrev); });
     $("make").addEventListener("click", createEstimate);
+    $("reload").addEventListener("click", function(){ $("reload").textContent="読み込み中…"; loadList().then(function(){ $("reload").textContent="再読み込み"; }); });
     loadList();
   }
 
@@ -205,6 +210,9 @@
       Array.prototype.forEach.call(document.querySelectorAll("[data-statement]"),function(b){
         b.addEventListener("click",function(){ window.open(docBase()+"?id="+encodeURIComponent(b.getAttribute("data-statement"))+"&kind=statement","_blank"); });
       });
+      Array.prototype.forEach.call(document.querySelectorAll("[data-delete]"),function(b){
+        b.addEventListener("click",function(){ delEstimate(b.getAttribute("data-delete"), b); });
+      });
     }catch(e){ $("list").innerHTML='<div class="empty">'+esc(e.message)+'</div>'; }
   }
 
@@ -235,6 +243,7 @@
         '<button class="sm" data-copy-est="'+e.id+'">見積書リンクをコピー</button>';
     if(!done){
       h+='<button class="sm go" data-convert="'+e.id+'">この見積書を請書にする</button>';
+      h+='<button class="sm del" data-delete="'+e.id+'">削除</button>';
     }else{
       h+='<button class="sm" data-copy-quote="'+e.converted_quote+'">請書リンクをコピー（買い手へ）</button>';
       // 完了（送金済み）なら、出品者が自分で精算書を取得できる
@@ -254,6 +263,16 @@
       toast(d.already?"すでに請書にしています":"請書を作成しました");
       loadList();
     }catch(e){ toast(e.message,true); btn.disabled=false; btn.textContent="この見積書を請書にする"; }
+  }
+
+  async function delEstimate(id, btn){
+    if(!confirm("この見積書を削除します。\nこの操作は取り消せません。よろしいですか？")) return;
+    btn.disabled=true; btn.textContent="削除中…";
+    try{
+      await api("/estimates/delete", { seller: SELLER, id: id });
+      toast("見積書を削除しました");
+      loadList();
+    }catch(e){ toast(e.message,true); btn.disabled=false; btn.textContent="削除"; }
   }
 
   async function copy(text,msg){
