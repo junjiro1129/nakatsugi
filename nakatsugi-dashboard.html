@@ -295,7 +295,9 @@
       acts += '<div style="margin-top:6px">'+docs+'</div>';
 
       tr.innerHTML =
-        '<td><div class="ttl">'+esc(q.title)+'</div><div class="sub2">'+esc(q.id)+'</div></td>'+
+        '<td><div class="ttl">'+esc(q.title)+
+          (q.from_estimate?' <span class="badge b-pending" title="出品者が見積書ツールから作成した請書">出品者作成</span>':'')+
+          '</div><div class="sub2">'+esc(q.id)+(q.seller_name?'　／　出品者：'+esc(q.seller_name):'')+'</div></td>'+
         '<td class="amt">'+yen(inc)+(q.amount_ex!=null?'<div class="sub2">税抜 '+yen(q.amount_ex)+'＋税 '+yen(q.tax)+'</div>':'')+'</td>'+
         '<td class="hide-sp sub2">'+esc(q.buyer_name||"")+(q.buyer_name&&q.buyer_email?'<br>':'')+esc(q.buyer_email||(q.buyer_name?"":"—"))+'</td>'+
         '<td><span class="badge '+s.cls+'">'+s.label+'</span></td>'+
