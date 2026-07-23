@@ -15,7 +15,17 @@
   }
   *{box-sizing:border-box}
   body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.8;font-size:15px}
-  .wrap{max-width:680px;margin:0 auto;padding:0 22px 80px}
+  .wrap{max-width:680px;margin:0 auto;padding:0 22px 40px}
+  .ftr{border-top:1px solid var(--line);background:#fff}
+  .ftr-in{max-width:680px;margin:0 auto;padding:22px 22px 34px;text-align:center;
+    color:var(--muted);font-size:12.5px;line-height:1.75}
+  .ftr-t{font-size:11.5px;letter-spacing:.04em;margin-bottom:5px}
+  .ftr-n{color:var(--ink);font-weight:700;font-size:13.5px}
+  .ftr-c{margin-top:3px}
+  .ftr-c a{color:var(--green-deep);font-weight:600;text-decoration:none}
+  .ftr-c a:hover{text-decoration:underline}
+  .ftr-c .sep{margin:0 6px;color:var(--line)}
+  .ftr-s{margin-top:8px;font-size:11.5px}
   .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:18px;padding:28px 0 4px}
   .head{padding:8px 0 22px}
   .eyebrow{font-size:12.5px;letter-spacing:.12em;color:var(--green-deep);font-weight:600;margin:0 0 8px}
@@ -68,6 +78,19 @@
   </div>
   <div id="content"></div>
 </div>
+
+<footer class="ftr">
+  <div class="ftr-in">
+    <div class="ftr-t">ご登録に関するお問い合わせ</div>
+    <div class="ftr-n">ナカツギ 運営事務局（株式会社ナカホームズ）</div>
+    <div class="ftr-c">
+      <a href="mailto:jnaka@nakahomes.com">jnaka@nakahomes.com</a>
+      <span class="sep">／</span>
+      <a href="tel:082-548-9746">082-548-9746</a>
+    </div>
+    <div class="ftr-s">〒735-0025 広島県安芸郡府中町鹿籠2-14-25　登録番号：T7240001047118</div>
+  </div>
+</footer>
 
 <script>
   // ▼ここをデプロイ済みWorkerのURLに変更（末尾スラッシュなし）
@@ -124,7 +147,7 @@
 
         '<div class="fld"><label id="lbl_person"><span id="lbl_person_t">事業主のお名前</span><span class="req">必須</span></label>'+
         '<div class="hint" id="hint_person">本人確認と、適格請求書の名義確認に使います。<b>購入者には公開されません。</b></div>'+
-        '<input type="text" id="rep_name" placeholder="例：中継 二郎"></div>'+
+        '<input type="text" id="rep_name" placeholder="例：那賀 潤二郎"></div>'+
 
         '<div class="fld"><label>連絡先メール<span class="req">必須</span></label>'+
         '<input type="email" id="contact_email" placeholder="you@example.com"></div>'+
