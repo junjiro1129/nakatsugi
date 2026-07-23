@@ -12,7 +12,16 @@
   }
   *{box-sizing:border-box}
   body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.65;
-    display:flex;min-height:100vh;align-items:flex-start;justify-content:center;padding:36px 18px}
+    display:flex;flex-direction:column;min-height:100vh;align-items:center;justify-content:flex-start;padding:36px 18px}
+  .ftr{max-width:480px;width:100%;margin-top:20px;padding:18px 22px;text-align:center;
+    border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;line-height:1.75}
+  .ftr-t{font-size:11.5px;letter-spacing:.04em;margin-bottom:5px}
+  .ftr-n{color:var(--ink);font-weight:700;font-size:13.5px}
+  .ftr-c{margin-top:3px}
+  .ftr-c a{color:var(--green-deep);font-weight:600;text-decoration:none}
+  .ftr-c a:hover{text-decoration:underline}
+  .ftr-c .sep{margin:0 6px;color:var(--line)}
+  .ftr-s{margin-top:8px;font-size:11.5px;line-height:1.7}
   .card{background:var(--surface);border:1px solid var(--line);border-radius:20px;max-width:480px;width:100%;
     padding:30px;box-shadow:0 12px 40px rgba(22,38,63,.07)}
   .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:16px;margin-bottom:22px}
@@ -50,6 +59,18 @@
     </div>
     <div id="content"><div class="msg">読み込み中…</div></div>
   </div>
+
+  <footer class="ftr">
+    <div class="ftr-t">このお取引に関するお問い合わせ</div>
+    <div class="ftr-n">ナカツギ 運営事務局（株式会社ナカホームズ）</div>
+    <div class="ftr-c">
+      <a href="mailto:jnaka@nakahomes.com">jnaka@nakahomes.com</a>
+      <span class="sep">／</span>
+      <a href="tel:082-548-9746">082-548-9746</a>
+    </div>
+    <div class="ftr-s">〒735-0025 広島県安芸郡府中町鹿籠2-14-25<br>
+      代金は役務の完了が確認されるまで、当社がお預かりしています。</div>
+  </footer>
 
 <script>
   /* ▼ ここにデプロイした Worker の URL を入れてください（末尾スラッシュなし） */
@@ -94,7 +115,7 @@
       '<div class="amount"><div class="l">お預かり中の代金</div><div class="v">'+yen(q.amount)+'</div></div>'+
       '<p class="note">お支払いは完了し、代金はナカツギがお預かりしています。役務を受け取り、内容にご納得いただけたら、下のボタンで完了を確定してください。確定すると、代金が提供者へお渡しされます。</p>'+
       '<button id="done">役務を受け取りました（提供者へお支払い）</button>'+
-      '<p class="msg">まだ受け取っていない・内容に問題がある場合は、確定せずに提供者または運営へご連絡ください。</p>';
+      '<p class="msg">まだ受け取っていない・内容に問題がある場合は、確定せずに提供者、または下記の運営事務局までご連絡ください。</p>';
     document.getElementById("done").addEventListener("click", completeQuote);
   }
 
