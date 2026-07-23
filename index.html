@@ -248,6 +248,7 @@
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%2316263F' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
     background-repeat:no-repeat;background-position:right 15px center}
   .field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--green)}
+  .field .hint-s{display:block;font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6}
   .contact-card .btn-primary{width:100%}
   .form-note{font-size:12.5px;color:var(--muted);margin:12px 0 0;text-align:center}
   .done-card{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:20px;
@@ -574,8 +575,13 @@
       </div>
       <form class="contact-card" id="contactForm" action="https://formspree.io/f/xlgypvqa" method="POST">
         <div class="field">
-          <label for="name">お名前 / 屋号</label>
-          <input id="name" name="name" type="text" autocomplete="name" required>
+          <label for="name">お名前</label>
+          <input id="name" name="name" type="text" autocomplete="name" placeholder="例：中継 二郎" required>
+        </div>
+        <div class="field">
+          <label for="bizname">屋号・法人名（任意）</label>
+          <input id="bizname" name="business_name" type="text" placeholder="例：スタジオ○○／株式会社○○" autocomplete="organization">
+          <span class="hint-s">ご利用開始後、お取引先に表示されるお名前です。まだお決まりでなければ空欄で構いません。</span>
         </div>
         <div class="field">
           <label for="email">メールアドレス</label>

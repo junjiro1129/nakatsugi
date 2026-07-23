@@ -147,7 +147,7 @@
 
         '<div class="fld"><label id="lbl_person"><span id="lbl_person_t">事業主のお名前</span><span class="req">必須</span></label>'+
         '<div class="hint" id="hint_person">本人確認と、適格請求書の名義確認に使います。<b>購入者には公開されません。</b></div>'+
-        '<input type="text" id="rep_name" placeholder="例：那賀 潤二郎"></div>'+
+        '<input type="text" id="rep_name" placeholder="例：中継 二郎"></div>'+
 
         '<div class="fld"><label>連絡先メール<span class="req">必須</span></label>'+
         '<input type="email" id="contact_email" placeholder="you@example.com"></div>'+
@@ -206,13 +206,13 @@
       $("lbl_public_t").textContent = "法人名";
       $("business_name").placeholder = "例：株式会社○○";
       $("lbl_person_t").textContent = "代表者氏名";
-      $("rep_name").placeholder = "例：那賀 潤二郎";
+      $("rep_name").placeholder = "例：中継 二郎";
       $("hint_person").innerHTML = "本人確認と、適格請求書の名義確認に使います。<b>購入者には公開されません。</b>";
     }else{
       $("lbl_public_t").textContent = "屋号";
       $("business_name").placeholder = "例：スタジオ○○";
       $("lbl_person_t").textContent = "事業主のお名前";
-      $("rep_name").placeholder = "例：那賀 潤二郎";
+      $("rep_name").placeholder = "例：中継 二郎";
       $("hint_person").innerHTML = "本人確認と、適格請求書の名義確認に使います。<b>購入者には公開されません。</b>屋号をお持ちでない場合も、取引先には屋号欄の名称のみが表示され、お名前は表示されません。";
     }
   }
