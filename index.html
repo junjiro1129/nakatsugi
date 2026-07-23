@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ナカツギ｜見積から入金まで、ひとつで。</title>
-<meta name="description" content="個人事業主・フリーランスのための見積・請求・決済。相手に住所を出さずに請求でき、役務が終わるまで代金はナカツギが間でお預かりします。">
+<title>ナカツギ｜マッチングは、もういらない。</title>
+<meta name="description" content="すでに取引相手がいる事業者のための、見積・請求・決済。住所を出さず、踏み倒されず、適格請求書も出る。手数料は取引額の8.6%（税抜）だけ。適格請求書発行事業者限定・審査制。">
 <style>
   :root{
     --ink:#16263F;          /* 紺 */
@@ -62,6 +62,42 @@
   .hero .lead{font-size:clamp(16px,1.7vw,18.5px);max-width:34em}
   .hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin:32px 0 10px}
   .note{font-size:13px;color:var(--muted);margin:16px 0 0}
+  .hero-pillars{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+  .pill{display:inline-flex;align-items:center;gap:7px;background:var(--surface);
+    border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-size:13.5px;font-weight:600}
+  .pill svg{color:var(--green-deep);flex-shrink:0}
+
+  /* stat cards */
+  .card .stat{font-size:30px;font-weight:700;color:var(--ink);line-height:1.2;margin:0 0 6px;
+    font-family:var(--mono);letter-spacing:-.01em}
+  .card .stat small{font-size:13px;color:var(--muted);font-family:var(--sans);font-weight:600;margin-left:4px}
+  .src{font-size:11.5px;color:var(--muted);margin-top:26px}
+
+  /* compare */
+  .compare{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}
+  .cmp{border-radius:var(--radius);padding:26px 24px;border:1px solid var(--line);background:var(--surface)}
+  .cmp .tag{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--muted);margin:0 0 10px}
+  .cmp h3{font-size:17px;font-weight:700;margin:0 0 4px}
+  .cmp .fee{font-family:var(--mono);font-size:25px;font-weight:700;margin:10px 0 8px;color:var(--ink)}
+  .cmp p{margin:0;color:var(--muted);font-size:13.5px}
+  .cmp ul{margin:12px 0 0;padding:0;list-style:none}
+  .cmp li{font-size:13px;color:var(--ink-soft);padding:4px 0 4px 20px;position:relative}
+  .cmp li::before{content:"";position:absolute;left:2px;top:12px;width:9px;height:9px;
+    border-radius:3px;background:var(--line)}
+  .cmp-mid{background:var(--ink);color:#fff;border-color:var(--ink);transform:scale(1.03)}
+  .cmp-mid .tag{color:#8FE0C4}
+  .cmp-mid p{color:#C3CCDA}
+  .cmp-mid li{color:#DCE3EE}
+  .cmp-mid li::before{background:var(--green)}
+  .cmp-mid .fee{color:#8FE0C4}
+
+  /* price zero row */
+  .price-zero{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px}
+  .zero{flex:1;min-width:180px;background:var(--paper);border:1px solid var(--line-soft);
+    border-radius:var(--radius);padding:16px 18px}
+  .zero b{display:block;font-size:15px;margin-bottom:2px}
+  .zero span{color:var(--muted);font-size:13px}
+  .sec-white .zero{background:var(--surface)}
 
   /* signature: relay band */
   .relay{margin:54px 0 6px;background:var(--surface);border:1px solid var(--line);
@@ -114,7 +150,7 @@
   .step p{margin:0;color:var(--muted);font-size:14px}
 
   /* features */
-  .feat{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .feat{display:grid;grid-template-columns:repeat(2,1fr);gap:28px 32px}
   .feat .f{padding:4px}
   .feat .fic{width:40px;height:40px;color:var(--green);margin-bottom:14px}
   .feat h3{font-size:18px;font-weight:700;margin:0 0 9px}
@@ -189,7 +225,8 @@
     .nav-links a{padding:13px 24px}
     .nav-links .btn{margin:10px 24px 0}
     .menu-btn{display:block}
-    .grid3,.steps,.feat,.trust{grid-template-columns:1fr}
+    .grid3,.steps,.feat,.trust,.compare{grid-template-columns:1fr}
+    .cmp-mid{transform:none}
     .relay-row{flex-direction:column}
     .conn{flex-direction:row;min-width:0;padding:2px 0}
     .conn svg{transform:rotate(90deg)}
@@ -211,11 +248,12 @@
       ナカツギ
     </a>
     <nav class="nav-links" id="navlinks">
+      <a href="#position">ナカツギとは</a>
       <a href="#how">仕組み</a>
-      <a href="#features">特徴</a>
+      <a href="#features">できること</a>
       <a href="#price">料金</a>
       <a href="#faq">FAQ</a>
-      <a class="btn btn-primary" href="#contact">使ってみる</a>
+      <a class="btn btn-primary" href="#contact">利用を申し込む</a>
     </nav>
     <button class="menu-btn" id="menubtn" aria-label="メニュー" aria-expanded="false">
       <span></span><span></span><span></span>
@@ -227,14 +265,19 @@
 
   <section class="hero">
     <div class="wrap">
-      <p class="eyebrow">個人事業主・フリーランスのための、見積・請求・決済</p>
-      <h1>見積から入金まで、<br><span class="accent">ひとつで。</span></h1>
-      <p class="lead">相手に住所を出さずに、請求もカード決済も。役務が終わるまで、代金はナカツギが間でお預かりします。</p>
-      <div class="hero-cta">
-        <a class="btn btn-primary" href="#contact">使ってみる</a>
-        <a class="btn btn-ghost" href="#how">仕組みを見る</a>
+      <p class="eyebrow">すでに取引相手がいる事業者のための、見積・請求・決済</p>
+      <h1>マッチングは、<br><span class="accent">もういらない。</span></h1>
+      <p class="lead">お客さまは、もうあなたが持っている。足りないのは、安全なお金の通り道だけ。住所を出さず、踏み倒されず、適格請求書も出る。手数料は取引額の8.6%（税抜）——それだけです。</p>
+      <div class="hero-pillars" aria-label="ナカツギの3つの価値">
+        <span class="pill"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M3 11l9-8 9 8M5 10v10h14V10" stroke-linecap="round" stroke-linejoin="round"/></svg>住所を出さない</span>
+        <span class="pill"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="4" y="9" width="16" height="11" rx="2"/><path d="M8 9V7a4 4 0 018 0v2" stroke-linecap="round"/></svg>踏み倒されない</span>
+        <span class="pill"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5" stroke-linecap="round"/></svg>適格請求書が出る</span>
       </div>
-      <p class="note">日本国内の事業者どうしのお取引が対象です。</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#contact">利用を申し込む</a>
+        <a class="btn btn-ghost" href="#position">ナカツギとは</a>
+      </div>
+      <p class="note">日本国内・適格請求書発行事業者の方が対象です（審査制）。</p>
 
       <div class="relay reveal" aria-label="ナカツギの受け渡しの流れ">
         <div class="relay-row">
@@ -271,41 +314,87 @@
   <section class="sec sec-white" id="pain">
     <div class="wrap">
       <div class="sec-head">
-        <p class="eyebrow">こんな場面、ありませんか</p>
-        <h2 class="title">請求と代金回収の、3つの不安。</h2>
+        <p class="eyebrow">直取引の現実</p>
+        <h2 class="title">手数料から自由になった人を、<br>3つのリスクが待っている。</h2>
       </div>
       <div class="grid3">
         <div class="card reveal">
-          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 11l9-8 9 8M5 10v10h14V10" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="15" r="2"/></svg>
-          <h3>自宅の住所を知られたくない</h3>
-          <p>特定商取引法の表記で、自宅の住所や氏名を取引相手に出すのが不安。</p>
+          <p class="stat">69.7<small>%</small></p>
+          <h3>報酬未払いを経験している</h3>
+          <p>フリーランスの約7割が「仕事をしたのに払ってもらえない」経験を持ち、その4割は泣き寝入り。直取引のトラブル発生率は、仲介ありのおよそ2倍と報告されています。</p>
         </div>
         <div class="card reveal">
-          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <h3>「先に払って」と言いづらい</h3>
-          <p>未入金やドタキャンが怖い。かといって前払いをお願いするのも気が引ける。</p>
+          <p class="stat">住所<small>が、出る</small></p>
+          <h3>請求書にも、公表サイトにも</h3>
+          <p>請求書や特定商取引法の表記で、自宅住所を求められる。しかもインボイス登録をすると、国税庁の公表サイトから氏名・所在地をたどられ得ます。</p>
         </div>
         <div class="card reveal">
-          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18" stroke-linecap="round"/></svg>
-          <h3>決済の導入が面倒、手数料も高い</h3>
-          <p>カード決済を一から用意するのは手間。マーケットの手数料も重い。</p>
+          <p class="stat">2026.10<small>〜</small></p>
+          <h3>「インボイスは？」が、重くなる</h3>
+          <p>免税事業者からの仕入れの控除は、2026年10月からさらに縮小。発注側の経理は、適格請求書の出ない相手との取引に、ますます慎重になります。</p>
+        </div>
+      </div>
+      <p class="src">出典：フリーランス協会調査、日本労働組合総連合会「フリーランスとして働く人の意識・実態調査2024」ほか。</p>
+    </div>
+  </section>
+
+  <section class="sec" id="position">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">ナカツギとは</p>
+        <h2 class="title">マーケットプレイスの、卒業先。</h2>
+        <p class="lead">出会いの場には、出会いの値段（約2割）がついてくる。もう出会う必要のないあなたが、その値段を払い続ける理由はありません。かといって、丸腰の直取引は未払いと隣り合わせ。ナカツギは、そのあいだに立ちます。</p>
+      </div>
+      <div class="compare">
+        <div class="cmp reveal">
+          <p class="tag">これまで</p>
+          <h3>マーケットプレイス</h3>
+          <p class="fee">16.5〜20%前後</p>
+          <p>出会いから決済まで全部入り。ただし、もう知っている相手との取引にも、毎回まるごと課金されます。</p>
+          <ul>
+            <li>マッチング・評価・仲裁つき</li>
+            <li>既知の相手でも手数料は同じ</li>
+            <li>継続するほど負担が積み上がる</li>
+          </ul>
+        </div>
+        <div class="cmp cmp-mid reveal">
+          <p class="tag">これから</p>
+          <h3>ナカツギ</h3>
+          <p class="fee">8.6%（税抜）</p>
+          <p>出会いは、外で。ナカツギは「見積→承認→決済→完了確認」という、お金の通り道だけを堅く整えます。</p>
+          <ul>
+            <li>代金は完了までお預かり</li>
+            <li>住所・氏名は相手に出さない</li>
+            <li>適格請求書はナカツギ名義で発行</li>
+          </ul>
+        </div>
+        <div class="cmp reveal">
+          <p class="tag">もうひとつの道</p>
+          <h3>丸腰の直取引</h3>
+          <p class="fee">0%</p>
+          <p>手数料は無料。ただし請求も回収も自前で、未払いに遭えば、自力で取り立てるしかありません。</p>
+          <ul>
+            <li>トラブル発生率は仲介ありの約2倍</li>
+            <li>請求書に住所を求められがち</li>
+            <li>取っ払い・口約束はトラブルの温床</li>
+          </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="sec" id="how">
+  <section class="sec sec-white" id="how">
     <div class="wrap">
       <div class="sec-head">
         <p class="eyebrow">ナカツギの仕組み</p>
         <h2 class="title">受けて、預かって、渡す。</h2>
-        <p class="lead">あなたと相手のあいだにナカツギが立ち、役務が終わるまで代金を預かります。</p>
+        <p class="lead">連絡も納品も、いつも通りのやり方で。ナカツギが引き受けるのは、お金の流れだけです。</p>
       </div>
       <div class="steps">
-        <div class="step reveal"><div class="num">01</div><h3>見積を送る</h3><p>あなたが見積をつくって相手に送ります。</p></div>
-        <div class="step reveal"><div class="num">02</div><h3>承認で取引成立</h3><p>相手が承認すると、ナカツギ上で取引が成立します。</p></div>
-        <div class="step reveal"><div class="num">03</div><h3>支払いを預かる</h3><p>相手の支払いを、役務が終わるまでナカツギが預かります。</p></div>
-        <div class="step reveal"><div class="num">04</div><h3>完了で入金</h3><p>完了が確認されたら、利用料を引いてあなたに入金します。</p></div>
+        <div class="step reveal"><div class="num">01</div><h3>見積を送る</h3><p>見積のリンクを相手に送ります。相手の登録は不要です。</p></div>
+        <div class="step reveal"><div class="num">02</div><h3>承認で取引成立</h3><p>相手がリンクを開いて承認すると、取引が成立します。</p></div>
+        <div class="step reveal"><div class="num">03</div><h3>支払いを預かる</h3><p>カードまたは銀行振込。代金は完了まで預かられます。</p></div>
+        <div class="step reveal"><div class="num">04</div><h3>完了で入金</h3><p>相手が受け取りを確認したら、利用料を引いて入金します。</p></div>
       </div>
     </div>
   </section>
@@ -314,25 +403,31 @@
     <div class="wrap">
       <div class="sec-head">
         <p class="eyebrow">ナカツギが間でできること</p>
-        <h2 class="title">身元を出さず、安心して取引できる仕組み。</h2>
+        <h2 class="title">身元を出さず、確実に受け取り、<br>書類も残す。</h2>
       </div>
       <div class="feat">
         <div class="f reveal">
           <svg class="fic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <h3>身元を相手に出さない</h3>
-          <p>取引相手には、あなたのお名前や住所を表示しません。請求も決済も、ナカツギの名義で行います。</p>
+          <h3>住所も氏名も、相手に出さない</h3>
+          <p>取引相手に見えるのは、あなたの表示名だけ。請求も決済も、特定商取引法の表記も、運営会社の名義で行います。自宅で働く人が、自宅を晒さずに仕事を受けられます。</p>
           <span class="sub">※完全な匿名ではなく、ご本人を確認したうえでの非開示です。</span>
         </div>
         <div class="f reveal">
           <svg class="fic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="9" width="16" height="11" rx="2"/><path d="M8 9V7a4 4 0 018 0v2" stroke-linecap="round"/></svg>
-          <h3>終わるまでお預かり</h3>
-          <p>代金は役務の完了までナカツギが預かります。だから未入金もドタキャンも起きにくい。</p>
-          <span class="sub">※完了後に、利用料を引いてあなたへ入金します。</span>
+          <h3>先に払ってもらい、完了まで預かる</h3>
+          <p>相手は着手前に支払い、代金は役務の完了まで預かられます。「納品したのに払われない」が構造的に起きません。前払いを、あなたが切り出す必要もありません。</p>
+          <span class="sub">※完了確認後に、利用料を引いてあなたへ入金します。</span>
+        </div>
+        <div class="f reveal">
+          <svg class="fic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5" stroke-linecap="round"/></svg>
+          <h3>適格請求書は、ナカツギ名義で</h3>
+          <p>媒介者交付特例により、運営会社の登録番号で適格請求書を発行します。相手は仕入税額控除ができて、あなたの登録番号や氏名は開示されない。インボイス対応と身元非開示が、両立します。</p>
+          <span class="sub">※適格請求書発行事業者の方のみご利用いただけます。</span>
         </div>
         <div class="f reveal">
           <svg class="fic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h4" stroke-linecap="round"/></svg>
-          <h3>決済はStripe</h3>
-          <p>決済と資金の管理は、決済事業者のStripeが行います。ナカツギが代金を自社で保有することはありません。</p>
+          <h3>決済と資金は、Stripeが</h3>
+          <p>決済処理と資金の保有・移動は、決済事業者のStripeが行います。ナカツギが代金を自社で保有することはありません。カードと銀行振込に対応しています。</p>
           <span class="sub">※カード情報はナカツギには保存されません。</span>
         </div>
       </div>
@@ -343,15 +438,20 @@
     <div class="wrap">
       <div class="sec-head">
         <p class="eyebrow">料金</p>
-        <h2 class="title">売り手も買い手も、フェアに。</h2>
-        <p class="lead">取引が成立したときだけ、利用料をいただきます。登録も月額も0円。</p>
+        <h2 class="title">ワンプライス。成立したときだけ。</h2>
+        <p class="lead">かかるのは、取引が完了したときの利用料だけ。決済手数料も、この中に含まれています。</p>
       </div>
       <div class="price-row reveal">
-        <div class="price-big">取引額の<span class="pct">8.6%</span><span class="of">のみ</span></div>
+        <div class="price-big">取引額の<span class="pct">8.6%</span><span class="of">（税抜）</span></div>
         <div class="price-meta">
-          <strong>登録・月額 0円／成果報酬</strong>
-          <p>取引が成立して完了したときだけ、預かった代金から利用料を差し引きます。使わない月の費用はかかりません。</p>
+          <strong>ほかには、何もかかりません</strong>
+          <p>カードでも銀行振込でも、料率は同じ。取引が成立して完了したときだけ、預かった代金から利用料を差し引いて、残りをお渡しします。</p>
         </div>
+      </div>
+      <div class="price-zero reveal">
+        <div class="zero"><b>登録 0円</b><span>審査のうえ、無料でご利用開始</span></div>
+        <div class="zero"><b>月額 0円</b><span>使わない月の費用はありません</span></div>
+        <div class="zero"><b>相手の負担 0円</b><span>支払う側に手数料はありません</span></div>
       </div>
     </div>
   </section>
@@ -360,12 +460,13 @@
     <div class="wrap">
       <div class="sec-head">
         <p class="eyebrow">安心して使えるように</p>
-        <h2 class="title">誰が運営しているか、はっきりさせています。</h2>
+        <h2 class="title">誰でも使えるわけでは、ありません。</h2>
+        <p class="lead">ナカツギは審査制です。入口を絞っているから、支払う側の相手にも、安心してすすめられます。</p>
       </div>
       <div class="trust">
-        <div class="t reveal"><h3>実在する事業者が運営</h3><p>運営は、宅地建物取引業者として実在する株式会社ナカホームズです。</p></div>
-        <div class="t reveal"><h3>本人確認を行います</h3><p>ご利用者の本人確認を行います。相手に出さないだけで、匿名ではありません。</p></div>
-        <div class="t reveal"><h3>国内の取引が対象</h3><p>当面は、日本国内の事業者どうしのお取引を対象としています。</p></div>
+        <div class="t reveal"><h3>適格請求書発行事業者に限定</h3><p>ご利用いただけるのは、インボイス登録済みの事業者の方のみ。登録番号は国税庁の公表情報で確認します。</p></div>
+        <div class="t reveal"><h3>本人確認と事業者確認</h3><p>ご本人と、事業者であることを確認します。相手に出さないだけで、匿名ではありません。</p></div>
+        <div class="t reveal"><h3>運営会社も、適格請求書発行事業者</h3><p>適格請求書は、ナカツギを運営する当社自身の登録番号で発行します。当社の名称・所在地・登録番号は、<a href="tokushoho.html" style="text-decoration:underline">特定商取引法に基づく表記</a>に記載しています。</p></div>
       </div>
     </div>
   </section>
@@ -377,11 +478,14 @@
         <h2 class="title">FAQ</h2>
       </div>
       <div class="faq">
-        <details class="reveal"><summary>匿名で使えますか？</summary><div class="ans">完全な匿名ではありません。ご本人を確認したうえで、取引相手にはお名前・住所などを表示しない仕組みです。</div></details>
+        <details class="reveal"><summary>誰でも利用できますか？</summary><div class="ans">代金を受け取る側としてのご利用は、日本国内の適格請求書発行事業者の方に限定しており、審査制です。インボイス未登録の方は、登録が完了してからお申し込みください。なお、支払う側の方に条件はありません。</div></details>
+        <details class="reveal"><summary>取引相手に、私の情報はどこまで見えますか？</summary><div class="ans">相手に表示されるのは、あなたの表示名（屋号など）のみです。氏名・住所・インボイス登録番号は表示されません。完全な匿名ではなく、運営がご本人と事業者性を確認したうえでの非開示です。</div></details>
+        <details class="reveal"><summary>相手は適格請求書（インボイス）を受け取れますか？</summary><div class="ans">受け取れます。媒介者交付特例に基づき、運営会社（株式会社ナカホームズ）の名義と登録番号で適格請求書を発行します。相手は仕入税額控除ができ、あなたの登録番号は開示されません。</div></details>
+        <details class="reveal"><summary>手数料はいくらですか？</summary><div class="ans">取引が成立して完了したときだけ、取引額の8.6%（税抜）をいただきます。決済手数料も含まれており、登録・月額は無料です。支払う側の手数料もありません。</div></details>
         <details class="reveal"><summary>お金は誰が持つのですか？</summary><div class="ans">決済と資金の保有・移動は、決済事業者のStripeが行います。ナカツギが代金を自社で保有することはありません。</div></details>
-        <details class="reveal"><summary>手数料はいくらですか？</summary><div class="ans">取引が成立して完了したときだけ、取引額の8.6％をいただきます。登録・月額は無料です。</div></details>
+        <details class="reveal"><summary>支払い方法は何が使えますか？</summary><div class="ans">クレジットカードと銀行振込に対応しています。銀行振込の場合は取引ごとに専用の振込先が発行され、入金の確認後に取引が進みます。</div></details>
+        <details class="reveal"><summary>連絡や納品も、ナカツギ上で行うのですか？</summary><div class="ans">いいえ。連絡と納品は、いつもお使いの方法（メール・チャットなど）でそのまま行ってください。ナカツギが引き受けるのは「見積→承認→決済→完了確認」という、お金の流れだけです。</div></details>
         <details class="reveal"><summary>海外との取引にも使えますか？</summary><div class="ans">当面は、日本国内の事業者どうしのお取引が対象です。国境を跨ぐ取引には対応していません。</div></details>
-        <details class="reveal"><summary>支払いはどうやって預かるのですか？</summary><div class="ans">相手が支払った代金は、役務の完了が確認されるまで預かられます。完了後に、利用料を引いてあなたへ入金します。</div></details>
       </div>
     </div>
   </section>
@@ -391,7 +495,7 @@
       <div class="sec-head" style="text-align:center">
         <p class="eyebrow">お申し込み・お問い合わせ</p>
         <h2 class="title">ナカツギを使ってみる。</h2>
-        <p class="lead" style="margin:0 auto">ご利用のお申し込み・ご質問はこちらから。担当より折り返しご連絡し、ご利用開始のご案内をします。</p>
+        <p class="lead" style="margin:0 auto">ご利用のお申し込み・ご質問はこちらから。担当より折り返しご連絡し、審査とご利用開始のご案内をします。</p>
       </div>
       <form class="contact-card" id="contactForm" action="https://formspree.io/f/xlgypvqa" method="POST">
         <div class="field">
@@ -403,11 +507,20 @@
           <input id="email" name="email" type="email" autocomplete="email" required>
         </div>
         <div class="field">
+          <label for="invoice">適格請求書発行事業者（インボイス）の登録</label>
+          <select id="invoice" name="invoice_status">
+            <option value="">選択してください</option>
+            <option value="登録済み（T番号あり）">登録済み（T番号あり）</option>
+            <option value="申請中・これから登録予定">申請中・これから登録予定</option>
+            <option value="未登録">未登録</option>
+          </select>
+        </div>
+        <div class="field">
           <label for="role">ご利用の立場（任意）</label>
           <select id="role" name="role">
             <option value="">選択してください</option>
-            <option value="出品者として使いたい">出品者として使いたい（請求・代金回収をしたい）</option>
-            <option value="利用者として支払う側">利用者として（支払う側）</option>
+            <option value="受け取る側として使いたい">受け取る側として使いたい（請求・代金回収をしたい）</option>
+            <option value="支払う側として">支払う側として（取引先にすすめたい）</option>
             <option value="その他・未定">その他・未定</option>
           </select>
         </div>
@@ -440,7 +553,7 @@
   <div class="wrap">
     <div class="foot-top">
       <div>
-        <div class="op">ナカツギ</div>
+        <div class="op">ナカツギ運営事務局</div>
         <div style="margin-top:6px">運営：株式会社ナカホームズ</div>
       </div>
       <nav class="foot-links" aria-label="フッター">
