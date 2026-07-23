@@ -146,6 +146,15 @@
     border-radius:var(--radius)}
   .step .num{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--green-deep);
     letter-spacing:.05em}
+  .step .who{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;
+    margin-left:7px;vertical-align:2px;letter-spacing:.02em}
+  .who-you{background:rgba(19,122,87,.12);color:var(--green-deep)}
+  .who-cust{background:rgba(22,38,63,.08);color:var(--ink-soft)}
+  .who-us{background:var(--ink);color:#fff}
+  .step p b{color:var(--ink);font-weight:700}
+  .br-pc{display:inline}
+  @media(max-width:860px){.steps{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:640px){.br-pc{display:none}.steps{grid-template-columns:1fr}}
   .step h3{font-size:16.5px;font-weight:700;margin:10px 0 7px}
   .step p{margin:0;color:var(--muted);font-size:14px}
 
@@ -361,7 +370,7 @@
           <p class="tag">これから</p>
           <h3>ナカツギ</h3>
           <p class="fee">8.6%（税抜）</p>
-          <p>出会いは、外で。ナカツギは「見積→承認→決済→完了確認」という、お金の通り道だけを堅く整えます。</p>
+          <p>出会いは、外で。ナカツギは「見積→請書→承認→決済→完了確認」という、お金の通り道だけを堅く整えます。</p>
           <ul>
             <li>代金は完了までお預かり</li>
             <li>住所・氏名は相手に出さない</li>
@@ -388,13 +397,29 @@
       <div class="sec-head">
         <p class="eyebrow">ナカツギの仕組み</p>
         <h2 class="title">受けて、預かって、渡す。</h2>
-        <p class="lead">連絡も納品も、いつも通りのやり方で。ナカツギが引き受けるのは、お金の流れだけです。</p>
+        <p class="lead">連絡も納品も、いつも通りのやり方で。ナカツギが引き受けるのは、お金の流れだけです。<br class="br-pc">商談は自由に、契約からはきっちりと。</p>
       </div>
       <div class="steps">
-        <div class="step reveal"><div class="num">01</div><h3>見積を送る</h3><p>見積のリンクを相手に送ります。相手の登録は不要です。</p></div>
-        <div class="step reveal"><div class="num">02</div><h3>承認で取引成立</h3><p>相手がリンクを開いて承認すると、取引が成立します。</p></div>
-        <div class="step reveal"><div class="num">03</div><h3>支払いを預かる</h3><p>カードまたは銀行振込。代金は完了まで預かられます。</p></div>
-        <div class="step reveal"><div class="num">04</div><h3>完了で入金</h3><p>相手が受け取りを確認したら、利用料を引いて入金します。</p></div>
+        <div class="step reveal">
+          <div class="num">01</div><span class="who who-you">あなた</span>
+          <h3>見積書を送る</h3>
+          <p>商談用の見積書です。何社に出しても、出しっぱなしでも自由。<b>この時点では契約になりません。</b>相手の登録も不要です。</p>
+        </div>
+        <div class="step reveal">
+          <div class="num">02</div><span class="who who-you">あなた</span>
+          <h3>決まったら、請書にする</h3>
+          <p>話がまとまったら、ボタンひとつで<b>請書</b>に変換。金額も宛名も引き継ぐので、書き写す手間はありません。</p>
+        </div>
+        <div class="step reveal">
+          <div class="num">03</div><span class="who who-cust">お客さま</span>
+          <h3>承認して、支払う</h3>
+          <p>請書を承認した時点で<b>契約が成立</b>。カードか銀行振込でお支払いいただき、代金はナカツギが預かります。</p>
+        </div>
+        <div class="step reveal">
+          <div class="num">04</div><span class="who who-cust">お客さま</span><span class="who who-us">ナカツギ</span>
+          <h3>完了の確認で、入金</h3>
+          <p>役務をお届けし、お客さまが受け取りを確認。その時点で、利用料を引いた額が<b>あなたの口座へ</b>届きます。</p>
+        </div>
       </div>
     </div>
   </section>
@@ -484,7 +509,7 @@
         <details class="reveal"><summary>手数料はいくらですか？</summary><div class="ans">取引が成立して完了したときだけ、取引額の8.6%（税抜）をいただきます。決済手数料も含まれており、登録・月額は無料です。支払う側の手数料もありません。</div></details>
         <details class="reveal"><summary>お金は誰が持つのですか？</summary><div class="ans">決済と資金の保有・移動は、決済事業者のStripeが行います。ナカツギが代金を自社で保有することはありません。</div></details>
         <details class="reveal"><summary>支払い方法は何が使えますか？</summary><div class="ans">クレジットカードと銀行振込に対応しています。銀行振込の場合は取引ごとに専用の振込先が発行され、入金の確認後に取引が進みます。</div></details>
-        <details class="reveal"><summary>連絡や納品も、ナカツギ上で行うのですか？</summary><div class="ans">いいえ。連絡と納品は、いつもお使いの方法（メール・チャットなど）でそのまま行ってください。ナカツギが引き受けるのは「見積→承認→決済→完了確認」という、お金の流れだけです。</div></details>
+        <details class="reveal"><summary>連絡や納品も、ナカツギ上で行うのですか？</summary><div class="ans">いいえ。連絡と納品は、いつもお使いの方法（メール・チャットなど）でそのまま行ってください。ナカツギが引き受けるのは「見積→請書→承認→決済→完了確認」という、お金の流れだけです。</div></details>
         <details class="reveal"><summary>海外との取引にも使えますか？</summary><div class="ans">当面は、日本国内の事業者どうしのお取引が対象です。国境を跨ぐ取引には対応していません。</div></details>
       </div>
     </div>
