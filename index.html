@@ -102,24 +102,39 @@
   /* signature: relay band */
   .relay{margin:54px 0 6px;background:var(--surface);border:1px solid var(--line);
     border-radius:20px;padding:30px 26px;box-shadow:0 1px 0 rgba(22,38,63,.03)}
-  .relay-row{display:flex;align-items:stretch;gap:14px}
-  .party{flex:1;min-width:0;background:var(--paper);border:1px solid var(--line-soft);
+  /* 3者を横に並べ、その下に「書類（右へ）」「お金（左へ）」の2レーンを敷く */
+  .relay-grid{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:12px 14px;align-items:stretch}
+  .party{background:var(--paper);border:1px solid var(--line-soft);
     border-radius:var(--radius);padding:18px 16px;text-align:center}
   .party .who{font-weight:700;font-size:16px}
   .party .what{font-size:12.5px;color:var(--muted);margin-top:4px}
-  .hub{flex:1.25;background:var(--ink);color:#fff;border-radius:var(--radius);
+  .hub{background:var(--ink);color:#fff;border-radius:var(--radius);
     padding:18px 16px;text-align:center;position:relative}
   .hub .who{font-weight:700;font-size:16px;letter-spacing:.02em}
   .hub .what{font-size:12.5px;color:#BFC9DA;margin-top:4px}
   .hub .pin{display:inline-block;font-size:11px;font-weight:600;color:var(--ink);
     background:#fff;border-radius:999px;padding:2px 10px;margin-top:10px}
-  .conn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
-    color:var(--green-deep);min-width:62px}
-  .conn .lab{font-size:11px;font-weight:600;white-space:nowrap}
-  .conn svg{color:var(--green)}
-  .relay-back{display:flex;align-items:center;justify-content:center;gap:8px;
-    margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);
-    font-size:12.5px;color:var(--green-deep);font-weight:600}
+  /* レーン：3列ぶち抜き */
+  .lane{grid-column:1 / -1;display:flex;align-items:center;gap:10px}
+  .lane-k{flex:none;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px}
+  .lane-doc .lane-k{background:rgba(22,38,63,.07);color:var(--ink-soft)}
+  .lane-pay .lane-k{background:rgba(19,122,87,.12);color:var(--green-deep)}
+  .track{flex:1;position:relative;height:30px;display:flex;align-items:center;justify-content:center}
+  .track::before{content:"";position:absolute;left:0;right:0;top:50%;height:1.5px;
+    background:var(--line);border-radius:2px}
+  /* 矢印の先端（右向き／左向き） */
+  .track-r::after,.track-l::after{content:"";position:absolute;top:50%;width:0;height:0;
+    border-top:5px solid transparent;border-bottom:5px solid transparent;transform:translateY(-50%)}
+  .track-r::after{right:0;border-left:8px solid var(--line)}
+  .track-l::after{left:0;border-right:8px solid var(--green)}
+  .track-l::before{background:var(--green);opacity:.5}
+  .track .tx{position:relative;background:var(--surface);padding:0 12px;font-size:12.5px;
+    font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+  .lane-doc .tx{color:var(--ink-soft)}
+  .lane-pay .tx{color:var(--green-deep)}
+  .relay-note{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);
+    font-size:12.5px;color:var(--muted);text-align:center;line-height:1.7}
+
 
   /* generic section */
   .sec{padding:74px 0}
@@ -152,9 +167,37 @@
   .who-cust{background:rgba(22,38,63,.08);color:var(--ink-soft)}
   .who-us{background:var(--ink);color:#fff}
   .step p b{color:var(--ink);font-weight:700}
+  /* 代金の所在を示す時系列 */
+  .tl{margin-top:34px;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:24px 22px}
+  .tl-head{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:16px;letter-spacing:.02em}
+  .tl-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative}
+  .tl-seg{position:relative;padding:22px 6px 0;text-align:center}
+  .tl-seg::before{content:"";position:absolute;left:0;right:0;top:7px;height:4px;background:var(--line)}
+  .tl-seg:first-child::before{left:50%;border-radius:3px 0 0 3px}
+  .tl-seg:last-child::before{right:50%;border-radius:0 3px 3px 0}
+  .tl-seg.hold::before{background:var(--green);opacity:.9}
+  .tl-dot{position:absolute;left:50%;top:2px;width:14px;height:14px;margin-left:-7px;border-radius:50%;
+    background:#fff;border:3px solid var(--line);z-index:1}
+  .tl-dot.on{border-color:var(--green)}
+  .tl-dot.fin{border-color:var(--green-deep);background:var(--green-deep)}
+  .tl-k{font-size:12.5px;font-weight:700;color:var(--ink)}
+  .tl-v{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.5}
+  .tl-seg.hold .tl-v{color:var(--green-deep);font-weight:600}
+  .tl-legend{display:flex;align-items:flex-start;gap:9px;margin-top:18px;padding-top:14px;
+    border-top:1px dashed var(--line);font-size:12.5px;color:var(--muted);line-height:1.7}
+  .lg-box{flex:none;width:22px;height:4px;border-radius:3px;background:var(--green);margin-top:8px}
   .br-pc{display:inline}
   @media(max-width:860px){.steps{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:640px){.br-pc{display:none}.steps{grid-template-columns:1fr}}
+  @media(max-width:640px){
+    .br-pc{display:none}.steps{grid-template-columns:1fr}
+    /* 時系列は縦積みに切り替え */
+    .tl-bar{grid-template-columns:1fr;gap:0}
+    .tl-seg{padding:0 0 0 26px;text-align:left;min-height:52px}
+    .tl-seg::before{left:6px;right:auto;top:0;bottom:0;width:4px;height:auto}
+    .tl-seg:first-child::before{top:50%;left:6px;border-radius:3px 3px 0 0}
+    .tl-seg:last-child::before{bottom:50%;top:0;border-radius:0 0 3px 3px}
+    .tl-dot{left:0;top:50%;margin-top:-7px;margin-left:1px}
+  }
   .step h3{font-size:16.5px;font-weight:700;margin:10px 0 7px}
   .step p{margin:0;color:var(--muted);font-size:14px}
 
@@ -236,7 +279,9 @@
     .menu-btn{display:block}
     .grid3,.steps,.feat,.trust,.compare{grid-template-columns:1fr}
     .cmp-mid{transform:none}
-    .relay-row{flex-direction:column}
+    .relay-grid{grid-template-columns:1fr}
+    .lane{flex-direction:column;align-items:stretch;gap:6px}
+    .track .tx{white-space:normal;text-align:center;font-size:12px}
     .conn{flex-direction:row;min-width:0;padding:2px 0}
     .conn svg{transform:rotate(90deg)}
     .hero{padding:48px 0 24px}
@@ -289,33 +334,26 @@
       <p class="note">日本国内・適格請求書発行事業者の方が対象です（審査制）。</p>
 
       <div class="relay reveal" aria-label="ナカツギの受け渡しの流れ">
-        <div class="relay-row">
-          <div class="party">
-            <div class="who">あなた</div>
-            <div class="what">見積を出す</div>
-          </div>
-          <div class="conn" aria-hidden="true">
-            <span class="lab">見積</span>
-            <svg width="30" height="12" viewBox="0 0 30 12"><path d="M0 6h24m0 0l-5-5m5 5l-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
+        <div class="relay-grid">
+          <div class="party"><div class="who">あなた</div><div class="what">役務を提供する</div></div>
           <div class="hub">
             <div class="who">ナカツギ</div>
             <div class="what">あいだに立つ</div>
             <span class="pin">代金をお預かり</span>
           </div>
-          <div class="conn" aria-hidden="true">
-            <span class="lab">支払い</span>
-            <svg width="30" height="12" viewBox="0 0 30 12"><path d="M30 6H6m0 0l5-5M6 6l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="party"><div class="who">取引相手</div><div class="what">役務を受け取る</div></div>
+
+          <div class="lane lane-doc">
+            <span class="lane-k">書類</span>
+            <div class="track track-r"><span class="tx">見積書 → 請書 → 適格請求書</span></div>
           </div>
-          <div class="party">
-            <div class="who">取引相手</div>
-            <div class="what">支払う</div>
+
+          <div class="lane lane-pay">
+            <span class="lane-k">お金</span>
+            <div class="track track-l"><span class="tx">完了確認で入金　←　ナカツギが預かる　←　支払い</span></div>
           </div>
         </div>
-        <div class="relay-back">
-          <svg width="18" height="12" viewBox="0 0 30 12" style="color:var(--green)"><path d="M30 6H6m0 0l5-5M6 6l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          役務の完了が確認されたら、利用料を引いてあなたに入金します
-        </div>
+        <div class="relay-note">役務が終わるまで、代金はナカツギが預かります。完了が確認された時点で、利用料を引いた額があなたに届きます。</div>
       </div>
     </div>
   </section>
@@ -420,6 +458,18 @@
           <h3>完了の確認で、入金</h3>
           <p>役務をお届けし、お客さまが受け取りを確認。その時点で、利用料を引いた額が<b>あなたの口座へ</b>届きます。</p>
         </div>
+      </div>
+
+      <div class="tl reveal" aria-label="代金がどこにあるかの時系列">
+        <div class="tl-head">代金は、いまどこにあるか</div>
+        <div class="tl-bar">
+          <div class="tl-seg"><span class="tl-dot"></span><div class="tl-k">見積書</div><div class="tl-v">商談中</div></div>
+          <div class="tl-seg"><span class="tl-dot"></span><div class="tl-k">請書を承認</div><div class="tl-v">契約成立</div></div>
+          <div class="tl-seg hold"><span class="tl-dot on"></span><div class="tl-k">支払い</div><div class="tl-v">ナカツギが預かる</div></div>
+          <div class="tl-seg hold"><span class="tl-dot on"></span><div class="tl-k">役務の提供</div><div class="tl-v">ナカツギが預かる</div></div>
+          <div class="tl-seg"><span class="tl-dot fin"></span><div class="tl-k">完了の確認</div><div class="tl-v">あなたの口座へ</div></div>
+        </div>
+        <div class="tl-legend"><span class="lg-box"></span>この区間は、代金がナカツギにあります。相手が払い渋ることも、あなたが取り立てることもありません。</div>
       </div>
     </div>
   </section>
