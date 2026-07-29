@@ -69,7 +69,7 @@
       <a href="tel:082-548-9746">082-548-9746</a>
     </div>
     <div class="ftr-s">〒735-0025 広島県安芸郡府中町鹿籠2-14-25<br>
-      代金は役務の完了が確認されるまで、当社がお預かりしています。</div>
+      代金は役務の完了が確認されるまで、決済事業者に留保されます。</div>
   </footer>
 
 <script>
@@ -112,8 +112,8 @@
     content.innerHTML =
       '<div class="eyebrow">お取引の状況</div>'+
       '<h1 class="title">'+escapeHtml(q.title)+'</h1>'+
-      '<div class="amount"><div class="l">お預かり中の代金</div><div class="v">'+yen(q.amount)+'</div></div>'+
-      '<p class="note">お支払いは完了し、代金はナカツギがお預かりしています。役務を受け取り、内容にご納得いただけたら、下のボタンで完了を確定してください。確定すると、代金が提供者へお渡しされます。</p>'+
+      '<div class="amount"><div class="l">留保中の代金</div><div class="v">'+yen(q.amount)+'</div></div>'+
+      '<p class="note">お支払いは完了し、代金は決済事業者に留保されています。役務を受け取り、内容にご納得いただけたら、下のボタンで完了を確定してください。確定すると、代金が提供者へお渡しされます。</p>'+
       '<button id="done">役務を受け取りました（提供者へお支払い）</button>'+
       '<p class="msg">まだ受け取っていない・内容に問題がある場合は、確定せずに提供者、または下記の運営事務局までご連絡ください。</p>';
     document.getElementById("done").addEventListener("click", completeQuote);
@@ -138,7 +138,7 @@
     content.innerHTML =
       '<div class="state ok">'+
       '<div class="big">返金されました</div>'+
-      '<div class="msg">お預かりしていた代金は、お客様へ返金されました。</div>'+
+      '<div class="msg">留保されていた代金は、お客様へ返金されました。</div>'+
       '</div>';
   }
   // 銀行振込・着金待ち
@@ -178,7 +178,7 @@
           : '<div class="l">お支払い金額（税込）</div>')+
         '</div>'+
         (q.valid_until ? '<p class="msg" style="text-align:center">有効期限：'+ymd(q.valid_until)+'</p>' : '')+
-        '<p class="note">お支払いいただいた代金は、役務の提供が完了するまでナカツギがお預かりします。完了の確認後に提供者へお渡しするため、前払いのご不安なくお取引いただけます。</p>'+
+        '<p class="note">お支払いいただいた代金は、役務の提供が完了するまで決済事業者に留保されます。完了の確認後に提供者へ送金されるため、前払いのご不安なくお取引いただけます。</p>'+
         '<button id="pay">承認して支払う</button>'+
         '<button id="doc" class="ghost">請書を保存・印刷（PDF可）</button>';
       document.getElementById("doc").addEventListener("click", function(){

@@ -214,7 +214,7 @@
     // 明細
     html += '<table><thead><tr><th>内容</th><th class="r">税率</th><th class="r">金額（税抜）</th></tr></thead><tbody>';
     if (isStm) {
-      html += '<tr><td>'+esc(d.title)+'<div class="dsc">'+(d.buyer_name?'役務利用者：'+esc(d.buyer_name)+'　／　':'')+'お取引の対価（お預かり金額 '+yen(d.amount_inc)+'）</div></td>'+
+      html += '<tr><td>'+esc(d.title)+'<div class="dsc">'+(d.buyer_name?'役務利用者：'+esc(d.buyer_name)+'　／　':'')+'お取引の対価（決済金額 '+yen(d.amount_inc)+'）</div></td>'+
         '<td class="r">'+d.tax_rate+'%</td><td class="r">'+yen(d.amount_ex)+'</td></tr>'+
         '<tr><td>ナカツギ利用料（'+d.fee_rate+'%）<div class="dsc">お取引金額（税込）に対する利用料です</div></td>'+
         '<td class="r">'+d.tax_rate+'%</td><td class="r">-'+yen(d.fee_ex).slice(1)+'</td></tr>';
@@ -264,7 +264,7 @@
     html += '<div class="legal">';
     if (isEst) {
       html += '<b>本書は御見積書です。</b>本見積の有効期限は '+ymd(d.valid_until)+' です。金額・内容は変更となる場合があります。<br>'+
-        'ご発注の際は、役務提供者より「請書」をお送りします。請書をご承認いただいた時点で契約が成立し、以降のご請求・お支払い・代金のお預かりは、ナカツギ（'+esc(d.issuer.name)+'）を通じて行われます。';
+        'ご発注の際は、役務提供者より「請書」をお送りします。請書をご承認いただいた時点で契約が成立し、以降のご請求・お支払い・代金の決済は、ナカツギ（'+esc(d.issuer.name)+'）を通じて行われます。';
     } else if (isStm) {
       html += '<b>本書は、ナカツギ利用料に係る適格請求書です。</b>上記の利用料について、発行者の登録番号にて交付します。<br>'+
         '<b>また本書は、当社が購入者へ交付した適格請求書の写しの交付に代えて交付するものです。</b>'+
