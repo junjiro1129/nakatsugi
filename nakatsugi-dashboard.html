@@ -70,6 +70,10 @@
   .amt{font-family:var(--mono);white-space:nowrap}
   .sub2{font-size:11.5px;color:var(--muted)}
   .badge{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:999px;white-space:nowrap}
+  .dsp{margin-top:8px;padding:9px 12px;border-radius:8px;background:rgba(163,53,43,.07);
+    color:#A3352B;font-size:12.5px;line-height:1.6}
+  .dsp-d{margin-top:5px;color:var(--ink-soft);white-space:pre-wrap}
+  .dsp-a{margin-top:7px}
   .b-pending{background:var(--line-soft);color:var(--ink-soft)}
   .b-awaiting{background:#E1E9F5;color:#2B5A9A}
   .b-paid{background:var(--amber-soft);color:var(--amber)}
@@ -128,6 +132,14 @@
       <div class="row2">
         <div class="fld"><label>出品者の屋号（空欄なら登録情報から自動取得）</label><input id="c_sname" placeholder="例：スタジオ○○"></div>
         <div class="fld" style="max-width:200px"><label>請書の有効期限（日数）</label><input id="c_days" type="number" value="14"></div>
+        <div class="row2">
+          <div class="fld"><label>役務提供の完了予定日</label><input id="c_due" type="date"></div>
+          <div class="fld"><label>役務の提供を受ける場所</label><input id="c_place" list="placelist" placeholder="例：オンライン（データ納品）">
+            <datalist id="placelist"><option value="オンライン（データ納品）"><option value="役務利用者の指定場所"><option value="役務提供者の事業所"></datalist></div>
+        </div>
+        <div class="fld" style="max-width:260px"><label>確認期間（日数・7〜14）</label>
+          <select id="c_confirm"><option value="7">7日</option><option value="10">10日</option><option value="14">14日</option></select>
+          <span class="sub2">役務完了の申告後、買い手が確認する期間です。</span></div>
       </div>
       <div class="fld"><label>件名</label><input id="c_title" placeholder="例：ロゴデザイン制作一式"></div>
       <div class="fld"><label>内容の説明（任意）</label><textarea id="c_desc" placeholder="例：ロゴ2案・修正2回・データ納品"></textarea></div>
@@ -294,6 +306,13 @@
       if(q.status==="released") docs += '<button class="sm" data-doc="statement:'+q.id+'">精算書</button>';
       acts += '<div style="margin-top:6px">'+docs+'</div>';
 
+      var flag = q.dispute
+        ? '<div class="dsp"><b>異議あり</b>（'+esc(q.dispute.reason)+'・'+ymd(q.dispute.at)+'）'+
+          (q.dispute.detail?'<div class="dsp-d">'+esc(q.dispute.detail)+'</div>':'')+
+          '<div class="dsp-a"><button class="sm" data-hold="'+q.id+'" data-on="'+(q.hold?'0':'1')+'">'+
+          (q.hold?'留保を解除':'留保を継続する')+'</button></div></div>'
+        : (q.status==="paid" && q.deemed_due && q.delivered_at
+            ? '<div class="sub2">自動送金予定：'+ymd(q.deemed_due)+'</div>' : '');
       tr.innerHTML =
         '<td><div class="ttl">'+esc(q.title)+
           (q.from_estimate?' <span class="badge b-pending" title="出品者が見積書ツールから作成した請書">出品者作成</span>':'')+
@@ -302,10 +321,23 @@
         '<td class="hide-sp sub2">'+esc(q.buyer_name||"")+(q.buyer_name&&q.buyer_email?'<br>':'')+esc(q.buyer_email||(q.buyer_name?"":"—"))+'</td>'+
         '<td><span class="badge '+s.cls+'">'+s.label+'</span></td>'+
         '<td class="hide-sp sub2">'+created+'</td>'+
-        '<td><div class="acts">'+acts+'</div></td>';
+        '<td><div class="acts">'+acts+'</div>'+flag+'</td>';
       tb.appendChild(tr);
     });
+    wireHold();
   }
+  function wireHold(){
+    Array.prototype.forEach.call(document.querySelectorAll("[data-hold]"), function(b){
+      b.addEventListener("click", async function(){
+        var on = b.getAttribute("data-on")==="1";
+        if(!confirm(on?"この取引の留保を継続します。自動送金は行われません。":"留保を解除します。")) return;
+        b.disabled=true;
+        await api("/quotes/hold", { id: b.getAttribute("data-hold"), hold: on });
+        load();
+      });
+    });
+  }
+
   function stat(n,l,attn){ return '<div class="stat'+(attn?" attn":"")+'"><div class="n">'+n+'</div><div class="l">'+l+'</div></div>'; }
 
   /* --- events --- */
@@ -367,6 +399,9 @@
       buyer_name: $("c_buyer").value.trim(),
       seller_name: $("c_sname").value.trim(),
       valid_days: parseInt($("c_days").value,10) || 14,
+      delivery_due: $("c_due").value || "",
+      delivery_place: $("c_place").value.trim(),
+      confirm_days: parseInt($("c_confirm").value,10) || 7,
       tax_mode: (document.querySelector('input[name=c_tax]:checked')||{}).value || "ex",
       title: $("c_title").value.trim() || "役務の対価",
       description: $("c_desc").value.trim(),

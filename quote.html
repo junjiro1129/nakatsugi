@@ -13,6 +13,16 @@
   *{box-sizing:border-box}
   body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.65;
     display:flex;flex-direction:column;min-height:100vh;align-items:center;justify-content:flex-start;padding:36px 18px}
+  .due{background:var(--green-soft);border-radius:12px;padding:13px 16px;margin:14px 0 6px;
+    font-size:13.5px;line-height:1.7;color:var(--green-deep)}
+  .fld{margin:14px 0}
+  .fld label{display:block;font-size:13.5px;font-weight:600;margin-bottom:6px}
+  .fld select,.fld textarea{width:100%;font-family:inherit;font-size:15px;padding:11px 13px;
+    border:1.5px solid var(--line);border-radius:11px;background:#fff;color:var(--ink)}
+  .fld textarea{resize:vertical}
+  .fld select:focus,.fld textarea:focus{outline:none;border-color:var(--green)}
+  button.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);margin-top:9px}
+  button.ghost:hover{border-color:var(--ink)}
   .ftr{max-width:480px;width:100%;margin-top:20px;padding:18px 22px;text-align:center;
     border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;line-height:1.75}
   .ftr-t{font-size:11.5px;letter-spacing:.04em;margin-bottom:5px}
@@ -107,16 +117,82 @@
 
   function checkMark(){ return '<div class="check"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0C5A40" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'; }
 
-  // 支払い済み・受け取り確認待ち → 完了確認ボタン（＝送金トリガー）
+  // 支払い済み。出品者の完了申告の有無で表示が変わる。
   function showAwaiting(q){
-    content.innerHTML =
+    var head =
       '<div class="eyebrow">お取引の状況</div>'+
       '<h1 class="title">'+escapeHtml(q.title)+'</h1>'+
-      '<div class="amount"><div class="l">留保中の代金</div><div class="v">'+yen(q.amount)+'</div></div>'+
-      '<p class="note">お支払いは完了し、代金は決済事業者に留保されています。役務を受け取り、内容にご納得いただけたら、下のボタンで完了を確定してください。確定すると、代金が提供者へお渡しされます。</p>'+
-      '<button id="done">役務を受け取りました（提供者へお支払い）</button>'+
-      '<p class="msg">まだ受け取っていない・内容に問題がある場合は、確定せずに提供者、または下記の運営事務局までご連絡ください。</p>';
+      '<div class="amount"><div class="l">留保中の代金</div><div class="v">'+yen(q.amount)+'</div></div>';
+
+    // 異議の申出後：運営の対応待ち
+    if(q.dispute){
+      content.innerHTML = head +
+        '<div class="state">'+
+          '<div class="big">確認のご連絡を受け付けました</div>'+
+          '<div class="msg">'+ymd(q.dispute.at)+'（'+escapeHtml(q.dispute.reason)+'）<br>'+
+          '運営事務局にて内容を確認し、ご連絡いたします。代金は引き続き留保されており、自動でお支払いに進むことはありません。</div>'+
+        '</div>';
+      return;
+    }
+
+    // 完了申告あり：確認期間のカウント中
+    if(q.delivered_at){
+      var lim = q.deemed_due ? ymd(q.deemed_due) : "";
+      content.innerHTML = head +
+        '<p class="note"><b>提供者より、役務の完了が申告されました。</b>内容をご確認のうえ、問題がなければ下のボタンで完了を確定してください。確定すると、代金が提供者へお渡しされます。</p>'+
+        (lim ? '<div class="due"><b>'+lim+'</b> までにご確認ください。<br>'+
+               'この日までにご確認・お申し出のいずれもない場合は、確認されたものとみなし、代金が提供者へお渡しされます。</div>' : '')+
+        '<button id="done">役務を受け取りました（提供者へお支払い）</button>'+
+        '<button id="obj" class="ghost">まだ受け取っていない・内容に相違がある</button>';
+      document.getElementById("done").addEventListener("click", completeQuote);
+      document.getElementById("obj").addEventListener("click", showDisputeForm);
+      return;
+    }
+
+    // 完了申告なし：役務提供中
+    content.innerHTML = head +
+      '<p class="note">お支払いは完了し、代金は決済事業者に留保されています。ただいま提供者が役務を進めています。完了の申告があり次第、この画面でご確認いただけます。</p>'+
+      '<div class="due">代金は、役務の完了が確認されるまでお渡しされません。<br>'+
+      'すでに役務を受け取っている場合は、下のボタンで完了を確定していただけます。</div>'+
+      '<button id="done" class="ghost">役務を受け取りました（提供者へお支払い）</button>'+
+      '<p class="msg">ご不明な点は、提供者または下記の運営事務局までご連絡ください。</p>';
     document.getElementById("done").addEventListener("click", completeQuote);
+  }
+
+  // 異議の申出フォーム
+  function showDisputeForm(){
+    content.innerHTML =
+      '<div class="eyebrow">お取引の状況</div>'+
+      '<h1 class="title">内容についてのお申し出</h1>'+
+      '<p class="note">下記をお送りいただくと、自動でのお支払いは止まり、運営事務局が内容を確認します。</p>'+
+      '<div class="fld"><label>お申し出の内容</label>'+
+        '<select id="d_reason">'+
+          '<option value="未着">まだ受け取っていない</option>'+
+          '<option value="内容相違">内容が異なる・不足がある</option>'+
+          '<option value="その他">その他</option>'+
+        '</select></div>'+
+      '<div class="fld"><label>詳しい状況（任意）</label>'+
+        '<textarea id="d_detail" rows="5" placeholder="お困りの状況をご記入ください。"></textarea></div>'+
+      '<button id="d_send">この内容で運営事務局に伝える</button>'+
+      '<button id="d_back" class="ghost">戻る</button>';
+    document.getElementById("d_send").addEventListener("click", sendDispute);
+    document.getElementById("d_back").addEventListener("click", load);
+  }
+
+  async function sendDispute(){
+    var btn=document.getElementById("d_send");
+    btn.disabled=true; btn.textContent="送信中…";
+    try{
+      await api("/quotes/dispute", {
+        id: id,
+        reason: document.getElementById("d_reason").value,
+        detail: document.getElementById("d_detail").value.trim(),
+      });
+      load();
+    }catch(e){
+      btn.disabled=false; btn.textContent="この内容で運営事務局に伝える";
+      alert(e.message);
+    }
   }
 
   // 完了済み

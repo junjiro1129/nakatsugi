@@ -68,6 +68,11 @@
   .sums .row.minus .n{color:#A3352B}
   .sums .row.g.pay{background:var(--green-deep)}
 
+  .terms{margin-top:9mm;border:1px solid #D9D5CB;border-radius:2mm;padding:3.5mm 4mm}
+  .terms-h{font-size:8.6pt;font-weight:700;letter-spacing:.04em;margin-bottom:2mm}
+  .terms dl{display:grid;grid-template-columns:34mm 1fr;gap:1.4mm 3mm;margin:0;font-size:8.4pt}
+  .terms dt{color:#5C6675;margin:0}
+  .terms dd{margin:0;color:#16263F}
   .legal{margin-top:26px;border-top:1px solid var(--line-soft);padding-top:14px;
     font-size:10.5px;color:var(--muted);line-height:1.75}
   .legal b{color:var(--ink)}
@@ -258,6 +263,21 @@
           '<small>本取引に係る消費税の差引額（目安）</small></div>'+
           '<div class="n">'+yen(d.tax - d.fee_tax)+'</div></div>'+
         '</div>';
+    }
+
+    // 取引条件（請書のみ）：取適法（旧・下請法）4条明示に対応する項目
+    if (d.kind === "quote") {
+      var terms = [];
+      terms.push(['発注日', d.approved_at ? ymd(d.approved_at) : '本請書のご承認日']);
+      if (d.delivery_due)   terms.push(['役務提供の完了予定日', ymd(d.delivery_due)]);
+      if (d.delivery_place) terms.push(['役務の提供を受ける場所', esc(d.delivery_place)]);
+      terms.push(['確認期間', d.confirm_days + '日（役務完了のご申告後、この期間内にご確認ください）']);
+      terms.push(['支払期日', '役務の完了確認日（確認期間の満了日までにお支払いされます）']);
+      html += '<div class="terms"><div class="terms-h">取引条件</div><dl>';
+      for (var ti = 0; ti < terms.length; ti++) {
+        html += '<dt>'+terms[ti][0]+'</dt><dd>'+terms[ti][1]+'</dd>';
+      }
+      html += '</dl></div>';
     }
 
     // 注記

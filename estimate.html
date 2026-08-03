@@ -58,6 +58,9 @@
   .sm:hover{border-color:var(--ink)}
   .sm.go{background:var(--green);color:#fff;border-color:var(--green)}
   .sm.del{color:#A3352B;border-color:rgba(163,53,43,.3)}
+  .b-warn{background:rgba(163,53,43,.1);color:#A3352B}
+  .note-warn{margin-top:8px;padding:9px 12px;border-radius:8px;background:rgba(163,53,43,.07);
+    color:#A3352B;font-size:12.5px;line-height:1.6}
   .sm.del:hover{background:rgba(163,53,43,.07);border-color:#A3352B}
   .listhead{display:flex;align-items:center;justify-content:space-between;margin:26px 0 12px}
   .listhead h2{font-size:16px;margin:0}
@@ -165,6 +168,11 @@
         '</div>'+
         '<div class="row2">'+
           '<div class="fld"><label>有効期限（日数）</label><input id="f_days" type="number" value="14"></div>'+
+          '<div class="fld"><label>役務提供の完了予定日</label><input id="f_due" type="date"></div>'+
+          '<div class="fld"><label>役務の提供を受ける場所</label><input id="f_place" list="placelist" placeholder="例：オンライン（データ納品）">'+
+            '<datalist id="placelist"><option value="オンライン（データ納品）"><option value="役務利用者の指定場所"><option value="役務提供者の事業所"></datalist></div>'+
+          '<div class="fld"><label>確認期間（日数）</label><select id="f_confirm"><option value="7">7日</option><option value="10">10日</option><option value="14">14日</option></select>'+
+            '<div class="hint">役務完了のご申告後、お客様が内容を確認する期間です。この期間を過ぎると自動でお支払いに進みます。</div></div>'+
         '</div>'+
         '<div class="fld"><label>備考（納期・条件など・任意）</label><textarea id="f_note" placeholder="例：納期はご発注から2週間／お支払いはご承認後の前払いとなります"></textarea></div>'+
         '<button class="primary" id="make">見積書を作成</button>'+
@@ -201,6 +209,9 @@
         amount: amount,
         tax_mode: (document.querySelector('input[name=tax]:checked')||{}).value||"ex",
         valid_days: parseInt($("f_days").value,10)||14,
+        delivery_due: $("f_due").value || "",
+        delivery_place: $("f_place").value.trim(),
+        confirm_days: parseInt($("f_confirm").value,10) || 7,
         note: $("f_note").value.trim(),
       });
       toast("見積書を作成しました");
@@ -236,6 +247,9 @@
       Array.prototype.forEach.call(document.querySelectorAll("[data-delete]"),function(b){
         b.addEventListener("click",function(){ delEstimate(b.getAttribute("data-delete"), b); });
       });
+      Array.prototype.forEach.call(document.querySelectorAll("[data-deliver]"),function(b){
+        b.addEventListener("click",function(){ deliver(b.getAttribute("data-deliver"), b); });
+      });
     }catch(e){ $("list").innerHTML='<div class="empty">'+esc(e.message)+'</div>'; }
   }
 
@@ -252,6 +266,8 @@
     var qs = e.quote_status || "";
     var statusBadge;
     if(!done){ statusBadge = '<span class="badge b-open">商談中</span>'; }
+    else if(qs==="paid" && e.disputed){ statusBadge = '<span class="badge b-warn">お客様から確認のご連絡</span>'; }
+    else if(qs==="paid" && e.delivered_at){ statusBadge = '<span class="badge b-open">お客様の確認待ち</span>'; }
     else if(QSTATUS[qs]){ statusBadge = '<span class="badge '+QSTATUS[qs].cls+'">'+QSTATUS[qs].label+'</span>'; }
     else { statusBadge = '<span class="badge b-done">請書にしました</span>'; }
 
@@ -260,7 +276,9 @@
       '<div class="by">'+(e.buyer_name?esc(e.buyer_name)+' 様':'（宛名なし）')+'</div>'+
       '</div><div class="am">'+yen(e.amount_inc)+'</div></div>'+
       '<div class="meta">作成 '+ymd(e.created)+'　／　有効期限 '+ymd(e.valid_until)+
-        (qs==="released"&&e.payout?'　／　お振込 '+yen(e.payout):'')+'</div>'+
+        (qs==="released"&&e.payout?'　／　お振込 '+yen(e.payout):'')+
+        (qs==="paid"&&e.deemed_due&&!e.disputed?'　／　自動でお支払いに進む日 '+ymd(e.deemed_due):'')+'</div>'+
+      (qs==="paid"&&e.disputed?'<div class="note-warn">お客様から内容の確認について連絡がありました。運営事務局よりご連絡いたします。</div>':'')+
       '<div class="acts">'+
         '<button class="sm" data-open-est="'+e.id+'">見積書を開く</button>'+
         '<button class="sm" data-copy-est="'+e.id+'">見積書リンクをコピー</button>';
@@ -269,6 +287,10 @@
       h+='<button class="sm del" data-delete="'+e.id+'">削除</button>';
     }else{
       h+='<button class="sm" data-copy-quote="'+e.converted_quote+'">請書リンクをコピー（買い手へ）</button>';
+      // 支払い済みで未申告なら、役務完了を申告できる（確認期間のカウントが始まる）
+      if(qs==="paid" && !e.delivered_at){
+        h+='<button class="sm go" data-deliver="'+e.converted_quote+'">役務の完了を申告する</button>';
+      }
       // 完了（送金済み）なら、出品者が自分で精算書を取得できる
       if(qs==="released"){
         h+='<button class="sm go" data-statement="'+e.converted_quote+'">精算書を取得</button>';
@@ -286,6 +308,16 @@
       toast(d.already?"すでに請書にしています":"請書を作成しました");
       loadList();
     }catch(e){ toast(e.message,true); btn.disabled=false; btn.textContent="この見積書を請書にする"; }
+  }
+
+  async function deliver(qid, btn){
+    if(!confirm("役務の提供が完了したことをお客様に申告します。\n\n・お客様が確認するか、確認期間が過ぎると、お支払いに進みます。\n・申告の前に、お客様へ完了のご連絡をお願いします。\n\nよろしいですか？")) return;
+    btn.disabled=true; btn.textContent="送信中…";
+    try{
+      var d=await api("/quotes/deliver", { seller: SELLER, id: qid });
+      toast(d.already?"すでに申告済みです":"完了を申告しました。お客様の確認をお待ちください。");
+      loadList();
+    }catch(e){ toast(e.message,true); btn.disabled=false; btn.textContent="役務の完了を申告する"; }
   }
 
   async function delEstimate(id, btn){
