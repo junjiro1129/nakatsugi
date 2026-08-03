@@ -59,6 +59,14 @@
   .sm.go{background:var(--green);color:#fff;border-color:var(--green)}
   .sm.del{color:#A3352B;border-color:rgba(163,53,43,.3)}
   .b-warn{background:rgba(163,53,43,.1);color:#A3352B}
+  .grp{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:18px 0}
+  .grp-h{font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:4px}
+  .grp-note{font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:12px}
+  .grp .fld:last-child{margin-bottom:0}
+  .inline{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .inline input[type=number]{width:90px}
+  .unit{font-size:14px;color:var(--muted)}
+  .calc{font-size:13px;color:var(--green-deep);font-weight:600}
   .note-warn{margin-top:8px;padding:9px 12px;border-radius:8px;background:rgba(163,53,43,.07);
     color:#A3352B;font-size:12.5px;line-height:1.6}
   .sm.del:hover{background:rgba(163,53,43,.07);border-color:#A3352B}
@@ -166,13 +174,24 @@
           '</div>'+
           '<div class="preview" id="prev"></div>'+
         '</div>'+
-        '<div class="row2">'+
-          '<div class="fld"><label>有効期限（日数）</label><input id="f_days" type="number" value="14"></div>'+
-          '<div class="fld"><label>役務提供の完了予定日</label><input id="f_due" type="date"></div>'+
+        '<div class="grp">'+
+          '<div class="grp-h">① この見積書について</div>'+
+          '<div class="fld"><label>お客様がご承認いただける期限</label>'+
+            '<div class="inline"><input id="f_days" type="number" value="14" min="1"><span class="unit">日間</span>'+
+            '<span class="calc" id="f_days_calc"></span></div>'+
+            '<div class="hint">この見積書を作成した日から数えます。見積書に「有効期限」として表示されます。</div></div>'+
+        '</div>'+
+
+        '<div class="grp">'+
+          '<div class="grp-h">② 請書にしたときの取引条件</div>'+
+          '<div class="grp-note">下記は、この見積書を「請書」に変換したときに、請書へ記載される条件です。見積書の段階では表示されません。</div>'+
+          '<div class="fld"><label>役務提供の完了予定日</label><input id="f_due" type="date">'+
+            '<div class="hint">いつまでに役務をお届けするかの予定日です。</div></div>'+
           '<div class="fld"><label>役務の提供を受ける場所</label><input id="f_place" list="placelist" placeholder="例：オンライン（データ納品）">'+
             '<datalist id="placelist"><option value="オンライン（データ納品）"><option value="役務利用者の指定場所"><option value="役務提供者の事業所"></datalist></div>'+
-          '<div class="fld"><label>確認期間（日数）</label><select id="f_confirm"><option value="7">7日</option><option value="10">10日</option><option value="14">14日</option></select>'+
-            '<div class="hint">役務完了のご申告後、お客様が内容を確認する期間です。この期間を過ぎると自動でお支払いに進みます。</div></div>'+
+          '<div class="fld"><label>役務完了後、お客様が確認する期間</label>'+
+            '<div class="inline"><select id="f_confirm"><option value="7">7日間</option><option value="10">10日間</option><option value="14">14日間</option></select></div>'+
+            '<div class="hint">あなたが「役務の完了を申告」してから数えます。この期間内にお客様の確認も異議もない場合は、確認されたものとみなして自動でお支払いに進みます。</div></div>'+
         '</div>'+
         '<div class="fld"><label>備考（納期・条件など・任意）</label><textarea id="f_note" placeholder="例：納期はご発注から2週間／お支払いはご承認後の前払いとなります"></textarea></div>'+
         '<button class="primary" id="make">見積書を作成</button>'+
@@ -181,10 +200,17 @@
       '<div id="list"><div class="empty">読み込み中…</div></div>';
 
     $("f_amount").addEventListener("input", updPrev);
+    $("f_days").addEventListener("input", updDays); updDays();
     Array.prototype.forEach.call(document.querySelectorAll('input[name=tax]'), function(r){ r.addEventListener("change", updPrev); });
     $("make").addEventListener("click", createEstimate);
     $("reload").addEventListener("click", function(){ $("reload").textContent="読み込み中…"; loadList().then(function(){ $("reload").textContent="再読み込み"; }); });
     loadList();
+  }
+
+  function updDays(){
+    var n = parseInt($("f_days").value, 10);
+    $("f_days_calc").textContent = (n > 0)
+      ? "（" + ymd(new Date(Date.now() + n * 86400000).toISOString()) + " まで）" : "";
   }
 
   function updPrev(){
