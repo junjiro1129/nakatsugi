@@ -270,7 +270,7 @@
     try{
       var origin = location.origin + location.pathname;
       var d = await api("/quotes/checkout", { id: id, origin: origin });
-      location.href = d.url;      // Stripe Checkout へ
+      location.href = d.url;      // 決済事業者の決済画面へ
     }catch(e){
       btn.disabled = false; btn.textContent = "承認して支払う";
       content.insertAdjacentHTML("beforeend", '<div class="msg" style="color:#A3352B">'+e.message+'</div>');

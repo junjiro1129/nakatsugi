@@ -131,7 +131,7 @@
         '<h1>ご登録情報の入力</h1>'+
         '<p class="lead">お申し込みありがとうございます。以下をご入力ください。所要 2〜3分です。</p>'+
       '</div>'+
-      '<div class="note">氏名や振込口座などの本人確認情報は、この画面では入力しません。運営の確認後、決済事業者（Stripe）の安全な画面で別途ご登録いただきます。</div>'+
+      '<div class="note">氏名や振込口座などの本人確認情報は、この画面では入力しません。運営の確認後、決済事業者の安全な画面で別途ご登録いただきます。</div>'+
       '<div class="card">'+
 
         '<div class="fld"><label>事業者の区分<span class="req">必須</span></label>'+
@@ -271,7 +271,7 @@
   async function init(){
     if(!token){ showError("登録用のリンクが正しくありません。運営からお送りしたリンクをご確認ください。"); return; }
 
-    // Stripeの本人確認から戻ってきたとき
+    // 決済事業者の本人確認から戻ってきたとき
     if(params.get("done")){
       content.innerHTML =
         '<div class="card"><div class="state">'+
