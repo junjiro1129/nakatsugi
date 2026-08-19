@@ -227,6 +227,13 @@
   function buyerBase(){ return ($("buyerbase").value||"").trim(); }
   function yen(n){ return "¥" + Number(n||0).toLocaleString("ja-JP"); }
   function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  // 異議・自動送金予定の表示で使う。未定義だと一覧の描画ごと止まるため必ず値を返す。
+  function ymd(v){
+    if(!v) return "";
+    var d = new Date(v);
+    if(isNaN(d.getTime())) return String(v);
+    return d.getFullYear()+"/"+(d.getMonth()+1)+"/"+d.getDate();
+  }
   function buyerLink(id){ var b=buyerBase(); if(!b) return ""; return b + (b.indexOf("?")>=0?"&":"?") + "id=" + encodeURIComponent(id); }
 
   var toastT;
