@@ -79,7 +79,7 @@
       <a href="tel:082-548-9746">082-548-9746</a>
     </div>
     <div class="ftr-s">〒735-0025 広島県安芸郡府中町鹿籠2-14-25<br>
-      代金は役務の完了が確認されるまで、決済事業者に留保されます。</div>
+      代金は、お客様が役務の完了をご確認いただいた時点で提供者へお渡しされます。</div>
   </footer>
 
 <script>
@@ -122,7 +122,7 @@
     var head =
       '<div class="eyebrow">お取引の状況</div>'+
       '<h1 class="title">'+escapeHtml(q.title)+'</h1>'+
-      '<div class="amount"><div class="l">留保中の代金</div><div class="v">'+yen(q.amount)+'</div></div>';
+      '<div class="amount"><div class="l">完了確認待ちの金額</div><div class="v">'+yen(q.amount)+'</div></div>';
 
     // 異議の申出後：運営の対応待ち
     if(q.dispute){
@@ -130,7 +130,7 @@
         '<div class="state">'+
           '<div class="big">確認のご連絡を受け付けました</div>'+
           '<div class="msg">'+ymd(q.dispute.at)+'（'+escapeHtml(q.dispute.reason)+'）<br>'+
-          '運営事務局にて内容を確認し、ご連絡いたします。代金は引き続き留保されており、自動でお支払いに進むことはありません。</div>'+
+          '運営事務局にて内容を確認し、ご連絡いたします。自動でのお支払いは停止しており、提供者へのお渡しは行われません。</div>'+
         '</div>';
       return;
     }
@@ -151,7 +151,7 @@
 
     // 完了申告なし：役務提供中
     content.innerHTML = head +
-      '<p class="note">お支払いは完了し、代金は決済事業者に留保されています。ただいま提供者が役務を進めています。完了の申告があり次第、この画面でご確認いただけます。</p>'+
+      '<p class="note">お支払いは完了しています。提供者へのお渡しは、お客様が役務の完了をご確認いただいた後です。ただいま提供者が役務を進めています。完了の申告があり次第、この画面でご確認いただけます。</p>'+
       '<div class="due">代金は、役務の完了が確認されるまでお渡しされません。<br>'+
       'すでに役務を受け取っている場合は、下のボタンで完了を確定していただけます。</div>'+
       '<button id="done" class="ghost">役務を受け取りました（提供者へお支払い）</button>'+
@@ -176,7 +176,7 @@
       '<button id="d_send">この内容で運営事務局に伝える</button>'+
       '<button id="d_back" class="ghost">戻る</button>';
     document.getElementById("d_send").addEventListener("click", sendDispute);
-    document.getElementById("d_back").addEventListener("click", load);
+    document.getElementById("d_back").addEventListener("click", renderQuote);
   }
 
   async function sendDispute(){
@@ -188,7 +188,7 @@
         reason: document.getElementById("d_reason").value,
         detail: document.getElementById("d_detail").value.trim(),
       });
-      load();
+      renderQuote();
     }catch(e){
       btn.disabled=false; btn.textContent="この内容で運営事務局に伝える";
       alert(e.message);
@@ -214,7 +214,7 @@
     content.innerHTML =
       '<div class="state ok">'+
       '<div class="big">返金されました</div>'+
-      '<div class="msg">留保されていた代金は、お客様へ返金されました。</div>'+
+      '<div class="msg">お支払いいただいた代金は、お客様へ返金されました。</div>'+
       '</div>';
   }
   // 銀行振込・着金待ち
@@ -254,7 +254,7 @@
           : '<div class="l">お支払い金額（税込）</div>')+
         '</div>'+
         (q.valid_until ? '<p class="msg" style="text-align:center">有効期限：'+ymd(q.valid_until)+'</p>' : '')+
-        '<p class="note">お支払いいただいた代金は、役務の提供が完了するまで決済事業者に留保されます。完了の確認後に提供者へ送金されるため、前払いのご不安なくお取引いただけます。</p>'+
+        '<p class="note">お支払いいただいた代金は、お客様が役務の完了をご確認いただくまで提供者へお渡しされません。完了確認をきっかけにお支払いが実行されるため、前払いのご不安なくお取引いただけます。</p>'+
         '<button id="pay">承認して支払う</button>'+
         '<button id="doc" class="ghost">請書を保存・印刷（PDF可）</button>';
       document.getElementById("doc").addEventListener("click", function(){
