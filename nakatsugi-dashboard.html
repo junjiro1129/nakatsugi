@@ -74,6 +74,10 @@
     color:#A3352B;font-size:12.5px;line-height:1.6}
   .dsp-d{margin-top:5px;color:var(--ink-soft);white-space:pre-wrap}
   .dsp-a{margin-top:7px}
+  .hld{margin-top:8px;font-size:12.5px}
+  .hld.on{padding:9px 12px;border-radius:8px;background:rgba(163,53,43,.07);
+    border:1px solid rgba(163,53,43,.18);color:#A3352B}
+  .hld-a{margin-top:6px}
   .b-pending{background:var(--line-soft);color:var(--ink-soft)}
   .b-awaiting{background:#E1E9F5;color:#2B5A9A}
   .b-paid{background:var(--amber-soft);color:var(--amber)}
@@ -316,13 +320,26 @@
       if(q.status==="released") docs += '<button class="sm" data-doc="statement:'+q.id+'">精算書</button>';
       acts += '<div style="margin-top:6px">'+docs+'</div>';
 
-      var flag = q.dispute
-        ? '<div class="dsp"><b>異議あり</b>（'+esc(q.dispute.reason)+'・'+ymd(q.dispute.at)+'）'+
+      // 留保の操作（規約第12条第4項二号）。異議の有無にかかわらず、入金済みの取引では常に出す。
+      // 電話やメールでの申し出、禁止役務の疑いなど、画面からの異議申出を伴わない事由で止める場面があるため。
+      var holdBtn = q.status==="paid"
+        ? '<button class="sm'+(q.hold?' warn':'')+'" data-hold="'+q.id+'" data-on="'+(q.hold?'0':'1')+'">'+
+          (q.hold?'留保を解除':'送金を止める')+'</button>'
+        : '';
+
+      var flag = '';
+      if(q.dispute){
+        flag = '<div class="dsp"><b>異議あり</b>（'+esc(q.dispute.reason)+'・'+ymd(q.dispute.at)+'）'+
           (q.dispute.detail?'<div class="dsp-d">'+esc(q.dispute.detail)+'</div>':'')+
-          '<div class="dsp-a"><button class="sm" data-hold="'+q.id+'" data-on="'+(q.hold?'0':'1')+'">'+
-          (q.hold?'留保を解除':'留保を継続する')+'</button></div></div>'
-        : (q.status==="paid" && q.deemed_due && q.delivered_at
-            ? '<div class="sub2">自動送金予定：'+ymd(q.deemed_due)+'</div>' : '');
+          '<div class="dsp-a">'+holdBtn+'</div></div>';
+      }else if(q.status==="paid"){
+        var due = (q.deemed_due && q.delivered_at)
+          ? '自動送金予定：'+ymd(q.deemed_due)
+          : (q.hold ? '' : '出品者の完了申告を待っています');
+        flag = '<div class="hld'+(q.hold?' on':'')+'">'+
+          (q.hold ? '<b>送金を停止中</b>　自動送金は行われません。' : (due?'<span class="sub2">'+due+'</span>':''))+
+          '<div class="hld-a">'+holdBtn+'</div></div>';
+      }
       tr.innerHTML =
         '<td><div class="ttl">'+esc(q.title)+
           (q.from_estimate?' <span class="badge b-pending" title="出品者が見積書ツールから作成した請書">出品者作成</span>':'')+
@@ -340,7 +357,7 @@
     Array.prototype.forEach.call(document.querySelectorAll("[data-hold]"), function(b){
       b.addEventListener("click", async function(){
         var on = b.getAttribute("data-on")==="1";
-        if(!confirm(on?"この取引の留保を継続します。自動送金は行われません。":"留保を解除します。")) return;
+        if(!confirm(on?"この取引の送金を停止します。みなし完了による自動送金は行われません。":"送金の停止を解除します。確認期間の経過後、自動送金の対象に戻ります。")) return;
         b.disabled=true;
         await api("/quotes/hold", { id: b.getAttribute("data-hold"), hold: on });
         load();
