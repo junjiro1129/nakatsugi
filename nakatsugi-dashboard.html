@@ -69,6 +69,7 @@
   .ttl{font-weight:600}
   .amt{font-family:var(--mono);white-space:nowrap}
   .sub2{font-size:11.5px;color:var(--muted)}
+  .sub2.warn{color:var(--red)}
   .badge{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:999px;white-space:nowrap}
   .dsp{margin-top:8px;padding:9px 12px;border-radius:8px;background:rgba(163,53,43,.07);
     color:#A3352B;font-size:12.5px;line-height:1.6}
@@ -312,7 +313,9 @@
       }else if(q.status==="released"){
         acts = '<span class="sub2">出品者 '+yen(payout)+' ／ 利用料 '+yen(fee)+'</span>';
       }else if(q.status==="refunded"){
-        acts = '<span class="sub2">返金済み</span>';
+        acts = q.refund_pending
+          ? '<span class="sub2 warn">返金手続き中（買い手の口座入力待ち）</span>'
+          : '<span class="sub2">返金済み</span>';
       }
       // 書類（状態に応じて出せるものだけ）
       var docs = '<button class="sm" data-doc="quote:'+q.id+'">請書</button>';
@@ -413,7 +416,9 @@
       if(!confirm("この請書を買い手へ返金します。よろしいですか？")) return;
       btn.disabled = true; btn.textContent = "返金中…";
       var r = await api("/quotes/refund", { id: refId });
-      if(r && r.status==="refunded"){ toast("返金しました"); }
+      if(r && r.status==="refunded"){
+        toast(r.refund_pending ? "返金手続きを開始しました（買い手の口座入力待ち）" : "返金しました");
+      }
       await load();
       return;
     }
