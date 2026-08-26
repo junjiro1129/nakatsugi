@@ -209,13 +209,23 @@
     });
   }
 
-  // 返金済み
-  function showRefunded(){
-    content.innerHTML =
-      '<div class="state ok">'+
-      '<div class="big">返金されました</div>'+
-      '<div class="msg">お支払いいただいた代金は、お客様へ返金されました。</div>'+
-      '</div>';
+  // 返金済み（カード＝即時完了）／返金手続き中（銀行振込＝口座入力待ち）
+  function showRefunded(q){
+    if(q && q.refund_pending){
+      content.innerHTML =
+        '<div class="state ok">'+
+        '<div class="big">返金手続きを開始しました</div>'+
+        '<div class="msg">ご登録のメールアドレスに、決済事業者（Stripe）から返金先口座のご案内メールをお送りしています。'+
+        'お手数ですが、メール内のリンクから返金先の口座情報をご入力ください。ご入力後、お客様の口座へ返金されます。</div>'+
+        '<div class="msg" style="margin-top:8px">メールが届かない場合は、下記の運営事務局までお問い合わせください。</div>'+
+        '</div>';
+    }else{
+      content.innerHTML =
+        '<div class="state ok">'+
+        '<div class="big">返金されました</div>'+
+        '<div class="msg">お支払いいただいた代金は、お客様へ返金されました。</div>'+
+        '</div>';
+    }
   }
   // 銀行振込・着金待ち
   function showAwaitingFunds(q){
@@ -241,7 +251,7 @@
       if(q.status === "awaiting_funds"){ showAwaitingFunds(q); return; }
       if(q.status === "paid"){ showAwaiting(q); return; }
       if(q.status === "released"){ showDone(); return; }
-      if(q.status === "refunded"){ showRefunded(); return; }
+      if(q.status === "refunded"){ showRefunded(q); return; }
       content.innerHTML =
         '<div class="eyebrow">ご注文内容</div>'+
         '<h1 class="title">'+escapeHtml(q.title)+'</h1>'+
