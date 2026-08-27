@@ -252,10 +252,21 @@
     content.innerHTML = '<div class="state err"><div class="big">表示できません</div><div class="msg">'+m+'</div></div>';
   }
 
+  var pollTimer = null;
+  function schedulePoll(){
+    // 買い手が結果を「待っている」状態のときだけ静かに最新化する。
+    // 着金待ち・完了確認待ちの間に、運営の返金や着金反映が起きても画面が追随する。
+    if(pollTimer) return;
+    pollTimer = setInterval(function(){ renderQuote(); }, 15000);
+  }
+  function stopPoll(){ if(pollTimer){ clearInterval(pollTimer); pollTimer = null; } }
+
   async function renderQuote(){
     try{
       var q = await api("/quotes/get?id="+encodeURIComponent(id), null, "GET");
       setTitle(q); // タブに進捗を反映（返金手続き中も出し分け）
+      // 待ち状態はポーリング継続、それ以外（終端・操作画面）は停止
+      if(q.status === "awaiting_funds" || q.status === "paid"){ schedulePoll(); } else { stopPoll(); }
       if(q.status === "awaiting_funds"){ showAwaitingFunds(q); return; }
       if(q.status === "paid"){ showAwaiting(q); return; }
       if(q.status === "released"){ showDone(); return; }
