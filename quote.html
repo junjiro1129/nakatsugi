@@ -102,8 +102,16 @@
     released:       "お取引完了",
     refunded:       "返金済み",
   };
-  function setTitle(status){
-    document.title = (TAB_TITLES[status] || "お取引") + " ｜ ナカツギ";
+  function setTitle(arg){
+    // arg は請書オブジェクト or ステータス文字列。振込返金（手続き中）はタブも出し分ける。
+    var status = (arg && typeof arg === "object") ? arg.status : arg;
+    var label;
+    if(status === "refunded" && arg && typeof arg === "object" && arg.refund_pending){
+      label = "返金手続き開始";
+    }else{
+      label = TAB_TITLES[status] || "お取引";
+    }
+    document.title = label + " ｜ ナカツギ";
   }
 
   async function api(path, payload, method){
@@ -247,7 +255,7 @@
   async function renderQuote(){
     try{
       var q = await api("/quotes/get?id="+encodeURIComponent(id), null, "GET");
-      setTitle(q.status); // タブに進捗を反映
+      setTitle(q); // タブに進捗を反映（返金手続き中も出し分け）
       if(q.status === "awaiting_funds"){ showAwaitingFunds(q); return; }
       if(q.status === "paid"){ showAwaiting(q); return; }
       if(q.status === "released"){ showDone(); return; }
