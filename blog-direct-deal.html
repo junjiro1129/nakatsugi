@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>マーケットプレイスから直接取引へ。移行前に準備すべき5つのこと｜ナカツギ</title>
+<meta name="description" content="手数料の高いマーケットプレイスから直接取引へ移りたい方へ。契約書、報酬の受け取り方、適格請求書、電子帳簿保存法、支払期日のルールまで、移行前に整えるべき実務を解説します。">
+<link rel="canonical" href="https://nakatsugi.co.jp/blog/direct-deal.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="マーケットプレイスから直接取引へ。移行前に準備すべき5つのこと">
+<meta property="og:description" content="契約書、報酬の受け取り方、適格請求書、電子保存、支払期日。直接取引に移る前に整えるべき実務を、順を追って解説します。">
+<meta property="og:url" content="https://nakatsugi.co.jp/blog/direct-deal.html">
+<style>
+  :root{
+    --ink:#16263F;--ink-soft:#3A4A63;--muted:#5C6675;
+    --green:#137A57;--green-deep:#0C5A40;
+    --paper:#F4F3ED;--surface:#FFFFFF;
+    --line:rgba(22,38,63,.12);--line-soft:rgba(22,38,63,.07);
+    --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);
+    line-height:1.95;-webkit-font-smoothing:antialiased;font-size:16px}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+  :focus-visible{outline:2.5px solid var(--green);outline-offset:3px;border-radius:4px}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(244,243,237,.86);
+    backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line-soft)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px;
+    max-width:1080px;margin:0 auto;padding:0 24px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px;letter-spacing:.02em}
+  .nav-links{display:flex;align-items:center;gap:28px}
+  .nav-links a{font-size:14.5px;color:var(--ink-soft);font-weight:500}
+  .nav-links a:hover{color:var(--ink)}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;
+    padding:9px 20px;border-radius:999px;background:var(--ink);color:#fff;border:none;cursor:pointer}
+  .btn:hover{background:#0E1B30}
+  @media(max-width:720px){.nav-links a:not(.btn){display:none}}
+
+  .head{padding:60px 0 22px}
+  .eyebrow{font-size:13px;letter-spacing:.14em;color:var(--green-deep);font-weight:600;margin:0 0 14px}
+  h1{font-size:clamp(25px,4.2vw,35px);font-weight:700;margin:0 0 16px;letter-spacing:.01em;line-height:1.5}
+  .meta{color:var(--muted);margin:0;font-size:14px}
+
+  .body{padding:8px 0 70px}
+  .lead{background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:24px 26px;margin-bottom:38px;font-size:15.5px;color:var(--ink-soft)}
+  h2{font-size:21px;font-weight:700;margin:46px 0 16px;padding-bottom:10px;
+    border-bottom:2px solid var(--green);line-height:1.5}
+  h3{font-size:17px;font-weight:700;margin:30px 0 10px;color:var(--ink)}
+  p{margin:0 0 16px;font-size:15.5px;color:var(--ink-soft)}
+  strong{color:var(--ink);font-weight:700}
+  ul,ol{margin:0 0 18px;padding-left:1.4em;font-size:15.5px;color:var(--ink-soft)}
+  li{margin-bottom:7px}
+
+  .note{background:var(--surface);border-left:3px solid var(--green);
+    padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0;font-size:15px;color:var(--ink-soft)}
+  .note b{color:var(--green-deep)}
+
+  .checklist{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:22px 26px;margin:24px 0}
+  .checklist h4{margin:0 0 12px;font-size:15px;font-weight:700;color:var(--green-deep)}
+  .checklist ul{margin:0;padding-left:1.3em;font-size:15px}
+
+  .src{font-size:13.5px;color:var(--muted);margin-top:6px}
+
+  .cta{background:var(--surface);border:1px solid var(--line);border-radius:18px;
+    padding:30px 30px;margin:52px 0 0;text-align:center}
+  .cta h3{margin:0 0 12px;font-size:19px}
+  .cta p{font-size:15px;margin-bottom:20px}
+
+  .foot{background:var(--paper);border-top:1px solid var(--line);padding:40px 0 38px;
+    font-size:13.5px;color:var(--muted)}
+  .foot-top{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-start;
+    max-width:1080px;margin:0 auto;padding:0 24px}
+  .foot-links{display:flex;gap:22px;flex-wrap:wrap}
+  .foot-links a:hover{color:var(--ink)}
+  .foot .op{font-weight:700;color:var(--ink);font-size:15px}
+  .foot .cp{max-width:1080px;margin:24px auto 0;padding:0 24px;font-size:12.5px}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="../index.html" aria-label="ナカツギ ホーム">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <circle cx="5" cy="13" r="3.4" fill="#16263F"/>
+        <circle cx="21" cy="13" r="3.4" fill="#16263F"/>
+        <path d="M5 13 Q13 1 21 13" fill="none" stroke="#137A57" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      ナカツギ
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html#how">仕組み</a>
+      <a href="../index.html#features">特徴</a>
+      <a href="../index.html#price">料金</a>
+      <a class="btn" href="../index.html#contact">使ってみる</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="head">
+    <div class="wrap">
+      <p class="eyebrow">実務ガイド</p>
+      <h1>マーケットプレイスから直接取引へ。<br>移行前に準備すべき5つのこと</h1>
+      <p class="meta">2026年9月1日　｜　ナカツギ運営事務局</p>
+    </div>
+  </section>
+
+  <section class="body">
+    <div class="wrap">
+
+      <div class="lead">
+        スキルマーケットやクラウドソーシングでは、出品者に20%を超える手数料がかかることがあります。月100万円を継続して受注していれば、年間の負担は200万円を超える計算です。一度そこで出会った相手となら、直接取引に移った方が双方にとって合理的——そう考えながらも踏み切れない方は少なくありません。理由は、プラットフォームが肩代わりしていた機能を、自分で用意する必要があるからです。この記事では、移行前に整えるべき実務を5つに整理します。
+      </div>
+
+      <h2>1. 契約の証拠を、どう残すか</h2>
+
+      <p>マーケットプレイスを介さない取引では、当事者間で条件を取り決めることになります。口約束でも契約は成立しますが、認識の食い違いが起きたときに争いになります。</p>
+
+      <p>形式は契約書でも、発注書と請書のやりとりでも構いません。重要なのは<strong>内容と、記録が残ること</strong>です。最低限、次の5点は文面に残してください。</p>
+
+      <div class="checklist">
+        <h4>取り決めておくべき5項目</h4>
+        <ul>
+          <li><strong>業務の内容</strong>：何を、どこまで行うか。修正対応の回数まで書けるとなお良い</li>
+          <li><strong>納期</strong>：いつまでに納品するか</li>
+          <li><strong>金額</strong>：税抜か税込か、消費税額を明記する</li>
+          <li><strong>検収の基準</strong>：何をもって「完了」とするか。ここが曖昧だと支払いが遅れます</li>
+          <li><strong>支払期日</strong>：いつまでに支払われるか</li>
+        </ul>
+      </div>
+
+      <p>とくに見落とされがちなのが<strong>検収の基準</strong>です。「納品したつもり」と「まだ終わっていない」の食い違いは、支払いトラブルの典型的な入り口になります。成果物の形式、確認にかける期間まで決めておくと、後の交渉が楽になります。</p>
+
+      <h2>2. 報酬を、どう受け取るか</h2>
+
+      <p>ここが最大の壁です。後払いにすれば未払いのリスクがあり、前払いを求めれば言い出しにくい。多くの方が、この二択で止まります。</p>
+
+      <p>実態を示すデータがあります。調査によって数字に幅がありますが、<strong>報酬の未払いや支払い遅延を経験した人は、およそ3割から7割</strong>とされています。</p>
+
+      <p>内閣官房などが実施したフリーランス実態調査（2020年）では、取引先との間で報酬の支払いが遅れた、または支払われなかった経験がある人が<strong>約3割</strong>。一方、日本労働組合総連合会が2024年に公表した調査では、より高い割合が報告されています。民間のマイナビ調査（2024年）でも、フリーランスとして働くなかでのトラブル経験率は<strong>全体で53.3%、クリエイティブ系では64.2%</strong>でした。</p>
+
+      <p>調査対象や設問の立て方で数字は変わりますが、<strong>いずれの調査でも、けっして珍しい出来事ではない</strong>ことが示されています。そして内閣官房調査では、トラブルを交渉せずに受け入れた人のうち<strong>約4割</strong>が、その理由として「受け入れないと今後の取引に支障が出るため」と回答しています。立場の弱さから、泣き寝入りせざるを得ない構造がうかがえます。</p>
+
+      <p class="src">出典：内閣官房日本経済再生総合事務局「フリーランス実態調査結果」（2020年）／日本労働組合総連合会「フリーランスとして働く人の意識・実態調査2024」／株式会社マイナビ「フリーランスの意識・就業実態調査2024年版」</p>
+
+      <h3>現実的な選択肢</h3>
+
+      <p><strong>着手金と残金に分ける</strong>方法が、実務ではよく使われます。全額前払いは相手にとって不安が大きく、全額後払いは自分の不安が大きい。半分ずつなら、双方が受け入れやすくなります。</p>
+
+      <p>切り出し方は、条件の一部として最初に提示するのが角が立ちません。「制作物の性質上、着手金として半額を先にいただいております」と、<strong>個別の交渉ではなく、通常の取引条件として伝える</strong>形です。</p>
+
+      <div class="note">
+        <b>ポイント</b>　前払いを「相手を信用していないから」と受け取られないために、条件提示の段階で伝えることが大切です。契約が固まってから切り出すと、交渉に見えてしまいます。
+      </div>
+
+      <h2>3. 適格請求書（インボイス）の要件</h2>
+
+      <p>取引先が課税事業者の場合、適格請求書がなければ仕入税額控除を受けられません。つまり<strong>相手の税負担が増える</strong>ため、登録の有無が取引の判断に影響します。</p>
+
+      <p>適格請求書として認められるには、次の記載が必要です。</p>
+
+      <ul>
+        <li>発行事業者の氏名または名称、および<strong>登録番号</strong></li>
+        <li>取引年月日</li>
+        <li>取引内容（軽減税率対象ならその旨）</li>
+        <li>税率ごとに区分した対価の合計額と、適用税率</li>
+        <li>税率ごとに区分した消費税額</li>
+        <li>交付を受ける事業者の氏名または名称</li>
+      </ul>
+
+      <p>登録していない場合、これらを満たす請求書は発行できません。取引先が事業者中心であれば、<strong>登録を検討する価値があります</strong>。ただし登録すると免税事業者ではなくなり、消費税の納税義務が生じます。売上規模と取引先の性質を踏まえて判断してください。</p>
+
+      <h2>4. 書類の保存義務（電子帳簿保存法）</h2>
+
+      <p>見落とされやすい点です。<strong>電子的にやりとりした取引書類は、電子データのまま保存することが義務</strong>づけられています。2022年1月の改正電子帳簿保存法によるもので、宥恕期間を経て2024年1月から完全義務化されました。法人・個人事業主を問わず対象です。</p>
+
+      <p>対象になるのは、請求書・領収書・注文書・見積書など。メールに添付して受け取ったPDFの請求書を、印刷して紙で保管する運用は認められません。</p>
+
+      <div class="note">
+        <b>よくある誤解</b>　「請求書を電子で発行しなければならない」という義務はありません。発行は紙でも電子でも自由です。義務なのは<b>電子で受け取ったものを電子で保存すること</b>です。
+      </div>
+
+      <p>保存にあたっては、改ざん防止の措置と、日付・金額・取引先で検索できる状態にすることが求められます。フォルダとファイル名で管理する方法も認められていますが、件数が増えると運用が破綻しがちです。</p>
+
+      <h2>5. 支払期日のルールを知っておく</h2>
+
+      <p>2024年11月に施行されたフリーランス・事業者間取引適正化等法（フリーランス新法）では、発注者に対して<strong>役務の提供を受けた日から60日以内</strong>のできる限り短い期間内で支払期日を定めることが義務づけられています。</p>
+
+      <p>資本金1,000万円超の発注者との取引であれば、下請法も適用され、同様に60日以内のルールがあります。</p>
+
+      <p>これを知っているかどうかで、交渉の姿勢が変わります。「支払いは3か月後」と言われたときに、<strong>法令に基づいて期日の見直しを求められる</strong>ようになります。</p>
+
+      <h2>まとめ：整えれば、手数料は不要になる</h2>
+
+      <p>5つを並べると負担が大きく見えます。ただし裏を返せば、<strong>一度整えてしまえば、以降の取引で手数料を払う必要はありません</strong>。月100万円の取引で20%なら、年間240万円。それだけの価値がある準備です。</p>
+
+      <p>優先順位をつけるなら、<strong>1と2</strong>から着手してください。契約の証跡と報酬の受け取り方さえ固まれば、直接取引は始められます。3・4・5は、取引を重ねながら整えていくことができます。</p>
+
+      <div class="cta">
+        <h3>これらをまとめて引き受ける、という選択肢</h3>
+        <p>ナカツギは、見積書・請書・適格請求書の発行から、前払いと検収による代金の受け渡しまでを一つの画面で完結できるB2B取引プラットフォームです。利用料は取引額の8.6%（税抜）、買い手の負担はありません。</p>
+        <a class="btn" href="../index.html">ナカツギについて見る</a>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-top">
+    <div>
+      <div class="op">ナカツギ運営事務局</div>
+      <div style="margin-top:6px">運営：株式会社ナカホームズ</div>
+    </div>
+    <nav class="foot-links" aria-label="フッター">
+      <a href="../tokushoho.html">特定商取引法に基づく表記</a>
+      <a href="../kiyaku.html">利用規約</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../index.html#contact">お問い合わせ</a>
+    </nav>
+  </div>
+  <div class="cp">© 2026 株式会社ナカホームズ</div>
+</footer>
+
+</body>
+</html>

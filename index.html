@@ -265,6 +265,18 @@
   .foot .op{font-weight:700;color:var(--ink);font-size:15px}
   .foot .cp{margin-top:24px;font-size:12.5px}
 
+  .guide-link{margin:18px 0 0;font-size:15px}
+  .guide-link a{color:var(--green-deep);font-weight:600;
+    border-bottom:1px solid rgba(19,122,87,.35);padding-bottom:2px}
+  .guide-link a:hover{border-bottom-color:var(--green-deep)}
+  .guide-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:30px 32px}
+  .guide-card h3{margin:0 0 12px;font-size:20px;font-weight:700;line-height:1.55}
+  .guide-card h3 a:hover{color:var(--green-deep)}
+  .guide-card p{margin:0 0 18px;color:var(--ink-soft);font-size:15.5px}
+  .guide-more{display:inline-block;font-size:15px;font-weight:600;color:var(--green-deep)}
+  .guide-more:hover{text-decoration:underline;text-underline-offset:4px}
+  @media(max-width:640px){ .guide-card{padding:24px 22px} .guide-card h3{font-size:18px} }
+
   .reveal{opacity:0;transform:translateY(16px)}
   @media (prefers-reduced-motion: no-preference){
     .reveal{transition:opacity .6s ease,transform .6s ease}
@@ -368,9 +380,9 @@
       </div>
       <div class="grid3">
         <div class="card reveal">
-          <p class="stat">69.7<small>%</small></p>
+          <p class="stat">3〜7<small>割</small></p>
           <h3>報酬未払いを経験している</h3>
-          <p>フリーランスの約7割が「仕事をしたのに払ってもらえない」経験を持ち、その4割は泣き寝入り。直取引のトラブル発生率は、仲介ありのおよそ2倍と報告されています。</p>
+          <p>「仕事をしたのに払ってもらえない」経験を持つ人は、調査により3〜7割。トラブルを交渉せず受け入れた人の約4割が、その理由に「今後の取引に支障が出るため」を挙げています。</p>
         </div>
         <div class="card reveal">
           <p class="stat">住所<small>が、出る</small></p>
@@ -383,7 +395,8 @@
           <p>免税事業者からの仕入れの控除は、2026年10月からさらに縮小。発注側の経理は、適格請求書の出ない相手との取引に、ますます慎重になります。</p>
         </div>
       </div>
-      <p class="src">出典：フリーランス協会調査、日本労働組合総連合会「フリーランスとして働く人の意識・実態調査2024」ほか。</p>
+      <p class="src">出典：内閣官房日本経済再生総合事務局「フリーランス実態調査結果」（2020年）、日本労働組合総連合会「フリーランスとして働く人の意識・実態調査2024」、フリーランス協会調査ほか。</p>
+      <p class="guide-link"><a href="blog/direct-deal.html">では、直取引に移る前に何を準備すればいいのか　→　実務ガイドを読む</a></p>
     </div>
   </section>
 
@@ -567,6 +580,20 @@
     </div>
   </section>
 
+  <section class="sec" id="guide">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">実務ガイド</p>
+        <h2 class="title">直取引を始める前に、<br>知っておきたいこと。</h2>
+      </div>
+      <div class="guide-card reveal">
+        <h3><a href="blog/direct-deal.html">マーケットプレイスから直接取引へ。移行前に準備すべき5つのこと</a></h3>
+        <p>契約の証跡の残し方、報酬の受け取り方、適格請求書の要件、書類の電子保存義務、支払期日のルール。直取引に移る前に整えるべき実務を、順を追って解説します。</p>
+        <a class="guide-more" href="blog/direct-deal.html">続きを読む →</a>
+      </div>
+    </div>
+  </section>
+
   <section class="sec sec-ink" id="contact">
     <div class="wrap">
       <div class="sec-head" style="text-align:center">
@@ -639,6 +666,7 @@
         <div style="margin-top:6px">運営：株式会社ナカホームズ</div>
       </div>
       <nav class="foot-links" aria-label="フッター">
+        <a href="blog/direct-deal.html">実務ガイド</a>
         <a href="tokushoho.html">特定商取引法に基づく表記</a>
         <a href="kiyaku.html">利用規約</a>
         <a href="privacy.html">プライバシーポリシー</a>
