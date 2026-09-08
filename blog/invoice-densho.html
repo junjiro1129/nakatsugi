@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>インボイスと電子帳簿保存法。請求書まわりで、いま何が義務なのか｜ナカツギ</title>
+<meta name="description" content="適格請求書の記載要件、免税事業者との取引の経過措置、電子取引データの保存義務。混同されがちな2つの制度を、事業者が実務でやるべきことに絞って整理します。">
+<link rel="canonical" href="https://nakatsugi.co.jp/blog/invoice-densho.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="インボイスと電子帳簿保存法。請求書まわりで、いま何が義務なのか">
+<meta property="og:description" content="適格請求書の記載要件、経過措置、電子取引データの保存義務。2つの制度を実務目線で整理します。">
+<meta property="og:url" content="https://nakatsugi.co.jp/blog/invoice-densho.html">
+<style>
+  :root{
+    --ink:#16263F;--ink-soft:#3A4A63;--muted:#5C6675;
+    --green:#137A57;--green-deep:#0C5A40;
+    --paper:#F4F3ED;--surface:#FFFFFF;
+    --line:rgba(22,38,63,.12);--line-soft:rgba(22,38,63,.07);
+    --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);
+    line-height:1.95;-webkit-font-smoothing:antialiased;font-size:16px}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+  :focus-visible{outline:2.5px solid var(--green);outline-offset:3px;border-radius:4px}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(244,243,237,.86);
+    backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line-soft)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px;
+    max-width:1080px;margin:0 auto;padding:0 24px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px;letter-spacing:.02em}
+  .nav-links{display:flex;align-items:center;gap:28px}
+  .nav-links a{font-size:14.5px;color:var(--ink-soft);font-weight:500}
+  .nav-links a:hover{color:var(--ink)}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;
+    padding:9px 20px;border-radius:999px;background:var(--ink);color:#fff;border:none;cursor:pointer}
+  .btn:hover{background:#0E1B30}
+  @media(max-width:720px){.nav-links a:not(.btn){display:none}}
+
+  .head{padding:60px 0 22px}
+  .eyebrow{font-size:13px;letter-spacing:.14em;color:var(--green-deep);font-weight:600;margin:0 0 14px}
+  h1{font-size:clamp(25px,4.2vw,35px);font-weight:700;margin:0 0 16px;letter-spacing:.01em;line-height:1.5}
+  .meta{color:var(--muted);margin:0;font-size:14px}
+
+  .body{padding:8px 0 70px}
+  .lead{background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:24px 26px;margin-bottom:38px;font-size:15.5px;color:var(--ink-soft)}
+  h2{font-size:21px;font-weight:700;margin:46px 0 16px;padding-bottom:10px;
+    border-bottom:2px solid var(--green);line-height:1.5}
+  h3{font-size:17px;font-weight:700;margin:30px 0 10px;color:var(--ink)}
+  p{margin:0 0 16px;font-size:15.5px;color:var(--ink-soft)}
+  strong{color:var(--ink);font-weight:700}
+  ul,ol{margin:0 0 18px;padding-left:1.4em;font-size:15.5px;color:var(--ink-soft)}
+  li{margin-bottom:7px}
+
+  .note{background:var(--surface);border-left:3px solid var(--green);
+    padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0;font-size:15px;color:var(--ink-soft)}
+  .note b{color:var(--green-deep)}
+
+  .checklist{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:22px 26px;margin:24px 0}
+  .checklist h4{margin:0 0 12px;font-size:15px;font-weight:700;color:var(--green-deep)}
+  .checklist ul{margin:0;padding-left:1.3em;font-size:15px}
+
+  .tbl{width:100%;border-collapse:collapse;margin:22px 0;background:var(--surface);
+    border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:15px}
+  .tbl th,.tbl td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line-soft)}
+  .tbl th{background:var(--paper);font-weight:700;font-size:14px;color:var(--ink)}
+  .tbl tr:last-child td{border-bottom:none}
+  .tbl td{color:var(--ink-soft)}
+
+  .src{font-size:13.5px;color:var(--muted);margin-top:6px}
+
+  .cta{background:var(--surface);border:1px solid var(--line);border-radius:18px;
+    padding:30px 30px;margin:52px 0 0;text-align:center}
+  .cta h3{margin:0 0 12px;font-size:19px}
+  .cta p{font-size:15px;margin-bottom:20px}
+
+  .related{margin:40px 0 0;padding:22px 26px;background:var(--surface);
+    border:1px solid var(--line);border-radius:14px}
+  .related h4{margin:0 0 10px;font-size:14px;color:var(--green-deep);font-weight:700}
+  .related a{font-size:15.5px;font-weight:600;display:block;margin-bottom:8px}
+  .related a:last-child{margin-bottom:0}
+  .related a:hover{color:var(--green-deep)}
+
+  .foot{background:var(--paper);border-top:1px solid var(--line);padding:40px 0 38px;
+    font-size:13.5px;color:var(--muted)}
+  .foot-top{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-start;
+    max-width:1080px;margin:0 auto;padding:0 24px}
+  .foot-links{display:flex;gap:22px;flex-wrap:wrap}
+  .foot-links a:hover{color:var(--ink)}
+  .foot .op{font-weight:700;color:var(--ink);font-size:15px}
+  .foot .cp{max-width:1080px;margin:24px auto 0;padding:0 24px;font-size:12.5px}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="../index.html" aria-label="ナカツギ ホーム">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <circle cx="5" cy="13" r="3.4" fill="#16263F"/>
+        <circle cx="21" cy="13" r="3.4" fill="#16263F"/>
+        <path d="M5 13 Q13 1 21 13" fill="none" stroke="#137A57" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      ナカツギ
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html#how">仕組み</a>
+      <a href="../index.html#features">特徴</a>
+      <a href="../index.html#price">料金</a>
+      <a class="btn" href="../index.html#contact">使ってみる</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="head">
+    <div class="wrap">
+      <p class="eyebrow">実務ガイド</p>
+      <h1>インボイスと電子帳簿保存法。<br>請求書まわりで、いま何が義務なのか</h1>
+      <p class="meta">2026年9月1日　｜　ナカツギ運営事務局</p>
+    </div>
+  </section>
+
+  <section class="body">
+    <div class="wrap">
+
+      <div class="lead">
+        「請求書の電子化が義務になった」という言い方を目にすることがあります。しかし、これは正確ではありません。インボイス制度と電子帳簿保存法は別の制度で、義務の内容も異なります。混同したまま対応すると、必要のない作業に時間を使ったり、逆に本当に必要な対応を見落としたりします。この記事では、2つの制度を切り分けたうえで、事業者が実際にやるべきことだけを整理します。
+      </div>
+
+      <h2>まず、2つの制度を切り分ける</h2>
+
+      <p>混乱のもとは、どちらも請求書に関係する制度でありながら、目的がまったく違うことにあります。</p>
+
+      <table class="tbl">
+        <tr>
+          <th style="width:34%">　</th>
+          <th>インボイス制度</th>
+          <th>電子帳簿保存法</th>
+        </tr>
+        <tr>
+          <td><strong>関係する税</strong></td>
+          <td>消費税</td>
+          <td>法人税・所得税など</td>
+        </tr>
+        <tr>
+          <td><strong>何を求めているか</strong></td>
+          <td>請求書に何を書くか</td>
+          <td>書類をどう保存するか</td>
+        </tr>
+        <tr>
+          <td><strong>登録は必要か</strong></td>
+          <td>必要（任意）</td>
+          <td>不要</td>
+        </tr>
+      </table>
+
+      <p>つまり<strong>インボイスは「書き方」、電子帳簿保存法は「しまい方」</strong>の話です。この区別さえつけば、あとは整理できます。</p>
+
+      <h2>インボイス制度：請求書に何を書くか</h2>
+
+      <p>取引先が課税事業者の場合、適格請求書がなければ仕入税額控除ができません。相手の税負担が増えるため、<strong>登録の有無が取引の判断に影響します</strong>。</p>
+
+      <h3>適格請求書の記載事項</h3>
+
+      <div class="checklist">
+        <h4>6つの必須項目</h4>
+        <ul>
+          <li>発行事業者の氏名または名称、および<strong>登録番号</strong></li>
+          <li>取引年月日</li>
+          <li>取引内容（軽減税率の対象ならその旨）</li>
+          <li>税率ごとに区分した対価の額（税抜または税込）と、適用税率</li>
+          <li>税率ごとに区分した消費税額</li>
+          <li>交付を受ける事業者の氏名または名称</li>
+        </ul>
+      </div>
+
+      <p>従来の請求書との違いは、<strong>登録番号</strong>、<strong>適用税率</strong>、<strong>税率ごとの消費税額</strong>の3点です。既存のフォーマットにこの3つを足せば、要件は満たせます。</p>
+
+      <h3>登録するかどうかの判断</h3>
+
+      <p>登録すると免税事業者ではなくなり、消費税の納税義務が生じます。判断の分かれ目は、<strong>取引先が誰か</strong>です。</p>
+
+      <ul>
+        <li><strong>取引先が事業者中心</strong>　→　登録しないと、相手の負担が増え、取引で不利になりやすい</li>
+        <li><strong>取引先が一般消費者中心</strong>　→　相手は仕入税額控除をしないため、登録の必要性は低い</li>
+      </ul>
+
+      <p>売上規模だけで決められる話ではありません。<strong>誰に売っているかで決まります。</strong></p>
+
+      <h3>免税事業者からの仕入れには経過措置がある</h3>
+
+      <p>登録していない事業者からの仕入れであっても、経過措置により一定割合の控除が認められています。制度開始から段階的に縮小される仕組みで、期間の区切りごとに控除できる割合が下がっていきます。</p>
+
+      <p>発注する側にとっては、<strong>免税事業者との取引コストが時間とともに上がっていく</strong>ということです。受注する側から見れば、登録の有無が取引の可否に影響する場面が増えていきます。</p>
+
+      <div class="note">
+        <b>確認してください</b>　経過措置の割合と期間は、税制改正で変更される可能性があります。実際の取引判断にあたっては、<b>国税庁の最新の資料</b>または顧問税理士にご確認ください。
+      </div>
+
+      <h2>電子帳簿保存法：書類をどう保存するか</h2>
+
+      <p>ここが最も誤解されている部分です。</p>
+
+      <div class="note">
+        <b>よくある誤解</b>　「請求書を電子で発行しなければならない」という義務は<b>ありません</b>。発行は紙でも電子でも自由です。義務なのは、<b>電子で受け取ったものを電子のまま保存すること</b>です。
+      </div>
+
+      <p>2022年1月施行の改正電子帳簿保存法により、電子的にやりとりした取引関係書類は電子データのまま保存することが義務づけられました。2023年12月31日までの宥恕期間を経て、<strong>2024年1月1日以降は完全義務化</strong>されています。法人・個人事業主を問わず、すべての事業者が対象です。</p>
+
+      <h3>対象になるもの</h3>
+
+      <p>電子的にやりとりした、請求書・領収書・注文書・見積書・契約書などです。具体的には次のようなケースが該当します。</p>
+
+      <ul>
+        <li>メールに添付されたPDFの請求書を受け取った</li>
+        <li>取引先のサイトから請求書をダウンロードした</li>
+        <li>クラウドサービス上で発行された領収書を取得した</li>
+        <li>チャットツールで見積書のデータを受け取った</li>
+      </ul>
+
+      <p>これらを<strong>印刷して紙のファイルに綴じる運用は、認められません</strong>。電子データのまま保存する必要があります。</p>
+
+      <h3>保存の要件</h3>
+
+      <p>単にファイルを置いておけばよいわけではなく、2つの要件があります。</p>
+
+      <div class="checklist">
+        <h4>電子取引データの保存要件</h4>
+        <ul>
+          <li><strong>真実性の確保</strong>：改ざんを防ぐ措置。タイムスタンプの付与、訂正削除の履歴が残るシステムの利用、または事務処理規程の整備と運用</li>
+          <li><strong>可視性の確保</strong>：ディスプレイと書面で速やかに出力できること。<strong>取引年月日・取引金額・取引先</strong>で検索できること</li>
+        </ul>
+      </div>
+
+      <p>検索要件は、専用システムがなくても満たせます。<strong>ファイル名に「日付＿金額＿取引先」を入れてフォルダに保存する</strong>方法も認められています。ただし件数が増えると、命名規則の維持が難しくなり、運用が破綻しがちです。</p>
+
+      <h3>紙の書類は、これまで通り</h3>
+
+      <p>紙で受け取った請求書を紙のまま保存することは、従来どおり認められています。完全義務化されたのは電子取引データの保存だけで、<strong>紙をスキャンして保存する「スキャナ保存」や、帳簿の電子保存は任意のまま</strong>です。</p>
+
+      <p>また、電子化対応が困難な事業者に対しては猶予措置が設けられており、一定の要件を満たす場合には書面での保存も認められています。</p>
+
+      <h2>結局、何をすればいいのか</h2>
+
+      <p>制度の説明は長くなりましたが、実務でやることは多くありません。</p>
+
+      <div class="checklist">
+        <h4>今日から着手できること</h4>
+        <ul>
+          <li><strong>請求書のテンプレートを見直す</strong>：登録番号・適用税率・税率ごとの消費税額が入っているか</li>
+          <li><strong>電子で受け取った書類の置き場所を決める</strong>：メール添付のPDFを、印刷せずに保存する場所</li>
+          <li><strong>ファイル名の規則を決める</strong>：「20260401＿55000＿株式会社◯◯」のような形式に統一する</li>
+          <li><strong>事務処理規程を用意する</strong>：国税庁がサンプルを公開しています。真実性の確保は、この方法が最も手軽です</li>
+        </ul>
+      </div>
+
+      <p>4つとも、一度整えれば以降は運用するだけです。<strong>制度への対応は、最初の設計でほぼ決まります。</strong></p>
+
+      <p class="src">出典：国税庁「インボイス制度に関する各種資料」「電子帳簿保存法関係」。制度の詳細および最新の取扱いは、国税庁の公表資料をご確認ください。本記事は一般的な情報提供を目的としたもので、個別の税務判断については税理士等の専門家にご相談ください。</p>
+
+      <div class="cta">
+        <h3>書類の発行と保存を、取引の流れに組み込む</h3>
+        <p>ナカツギは、見積書・請書・適格請求書・精算書の発行を取引の流れの中で行うB2B取引プラットフォームです。発行した書類は取引ごとに記録として残ります。媒介者交付特例に基づき、運営会社の名義・登録番号で適格請求書を発行するため、出品者は自身の登録番号を相手に開示せずに、相手の仕入税額控除に対応できます。</p>
+        <a class="btn" href="../index.html">ナカツギについて見る</a>
+      </div>
+
+      <div class="related">
+        <h4>あわせて読みたい</h4>
+        <a href="direct-deal.html">マーケットプレイスから直接取引へ。移行前に準備すべき5つのこと →</a>
+        <a href="unpaid.html">未払いを防ぐ、契約と支払いの設計 →</a>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-top">
+    <div>
+      <div class="op">ナカツギ運営事務局</div>
+      <div style="margin-top:6px">運営：株式会社ナカホームズ</div>
+    </div>
+    <nav class="foot-links" aria-label="フッター">
+      <a href="../tokushoho.html">特定商取引法に基づく表記</a>
+      <a href="../kiyaku.html">利用規約</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../index.html#contact">お問い合わせ</a>
+    </nav>
+  </div>
+  <div class="cp">© 2026 株式会社ナカホームズ</div>
+</footer>
+
+</body>
+</html>
