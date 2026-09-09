@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# 運営専用画面（検索結果に出す必要がなく、URLを推測されたくない）
+Disallow: /nakatsugi-dashboard.html
+Disallow: /registrations-admin.html
+
+# 取引ごとの個別画面（IDつきURL。インデックス不要）
+Disallow: /quote.html
+Disallow: /doc.html
+Disallow: /estimate.html
+Disallow: /register.html
+
+Sitemap: https://nakatsugi.co.jp/sitemap.xml
