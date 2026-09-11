@@ -378,6 +378,27 @@
   .guide-more:hover{text-decoration:underline;text-underline-offset:4px}
   @media(max-width:640px){ .guide-card{padding:24px 22px} .guide-card h3{font-size:18px} }
 
+  .tbl-wrap{margin-top:48px}
+  .tbl-title{font-size:20px;font-weight:700;margin:0 0 18px;color:var(--ink);text-align:center;letter-spacing:.01em}
+  .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;
+    background:var(--surface);border:1px solid var(--line);border-radius:16px}
+  .cmp-tbl{width:100%;border-collapse:collapse;min-width:640px;font-size:14.5px}
+  .cmp-tbl th,.cmp-tbl td{padding:14px 16px;text-align:left;
+    border-bottom:1px solid var(--line-soft);vertical-align:top;color:var(--ink-soft);line-height:1.65}
+  .cmp-tbl thead th{background:var(--paper);font-weight:700;font-size:14px;color:var(--ink);
+    border-bottom:2px solid var(--line)}
+  .cmp-tbl tbody th{font-weight:700;color:var(--ink);background:var(--paper);width:22%;font-size:14px}
+  .cmp-tbl th.mine,.cmp-tbl td.mine{background:rgba(19,122,87,.06)}
+  .cmp-tbl thead th.mine{background:rgba(19,122,87,.14);color:var(--green-deep)}
+  .cmp-tbl td.mine b{color:var(--green-deep);font-weight:700}
+  .cmp-tbl tbody tr:last-child th,.cmp-tbl tbody tr:last-child td{border-bottom:none}
+  .tbl-src{margin:14px 4px 0;font-size:12.5px;color:var(--muted);text-align:right}
+  @media(max-width:640px){
+    .tbl-title{font-size:18px;text-align:left}
+    .cmp-tbl{font-size:13.5px}
+    .cmp-tbl th,.cmp-tbl td{padding:12px 14px}
+  }
+
   .reveal{opacity:0;transform:translateY(16px)}
   @media (prefers-reduced-motion: no-preference){
     .reveal{transition:opacity .6s ease,transform .6s ease}
@@ -436,7 +457,7 @@
     <div class="wrap">
       <p class="eyebrow">すでに取引相手がいる事業者のための、B2B取引管理プラットフォーム</p>
       <h1>マッチングは、<br><span class="accent">もういらない。</span></h1>
-      <p class="lead">お客さまは、もうあなたが持っている。足りないのは、取引をきちんと形にする仕組みだけ。見積から適格請求書まで、住所を出さずに。手数料は取引額の8.6%（税抜）——それだけです。</p>
+      <p class="lead">ナカツギは集客・マッチング機能だけありません。前払い方式で踏み倒しを防止。開示されるのは屋号だけ。魅力的な手数料率。契約関係書類と決済周りをスムーズに連携させる、フリーランスのための新しいプラットフォームです。</p>
       <div class="hero-pillars" aria-label="ナカツギの3つの価値">
         <span class="pill"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M3 11l9-8 9 8M5 10v10h14V10" stroke-linecap="round" stroke-linejoin="round"/></svg>住所を出さない</span>
         <span class="pill"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="4" y="9" width="16" height="11" rx="2"/><path d="M8 9V7a4 4 0 018 0v2" stroke-linecap="round"/></svg>踏み倒されない</span>
@@ -542,6 +563,73 @@
             <li>取っ払い・口約束はトラブルの温床</li>
           </ul>
         </div>
+      </div>
+
+      <div class="tbl-wrap reveal">
+        <h3 class="tbl-title">主要サービスとの比較</h3>
+        <div class="tbl-scroll">
+          <table class="cmp-tbl">
+            <thead>
+              <tr>
+                <th>比較項目</th>
+                <th>ココナラ</th>
+                <th>クラウドワークス</th>
+                <th class="mine">ナカツギ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>主な目的</th>
+                <td>新しい顧客の開拓</td>
+                <td>案件マッチング</td>
+                <td class="mine"><b>既存顧客との直接取引</b></td>
+              </tr>
+              <tr>
+                <th>利用対象</th>
+                <td>個人〜法人（誰でも可）</td>
+                <td>個人〜法人（誰でも可）</td>
+                <td class="mine"><b>事業者間（BtoB）／招待制・審査制</b></td>
+              </tr>
+              <tr>
+                <th>販売手数料<br>（出品者）</th>
+                <td>22%（税別）</td>
+                <td>5〜20%<br>（金額に応じ変動）</td>
+                <td class="mine"><b>8.6%（税抜）のみ</b></td>
+              </tr>
+              <tr>
+                <th>購入者の手数料</th>
+                <td>5.5%（税込）</td>
+                <td>なし</td>
+                <td class="mine"><b>なし</b></td>
+              </tr>
+              <tr>
+                <th>取引のきっかけ</th>
+                <td>サイト内でサービスを探して購入</td>
+                <td>案件掲載への応募</td>
+                <td class="mine"><b>既知の相手と見積書からやり取り</b></td>
+              </tr>
+              <tr>
+                <th>報酬の受け取り</th>
+                <td>取引完了後、指定日に出金</td>
+                <td>週次または月次で出金</td>
+                <td class="mine"><b>検収完了で確定・出品者へ分配</b></td>
+              </tr>
+              <tr>
+                <th>相手への氏名・住所開示</th>
+                <td>プラットフォーム上の名義</td>
+                <td>プラットフォーム上の名義</td>
+                <td class="mine"><b>屋号のみ／氏名・住所は非開示</b></td>
+              </tr>
+              <tr>
+                <th>適格請求書</th>
+                <td>プラットフォーム名義</td>
+                <td>プラットフォーム名義</td>
+                <td class="mine"><b>運営名義で発行（媒介者交付特例）</b></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="tbl-src">※ 手数料等は各社の公表情報をもとに作成（2026年時点）。詳細・最新の条件は各社サイトでご確認ください。</p>
       </div>
     </div>
   </section>
