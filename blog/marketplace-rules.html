@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>マーケットプレイスの規約と、ナカツギの立場｜ナカツギ</title>
+<meta name="description" content="ナカツギは、マーケットプレイスの規約に反する外部誘導を推奨しません。プラットフォームへの敬意と、継続取引における選択肢について、運営としての考えをお伝えします。">
+<link rel="canonical" href="https://nakatsugi.co.jp/blog/marketplace-rules.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="マーケットプレイスの規約と、ナカツギの立場">
+<meta property="og:description" content="規約に反する外部誘導は推奨しません。プラットフォームへの敬意と、継続取引における選択肢について。">
+<meta property="og:url" content="https://nakatsugi.co.jp/blog/marketplace-rules.html">
+<style>
+  :root{
+    --ink:#16263F;--ink-soft:#3A4A63;--muted:#5C6675;
+    --green:#137A57;--green-deep:#0C5A40;
+    --paper:#F4F3ED;--surface:#FFFFFF;
+    --line:rgba(22,38,63,.12);--line-soft:rgba(22,38,63,.07);
+    --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);
+    line-height:1.95;-webkit-font-smoothing:antialiased;font-size:16px}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+  :focus-visible{outline:2.5px solid var(--green);outline-offset:3px;border-radius:4px}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(244,243,237,.86);
+    backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line-soft)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px;
+    max-width:1080px;margin:0 auto;padding:0 24px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px;letter-spacing:.02em}
+  .nav-links{display:flex;align-items:center;gap:28px}
+  .nav-links a{font-size:14.5px;color:var(--ink-soft);font-weight:500}
+  .nav-links a:hover{color:var(--ink)}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;
+    padding:9px 20px;border-radius:999px;background:var(--ink);color:#fff;border:none;cursor:pointer}
+  .btn:hover{background:#0E1B30}
+  @media(max-width:720px){.nav-links a:not(.btn){display:none}}
+
+  .head{padding:60px 0 22px}
+  .eyebrow{font-size:13px;letter-spacing:.14em;color:var(--green-deep);font-weight:600;margin:0 0 14px}
+  h1{font-size:clamp(25px,4.2vw,35px);font-weight:700;margin:0 0 16px;letter-spacing:.01em;line-height:1.5}
+  .meta{color:var(--muted);margin:0;font-size:14px}
+
+  .body{padding:8px 0 70px}
+  .lead{background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:24px 26px;margin-bottom:38px;font-size:15.5px;color:var(--ink-soft)}
+  h2{font-size:21px;font-weight:700;margin:46px 0 16px;padding-bottom:10px;
+    border-bottom:2px solid var(--green);line-height:1.5}
+  h3{font-size:17px;font-weight:700;margin:30px 0 10px;color:var(--ink)}
+  p{margin:0 0 16px;font-size:15.5px;color:var(--ink-soft)}
+  strong{color:var(--ink);font-weight:700}
+  ul,ol{margin:0 0 18px;padding-left:1.4em;font-size:15.5px;color:var(--ink-soft)}
+  li{margin-bottom:7px}
+
+  .note{background:var(--surface);border-left:3px solid var(--green);
+    padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0;font-size:15px;color:var(--ink-soft)}
+  .note b{color:var(--green-deep)}
+
+  .stance{background:#12352B;color:#E9F3EF;border-radius:16px;
+    padding:28px 30px;margin:30px 0;font-size:16px;line-height:1.9}
+  .stance h3{color:#FFFFFF;margin:0 0 14px;font-size:18px}
+  .stance p{color:#D8E8E1;margin:0 0 12px;font-size:15.5px}
+  .stance p:last-child{margin:0}
+  .stance b{color:#7FE3BE}
+
+  .checklist{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:22px 26px;margin:24px 0}
+  .checklist h4{margin:0 0 12px;font-size:15px;font-weight:700;color:var(--green-deep)}
+  .checklist ul{margin:0;padding-left:1.3em;font-size:15px}
+
+  .src{font-size:13.5px;color:var(--muted);margin-top:6px}
+
+  .sign{margin:46px 0 0;padding-top:24px;border-top:1px solid var(--line);
+    text-align:right;font-size:15px;color:var(--ink-soft)}
+  .sign div{margin-top:3px}
+  .sign .nm{font-weight:700;color:var(--ink)}
+
+  .foot{background:var(--paper);border-top:1px solid var(--line);padding:40px 0 38px;
+    font-size:13.5px;color:var(--muted)}
+  .foot-top{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-start;
+    max-width:1080px;margin:0 auto;padding:0 24px}
+  .foot-links{display:flex;gap:22px;flex-wrap:wrap}
+  .foot-links a:hover{color:var(--ink)}
+  .foot .op{font-weight:700;color:var(--ink);font-size:15px}
+  .foot .cp{max-width:1080px;margin:24px auto 0;padding:0 24px;font-size:12.5px}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="../index.html" aria-label="ナカツギ ホーム">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <circle cx="5" cy="13" r="3.4" fill="#16263F"/>
+        <circle cx="21" cy="13" r="3.4" fill="#16263F"/>
+        <path d="M5 13 Q13 1 21 13" fill="none" stroke="#137A57" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      ナカツギ
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html#how">仕組み</a>
+      <a href="../index.html#features">特徴</a>
+      <a href="../index.html#price">料金</a>
+      <a class="btn" href="../index.html#contact">使ってみる</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="head">
+    <div class="wrap">
+      <p class="eyebrow">運営からのお願い</p>
+      <h1>マーケットプレイスの規約と、<br>ナカツギの立場</h1>
+      <p class="meta">2026年9月1日　｜　ナカツギ運営事務局</p>
+    </div>
+  </section>
+
+  <section class="body">
+    <div class="wrap">
+
+      <div class="lead">
+        ナカツギは「マーケットプレイスからの卒業」を掲げています。その言葉が、規約違反をすすめるものと受け取られることを、私たちは望んでいません。この記事では、運営として何を推奨し、何を推奨しないのかを、はっきりお伝えします。サービスの紹介ではなく、立場の表明としてお読みください。
+      </div>
+
+      <h2>結論から申し上げます</h2>
+
+      <div class="stance">
+        <h3>ナカツギは、規約に反する外部誘導を推奨しません。</h3>
+        <p>マーケットプレイス上で出会った相手を、そのプラットフォームの規約に反する形で外部へ連れ出すこと。これを目的としたご利用は、<b>おやめください</b>とお願いしています。</p>
+        <p>ナカツギをご検討いただきたいのは、<b>すでに十分な取引関係が築かれ、規約上も問題のない段階に達した相手</b>との、継続的なお取引です。その判断は、必ずご自身で行ってください。</p>
+      </div>
+
+      <h2>なぜ、この立場をとるのか</h2>
+
+      <h3>1. マーケットプレイスは、敬意を払うべきインフラだからです</h3>
+
+      <p>事業を始めたばかりのとき、実績のない状態で最初の一件を取ることが、どれほど難しいか。それを可能にしているのがマーケットプレイスです。</p>
+
+      <p>審査、集客、決済、評価、紛争の仲裁。これらを整えるには膨大な投資が必要で、手数料はその対価です。<strong>0から1を生み出す機能は、ナカツギには一切ありません。</strong>私たちが提供しているのは、すでに生まれた関係を扱う仕組みだけです。</p>
+
+      <p>そのインフラを支えている会社があるから、多くの事業者が最初の顧客と出会えている。この事実を、私たちは軽視しません。</p>
+
+      <h3>2. 規約破りを前提としたサービスは、続かないからです</h3>
+
+      <p>他社の規約をかいくぐることを売りにするサービスは、遅かれ早かれ問題を起こします。利用者にも、その相手にも、迷惑がかかります。</p>
+
+      <p>ナカツギは、出品者を招待制・審査制としています。<strong>長く安心して使っていただけることを前提に設計しています。</strong>その前提と、規約破りの推奨は両立しません。</p>
+
+      <h3>3. 何より、利用者が不利益を被るからです</h3>
+
+      <p>規約違反が発覚した場合、アカウントの停止や、それまで積み上げた評価の喪失といった不利益を受けるのは、ほかならぬ利用者ご自身です。</p>
+
+      <p>私たちがそのリスクを負うわけではありません。だからこそ、安易に「大丈夫です」とは申し上げられません。</p>
+
+      <h2>規約の確認は、ご自身でお願いします</h2>
+
+      <p>各マーケットプレイスの規約は、それぞれ内容が異なり、また改定されることもあります。<strong>当社が個別の規約を解釈してお伝えすることはいたしません。</strong></p>
+
+      <div class="note">
+        <b>お願い</b>　外部でのお取引をご検討の際は、<b>必ずご利用中のプラットフォームの利用規約を、ご自身で最新の内容をご確認ください。</b>判断に迷う場合は、そのプラットフォームの運営にお問い合わせいただくのが確実です。
+      </div>
+
+      <p>私たちが申し上げられるのは、一般論として次のことだけです。多くのプラットフォームでは、案件の成立過程における外部への誘導を制限しています。制限の範囲や期間は、サービスによって異なります。</p>
+
+      <h2>では、いつナカツギをお使いいただけるのか</h2>
+
+      <p>ここからは、一般的な考え方としてお読みください。個別の可否は、繰り返しになりますが、ご自身でご判断ください。</p>
+
+      <div class="checklist">
+        <h4>私たちが想定している場面</h4>
+        <ul>
+          <li>マーケットプレイス外で、もともと知り合った相手との取引</li>
+          <li>紹介や、既存の人脈から生まれた取引</li>
+          <li>展示会、交流会、業界のつながりから発生した取引</li>
+          <li>長期にわたって関係が続き、規約上も制限のない段階に至った相手との継続取引</li>
+        </ul>
+      </div>
+
+      <p>もっとも自然なのは、<strong>マーケットプレイスを新規開拓の場として使い続けながら、それ以外の経路で生まれた取引にナカツギを使う</strong>という形です。二者択一ではありません。</p>
+
+      <h3>段階的に考える</h3>
+
+      <p>すべてを一度に切り替える必要はありません。新規の顧客はこれまで通りマーケットプレイスで獲得し、別の経路で生まれた関係だけをナカツギで管理する。<strong>併用しながら、ご自身のペースで整理していく</strong>のが現実的だと考えています。</p>
+
+      <h2>手数料の話だけではありません</h2>
+
+      <p>ナカツギの利用料は取引額の8.6%（税抜）です。ただ、私たちが提供したいのは「安さ」ではありません。</p>
+
+      <p>見積書と請書で条件を明確にすること。着手前に支払いを済ませ、検収の完了で報酬を確定させること。適格請求書を、氏名や住所を相手に開示せずに発行できること。<strong>これらは、プラットフォームを離れた取引では自前で用意するしかなかったものです。</strong></p>
+
+      <p>手数料を下げることが目的なら、何も使わずに直接取引をすればゼロで済みます。ナカツギは、その状態に伴うリスクと事務負担を引き受けるための仕組みです。</p>
+
+      <h2>最後に</h2>
+
+      <p>「卒業」という言葉を使ってきましたが、それは通っていた学校を否定することではありません。学ぶべきものを学び、次の段階に進むという意味です。</p>
+
+      <p>マーケットプレイスがなければ、多くの事業者は最初の一歩を踏み出せませんでした。私たちは、その役割を否定するつもりは一切ありません。<strong>ルールを守ったうえで、次の段階に進もうとする方の力になりたい。</strong>それが、ナカツギの立場です。</p>
+
+      <div class="sign">
+        <div class="nm">株式会社ナカホームズ</div>
+        <div>ナカツギ運営事務局</div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-top">
+    <div>
+      <div class="op">ナカツギ運営事務局</div>
+      <div style="margin-top:6px">運営：株式会社ナカホームズ</div>
+    </div>
+    <nav class="foot-links" aria-label="フッター">
+      <a href="../tokushoho.html">特定商取引法に基づく表記</a>
+      <a href="../kiyaku.html">利用規約</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../index.html#contact">お問い合わせ</a>
+    </nav>
+  </div>
+  <div class="cp">© 2026 株式会社ナカホームズ</div>
+</footer>
+
+</body>
+</html>
