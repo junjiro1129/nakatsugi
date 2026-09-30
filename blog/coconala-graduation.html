@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ココナラ卒業を考えたら。手数料22%の計算と、越えてはいけない一線｜ナカツギ</title>
+<meta name="description" content="ココナラの手数料22%は年間でいくらになるのか。何に対して払っている手数料なのか。ココナラ卒業を考えたときに、手数料の計算、規約上の注意点、外での取引で自分が引き受けることを順に整理します。">
+<link rel="canonical" href="https://nakatsugi.co.jp/blog/coconala-graduation.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ココナラ卒業を考えたら。手数料22%の計算と、越えてはいけない一線">
+<meta property="og:description" content="手数料22%を年間で計算し、何の対価かを整理。ココナラ卒業の正しい順番と、規約上の注意点をまとめます。">
+<meta property="og:url" content="https://nakatsugi.co.jp/blog/coconala-graduation.html">
+<style>
+  :root{
+    --ink:#16263F;--ink-soft:#3A4A63;--muted:#5C6675;
+    --green:#137A57;--green-deep:#0C5A40;
+    --paper:#F4F3ED;--surface:#FFFFFF;
+    --line:rgba(22,38,63,.12);--line-soft:rgba(22,38,63,.07);
+    --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);
+    line-height:1.95;-webkit-font-smoothing:antialiased;font-size:16px}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+  :focus-visible{outline:2.5px solid var(--green);outline-offset:3px;border-radius:4px}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(244,243,237,.86);
+    backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line-soft)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px;
+    max-width:1080px;margin:0 auto;padding:0 24px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px;letter-spacing:.02em}
+  .nav-links{display:flex;align-items:center;gap:28px}
+  .nav-links a{font-size:14.5px;color:var(--ink-soft);font-weight:500}
+  .nav-links a:hover{color:var(--ink)}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;
+    padding:9px 20px;border-radius:999px;background:var(--ink);color:#fff;border:none;cursor:pointer}
+  .btn:hover{background:#0E1B30}
+  @media(max-width:720px){.nav-links a:not(.btn){display:none}}
+
+  .head{padding:60px 0 22px}
+  .eyebrow{font-size:13px;letter-spacing:.14em;color:var(--green-deep);font-weight:600;margin:0 0 14px}
+  h1{font-size:clamp(25px,4.2vw,35px);font-weight:700;margin:0 0 16px;letter-spacing:.01em;line-height:1.5}
+  .meta{color:var(--muted);margin:0;font-size:14px}
+
+  .body{padding:8px 0 70px}
+  .lead{background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:24px 26px;margin-bottom:38px;font-size:15.5px;color:var(--ink-soft)}
+  h2{font-size:21px;font-weight:700;margin:46px 0 16px;padding-bottom:10px;
+    border-bottom:2px solid var(--green);line-height:1.5}
+  h3{font-size:17px;font-weight:700;margin:30px 0 10px;color:var(--ink)}
+  p{margin:0 0 16px;font-size:15.5px;color:var(--ink-soft)}
+  strong{color:var(--ink);font-weight:700}
+  ul,ol{margin:0 0 18px;padding-left:1.4em;font-size:15.5px;color:var(--ink-soft)}
+  li{margin-bottom:7px}
+
+  .note{background:var(--surface);border-left:3px solid var(--green);
+    padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0;font-size:15px;color:var(--ink-soft)}
+  .note b{color:var(--green-deep)}
+
+  .checklist{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:22px 26px;margin:24px 0}
+  .checklist h4{margin:0 0 12px;font-size:15px;font-weight:700;color:var(--green-deep)}
+  .checklist ul{margin:0;padding-left:1.3em;font-size:15px}
+
+  .tbl{width:100%;border-collapse:collapse;margin:22px 0;background:var(--surface);
+    border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:15px}
+  .tbl th,.tbl td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line-soft)}
+  .tbl th{background:var(--paper);font-weight:700;font-size:14px;color:var(--ink)}
+  .tbl tr:last-child td{border-bottom:none}
+  .tbl td{color:var(--ink-soft)}
+  .tbl td.num,.tbl th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+  .src{font-size:13.5px;color:var(--muted);margin-top:6px}
+
+  .inline-link{color:var(--green-deep);font-weight:600;border-bottom:1px solid rgba(19,122,87,.35)}
+  .inline-link:hover{border-bottom-color:var(--green-deep)}
+
+  .cta{background:var(--surface);border:1px solid var(--line);border-radius:18px;
+    padding:30px 30px;margin:52px 0 0;text-align:center}
+  .cta h3{margin:0 0 12px;font-size:19px}
+  .cta p{font-size:15px;margin-bottom:20px}
+  .cta .cta-sub{display:block;margin-top:14px;font-size:14px;color:var(--green-deep);font-weight:600}
+
+  .related{margin:40px 0 0;padding:22px 26px;background:var(--surface);
+    border:1px solid var(--line);border-radius:14px}
+  .related h4{margin:0 0 10px;font-size:14px;color:var(--green-deep);font-weight:700}
+  .related a{font-size:15.5px;font-weight:600;display:block;margin-bottom:8px}
+  .related a:last-child{margin-bottom:0}
+  .related a:hover{color:var(--green-deep)}
+
+  .foot{background:var(--paper);border-top:1px solid var(--line);padding:40px 0 38px;
+    font-size:13.5px;color:var(--muted)}
+  .foot-top{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-start;
+    max-width:1080px;margin:0 auto;padding:0 24px}
+  .foot-links{display:flex;gap:22px;flex-wrap:wrap}
+  .foot-links a:hover{color:var(--ink)}
+  .foot .op{font-weight:700;color:var(--ink);font-size:15px}
+  .foot .cp{max-width:1080px;margin:24px auto 0;padding:0 24px;font-size:12.5px}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="../index.html" aria-label="ナカツギ ホーム">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <circle cx="5" cy="13" r="3.4" fill="#16263F"/>
+        <circle cx="21" cy="13" r="3.4" fill="#16263F"/>
+        <path d="M5 13 Q13 1 21 13" fill="none" stroke="#137A57" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      ナカツギ
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html#how">仕組み</a>
+      <a href="../index.html#features">特徴</a>
+      <a href="../index.html#price">料金</a>
+      <a class="btn" href="../index.html#contact">使ってみる</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="head">
+    <div class="wrap">
+      <p class="eyebrow">実務ガイド</p>
+      <h1>ココナラ卒業を考えたら。<br>手数料22%の計算と、越えてはいけない一線</h1>
+      <p class="meta">2026年9月30日　｜　ナカツギ運営事務局</p>
+    </div>
+  </section>
+
+  <section class="body">
+    <div class="wrap">
+
+      <div class="lead">
+        売上が伸びてくると、ココナラの手数料が気になり始めます。通常サービスの販売手数料は22%（税込）で、1万円売れて手元に残るのは7,800円です。「そろそろ卒業したい」と考えるのは自然なことです。ただし、卒業には正しい順番があります。間違えると、アカウント停止という形で、これまで積み上げた評価ごと失いかねません。この記事では、手数料を年間で計算したうえで、それが何の対価なのか、卒業するときに越えてはいけない一線はどこか、外で取引するときに自分で引き受けることは何かを順に整理します。
+      </div>
+
+      <h2>まず、手数料を年間で計算してみる</h2>
+
+      <p>1件ごとに見ると気にならない手数料も、年間で並べると印象が変わります。ココナラの通常サービス（販売手数料22%・税込）で計算すると、次のとおりです。</p>
+
+      <div class="tbl-scroll">
+      <table class="tbl">
+        <tr>
+          <th>月の売上</th>
+          <th class="num">年間の売上</th>
+          <th class="num">年間の販売手数料（22%）</th>
+          <th class="num">手元に残る額</th>
+        </tr>
+        <tr>
+          <td>5万円</td>
+          <td class="num">60万円</td>
+          <td class="num">13万2,000円</td>
+          <td class="num">46万8,000円</td>
+        </tr>
+        <tr>
+          <td>10万円</td>
+          <td class="num">120万円</td>
+          <td class="num">26万4,000円</td>
+          <td class="num">93万6,000円</td>
+        </tr>
+        <tr>
+          <td>30万円</td>
+          <td class="num">360万円</td>
+          <td class="num">79万2,000円</td>
+          <td class="num">280万8,000円</td>
+        </tr>
+      </table>
+      </div>
+
+      <p>月10万円の売上で、<strong>年間26万円以上</strong>が手数料になります。さらに購入者側にも、別途5.5%（税込）のサービス手数料がかかっています。お客さまが実際に支払う額は、あなたの提示価格より高くなっています。</p>
+
+      <div class="note">
+        <b>確認してください</b>　手数料率はサービスの種類や時期によって異なります。たとえばビデオチャットや電話相談は料率が違います。最新の料率はココナラの公式ヘルプでご確認ください。
+      </div>
+
+      <h2>22%は、何に対して払っているのか</h2>
+
+      <p>ここで冷静になっておきたいのは、22%がすべて「取られている」わけではないということです。この手数料には、次のようなものが含まれています。</p>
+
+      <ul>
+        <li><strong>集客</strong>：あなたのことを知らない人に見つけてもらう仕組み</li>
+        <li><strong>信用</strong>：評価・実績の表示。初めての相手でも頼んでもらえる理由</li>
+        <li><strong>決済と回収</strong>：代金の受け取り、未払いの防止</li>
+        <li><strong>トラブル対応</strong>：揉めたときに間に入ってもらえること</li>
+      </ul>
+
+      <p>自分で広告を出したりSNSを育てたりする費用と手間を考えると、<strong>新しいお客さまと出会うための費用としては、22%は決して高すぎない</strong>場面もあります。</p>
+
+      <p>問題になるのは、<strong>もう出会う必要のない相手</strong>との取引にも、同じ費用を払い続けることです。紹介で来たお客さま、SNSやポートフォリオサイトから直接依頼してきたお客さま、以前の勤務先の人脈。こうした相手との取引に「出会いの手数料」は本来いりません。</p>
+
+      <p>つまりココナラ卒業とは、<strong>ココナラをやめることではなく、出会いの費用を払わなくていい取引を増やしていくこと</strong>です。</p>
+
+      <h2>越えてはいけない一線：ココナラで出会った相手は、ココナラの中で</h2>
+
+      <p>ここが最も大切な部分です。</p>
+
+      <div class="note">
+        <b>やってはいけないこと</b>　ココナラで知り合ったお客さまを、ココナラの外での取引に誘うこと。ココナラのルールでは、外部での直接取引への誘導や、そのための連絡先の交換が禁止されています。運営はこれを悪質な行為として扱っており、<b>利用をお断りするケースも実際に発生している</b>と公表しています。
+      </div>
+
+      <p>「手数料がもったいないから、次回からは直接で」という持ちかけは、たとえお客さまの側から言われたとしても応じるべきではありません。発覚すれば、アカウントの停止によって、<strong>これまでの評価も、進行中の取引も、新規の集客経路も、まとめて失う</strong>ことになります。節約できる手数料と比べて、失うものが大きすぎます。</p>
+
+      <p>卒業の対象になるのは、<strong>最初からココナラの外で出会ったお客さま</strong>だけです。ここを取り違えないことが、卒業を成功させる大前提です。</p>
+
+      <div class="note">
+        <b>確認してください</b>　禁止行為の範囲や措置の内容は、ココナラの「ココナラのルール」および利用規約で定められています。判断に迷う場合は、最新の規約をご確認いただくか、ココナラの運営に問い合わせてください。
+      </div>
+
+      <h2>卒業の順番</h2>
+
+      <p>正しい順番で進めれば、ココナラでの実績を守ったまま、手数料の負担を減らしていけます。</p>
+
+      <h3>1. 外の入口をつくる</h3>
+
+      <p>ココナラの外で、あなたを見つけてもらえる場所をつくります。ポートフォリオサイト、SNSでの発信、過去の勤務先や同業者からの紹介などです。ココナラのプロフィールやトークルームで外の連絡先を案内するのはルール違反になるため、<strong>外の入口は、外だけで育てる</strong>必要があります。</p>
+
+      <h3>2. ココナラは「新規開拓の場」として残す</h3>
+
+      <p>いきなり退会する必要はありません。まだ知らないお客さまと出会う場として、ココナラは引き続き役に立ちます。<strong>新しい出会いはココナラで、外で出会ったお客さまとの取引は外で</strong>。この切り分けで、両方のよいところを使えます。</p>
+
+      <h3>3. 外での取引ルールを先に決めておく</h3>
+
+      <p>外で取引を始めると、これまでココナラが引き受けていたことを自分でやる必要があります。依頼が来てから慌てないように、最初の1件が来る前に決めておきましょう。</p>
+
+      <h2>外の取引で、自分が引き受けること</h2>
+
+      <p>ココナラの22%には、見えにくい仕事がいくつも含まれていました。外で取引するときは、これを自分で用意することになります。</p>
+
+      <div class="checklist">
+        <h4>外で取引する前に決めておくこと</h4>
+        <ul>
+          <li><strong>支払いのタイミング</strong>：前払いか、着手金か、納品後か。未払いのリスクは、ここでほぼ決まります</li>
+          <li><strong>完了の基準</strong>：何をもって納品完了とするか。修正は何回までか</li>
+          <li><strong>見積と契約の証跡</strong>：口約束にせず、金額と内容を書面で残す</li>
+          <li><strong>請求書とインボイス</strong>：相手が事業者なら、適格請求書を求められることが増えています</li>
+          <li><strong>住所と氏名の扱い</strong>：請求書に自宅住所を書くことに抵抗がないか</li>
+          <li><strong>揉めたときの手順</strong>：間に入ってくれる運営はもういません</li>
+        </ul>
+      </div>
+
+      <p>特に見落とされやすいのが、<strong>未払い</strong>と<strong>住所</strong>の2つです。ココナラでは、代金は先に支払われ、相手に見えるのはユーザー名だけでした。外に出た途端、この2つの守りがなくなります。</p>
+
+      <p>未払いを防ぐ具体的な設計は<a class="inline-link" href="unpaid.html">未払いを防ぐ、契約と支払いの設計</a>に、請求書の記載要件は<a class="inline-link" href="invoice-densho.html">インボイスと電子帳簿保存法の整理</a>にまとめています。</p>
+
+      <h2>どちらで取引するか、の判断</h2>
+
+      <div class="tbl-scroll">
+      <table class="tbl">
+        <tr>
+          <th style="width:40%">お客さまとの関係</th>
+          <th>向いている取引の場</th>
+        </tr>
+        <tr>
+          <td><strong>ココナラで出会った</strong></td>
+          <td>ココナラ（規約上、ここ以外は選べません）</td>
+        </tr>
+        <tr>
+          <td><strong>まだ出会っていない</strong></td>
+          <td>ココナラなどのマーケットプレイス（集客の対価として手数料を払う価値がある）</td>
+        </tr>
+        <tr>
+          <td><strong>外で出会った・紹介・以前からの知り合い</strong></td>
+          <td>直接取引（ただし、支払い・書類・住所の扱いは自分で整える）</td>
+        </tr>
+      </table>
+      </div>
+
+      <p>判断の軸は、手数料率ではなく<strong>そのお客さまとどこで出会ったか</strong>です。この順番で考えれば、規約に触れる心配もなく、払わなくていい手数料だけを減らしていけます。</p>
+
+      <p class="src">出典：株式会社ココナラ「ココナラのルール」および公式ヘルプ・お知らせ。手数料率・禁止行為の範囲は変更される可能性があります。最新の情報はココナラの公式サイトをご確認ください。本記事は一般的な情報提供を目的としたもので、特定のサービスの利用や退会を勧めるものではありません。</p>
+
+      <div class="cta">
+        <h3>外で出会ったお客さまとの取引を、守りつきで</h3>
+        <p>ナカツギは、すでに取引相手がいる事業者のためのB2B取引プラットフォームです。集客機能はありません。そのかわり、利用料は取引額の8.6%（税抜）で、お客さまの支払いは着手前、報酬は検収で確定します。相手に見えるのは屋号だけで、適格請求書は運営会社の名義で発行します。<br>※ココナラなど他のサービスで出会った相手との取引には、各サービスの規約に従ってください。</p>
+        <a class="btn" href="../index.html">ナカツギについて見る</a>
+        <a class="cta-sub" href="../index.html#price">料金を確認する →</a>
+      </div>
+
+      <div class="related">
+        <h4>あわせて読みたい</h4>
+        <a href="direct-deal.html">マーケットプレイスから直接取引へ。移行前に準備すべき5つのこと →</a>
+        <a href="marketplace-comparison.html">スキルマーケットと直接取引、どちらを選ぶか。手数料と実務負担から考える →</a>
+        <a href="unpaid.html">未払いを防ぐ、契約と支払いの設計 →</a>
+        <a href="invoice-densho.html">インボイスと電子帳簿保存法。請求書まわりで、いま何が義務なのか →</a>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-top">
+    <div>
+      <div class="op">ナカツギ運営事務局</div>
+      <div style="margin-top:6px">運営：株式会社ナカホームズ</div>
+    </div>
+    <nav class="foot-links" aria-label="フッター">
+      <a href="../tokushoho.html">特定商取引法に基づく表記</a>
+      <a href="../kiyaku.html">利用規約</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../index.html#contact">お問い合わせ</a>
+    </nav>
+  </div>
+  <div class="cp">© 2026 株式会社ナカホームズ</div>
+</footer>
+
+</body>
+</html>
