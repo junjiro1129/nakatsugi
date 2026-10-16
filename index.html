@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VP7BQEZXYK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-VP7BQEZXYK');
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>手数料8.6%のB2B取引プラットフォーム｜見積・請書・適格請求書と検収｜ナカツギ</title>
@@ -1036,6 +1047,7 @@
             done.hidden=false;
             done.scrollIntoView({behavior:'smooth',block:'center'});
           }else{throw new Error('failed');}
+	  if (window.gtag) gtag('event', 'generate_lead', { form_name: 'contact' });
         })
         .catch(function(){
           btn.disabled=false;btn.textContent='送信する';
