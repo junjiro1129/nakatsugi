@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VP7BQEZXYK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-VP7BQEZXYK');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>初めての法人案件で、前払いをお願いしてもいいのか。切り出し方と、未払いを防ぐ取引条件の決め方｜ナカツギ</title>
+<meta name="description" content="初めて取引する法人から単発の制作依頼。前払いや着手金をお願いしてもいいのか、どう切り出すか。支払い条件の選び方、見積への書き方、断られたときの代わりの手、フリーランス法で守られる範囲までを整理します。">
+<link rel="canonical" href="https://nakatsugi.co.jp/blog/first-client-prepayment.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初めての法人案件で、前払いをお願いしてもいいのか。切り出し方と、未払いを防ぐ取引条件の決め方">
+<meta property="og:description" content="初取引・単発の制作案件で、前払いや着手金をどう切り出すか。支払い条件の選び方と、断られたときの代わりの手を整理します。">
+<meta property="og:url" content="https://nakatsugi.co.jp/blog/first-client-prepayment.html">
+<style>
+  :root{
+    --ink:#16263F;--ink-soft:#3A4A63;--muted:#5C6675;
+    --green:#137A57;--green-deep:#0C5A40;
+    --paper:#F4F3ED;--surface:#FFFFFF;
+    --line:rgba(22,38,63,.12);--line-soft:rgba(22,38,63,.07);
+    --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);
+    line-height:1.95;-webkit-font-smoothing:antialiased;font-size:16px}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+  :focus-visible{outline:2.5px solid var(--green);outline-offset:3px;border-radius:4px}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(244,243,237,.86);
+    backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line-soft)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px;
+    max-width:1080px;margin:0 auto;padding:0 24px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px;letter-spacing:.02em}
+  .nav-links{display:flex;align-items:center;gap:28px}
+  .nav-links a{font-size:14.5px;color:var(--ink-soft);font-weight:500}
+  .nav-links a:hover{color:var(--ink)}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;
+    padding:9px 20px;border-radius:999px;background:var(--ink);color:#fff;border:none;cursor:pointer}
+  .btn:hover{background:#0E1B30}
+  .nav-links a.btn{color:#fff}
+  .nav-links a.btn:hover{color:#fff}
+  @media(max-width:720px){.nav-links a:not(.btn){display:none}}
+
+  .head{padding:60px 0 22px}
+  .eyebrow{font-size:13px;letter-spacing:.14em;color:var(--green-deep);font-weight:600;margin:0 0 14px}
+  h1{font-size:clamp(25px,4.2vw,35px);font-weight:700;margin:0 0 16px;letter-spacing:.01em;line-height:1.5}
+  .meta{color:var(--muted);margin:0;font-size:14px}
+
+  .body{padding:8px 0 70px}
+  .lead{background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:24px 26px;margin-bottom:38px;font-size:15.5px;color:var(--ink-soft)}
+  h2{font-size:21px;font-weight:700;margin:46px 0 16px;padding-bottom:10px;
+    border-bottom:2px solid var(--green);line-height:1.5}
+  h3{font-size:17px;font-weight:700;margin:30px 0 10px;color:var(--ink)}
+  p{margin:0 0 16px;font-size:15.5px;color:var(--ink-soft)}
+  strong{color:var(--ink);font-weight:700}
+  ul,ol{margin:0 0 18px;padding-left:1.4em;font-size:15.5px;color:var(--ink-soft)}
+  li{margin-bottom:7px}
+
+  .note{background:var(--surface);border-left:3px solid var(--green);
+    padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0;font-size:15px;color:var(--ink-soft)}
+  .note b{color:var(--green-deep)}
+
+  .checklist{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:22px 26px;margin:24px 0}
+  .checklist h4{margin:0 0 12px;font-size:15px;font-weight:700;color:var(--green-deep)}
+  .checklist ul{margin:0;padding-left:1.3em;font-size:15px}
+
+  .tbl{width:100%;border-collapse:collapse;margin:22px 0;background:var(--surface);
+    border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:15px}
+  .tbl th,.tbl td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line-soft)}
+  .tbl th{background:var(--paper);font-weight:700;font-size:14px;color:var(--ink)}
+  .tbl tr:last-child td{border-bottom:none}
+  .tbl td{color:var(--ink-soft)}
+  .tbl td.num,.tbl th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+  .src{font-size:13.5px;color:var(--muted);margin-top:6px}
+
+  .inline-link{color:var(--green-deep);font-weight:600;border-bottom:1px solid rgba(19,122,87,.35)}
+  .inline-link:hover{border-bottom-color:var(--green-deep)}
+
+  .cta{background:var(--surface);border:1px solid var(--line);border-radius:18px;
+    padding:30px 30px;margin:52px 0 0;text-align:center}
+  .cta h3{margin:0 0 12px;font-size:19px}
+  .cta p{font-size:15px;margin-bottom:20px}
+  .cta .cta-sub{display:block;margin-top:14px;font-size:14px;color:var(--green-deep);font-weight:600}
+
+  .related{margin:40px 0 0;padding:22px 26px;background:var(--surface);
+    border:1px solid var(--line);border-radius:14px}
+  .related h4{margin:0 0 10px;font-size:14px;color:var(--green-deep);font-weight:700}
+  .related a{font-size:15.5px;font-weight:600;display:block;margin-bottom:8px}
+  .related a:last-child{margin-bottom:0}
+  .related a:hover{color:var(--green-deep)}
+
+  .foot{background:var(--paper);border-top:1px solid var(--line);padding:40px 0 38px;
+    font-size:13.5px;color:var(--muted)}
+  .foot-top{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-start;
+    max-width:1080px;margin:0 auto;padding:0 24px}
+  .foot-links{display:flex;gap:22px;flex-wrap:wrap}
+  .foot-links a:hover{color:var(--ink)}
+  .foot .op{font-weight:700;color:var(--ink);font-size:15px}
+  .foot .cp{max-width:1080px;margin:24px auto 0;padding:0 24px;font-size:12.5px}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="../index.html" aria-label="ナカツギ ホーム">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <circle cx="5" cy="13" r="3.4" fill="#16263F"/>
+        <circle cx="21" cy="13" r="3.4" fill="#16263F"/>
+        <path d="M5 13 Q13 1 21 13" fill="none" stroke="#137A57" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      ナカツギ
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html#how">仕組み</a>
+      <a href="../index.html#features">特徴</a>
+      <a href="../index.html#price">料金</a>
+      <a class="btn" href="../index.html#contact">使ってみる</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="head">
+    <div class="wrap">
+      <p class="eyebrow">実務ガイド</p>
+      <h1>初めての法人案件で、前払いをお願いしてもいいのか。<br>切り出し方と、未払いを防ぐ取引条件の決め方</h1>
+      <p class="meta">2026年10月27日　｜　ナカツギ運営事務局</p>
+    </div>
+  </section>
+
+  <section class="body">
+    <div class="wrap">
+
+      <div class="lead">
+        ポートフォリオを見た法人から、ロゴやサイト制作の依頼が届く。金額は数十万円、継続の話はまだない。うれしい反面、「この会社は本当に払ってくれるのか」「前払いをお願いしたら失礼にならないか」と迷う場面です。結論から言うと、初めての法人との単発案件こそ、支払い条件を最初に決めておくべき取引です。この記事では、初取引の単発案件がなぜ危ないのか、前払いや着手金をどう切り出すか、断られたらどうするか、法律で守られるのはどこまでかを順に整理します。
+      </div>
+
+      <h2>初取引・単発の案件が、いちばん危ない理由</h2>
+
+      <p>未払いや支払い遅延は、珍しい話ではありません。内閣官房などが2020年に行ったフリーランス実態調査では、取引先との間で報酬の支払い遅延・未払いを経験した人が約3割いました。民間のマイナビ調査（2024年）では、取引上のトラブルを経験した人は全体で53.3%、クリエイティブ系では64.2%にのぼります。</p>
+
+      <p>なかでも、初めての法人から受ける単発の案件は、条件が重なりやすい取引です。</p>
+
+      <ul>
+        <li><strong>関係の積み上げがない</strong>：相手がどんな会社で、支払いがきちんとしているか、判断する材料がありません</li>
+        <li><strong>次の取引がない</strong>：継続案件なら相手も関係を大事にしますが、単発では揉めても相手が失うものがありません</li>
+        <li><strong>入金が遅い</strong>：法人の支払いは「月末締め翌月末払い」のような社内サイクルで動くことが多く、納品からお金が入るまで1〜2か月かかることがあります。その間、制作の手間はすべて先に出ています</li>
+        <li><strong>窓口と経理が別</strong>：やり取りしている担当者に支払いの決定権がなく、「経理に回しています」で止まることがあります</li>
+      </ul>
+
+      <p>継続取引で信頼ができた相手なら、後払いの請求書で十分です。守りが必要なのは、<strong>初めての相手と、1回きりかもしれない取引</strong>です。</p>
+
+      <h2>前払いをお願いするのは、失礼ではない</h2>
+
+      <p>前払いや着手金を求めると「信用していないと思われそう」と感じるかもしれません。ただ、制作の現場では着手金は珍しい条件ではありませんし、法人の側も、外注先から支払い条件を提示されることには慣れています。</p>
+
+      <p>相手が気にするのは、前払いそのものよりも、<strong>言い出すタイミング</strong>です。着手してから「やはり先に半分ください」と言うと、条件の後出しに見えます。最初の見積の時点で、金額や納期と同じ並びに書いてあれば、それはただの取引条件です。</p>
+
+      <h3>見積の段階で、条件として書く</h3>
+
+      <p>メールで見積を送るときの書き方の例です。</p>
+
+      <div class="note">
+        <b>文例</b>　お見積りをお送りします。お支払いについては、初めてのお取引のため、着手時に50%、納品時に残りの50%をお願いしております。ご入金を確認したうえで制作に着手いたします。社内のお手続きの都合で難しい場合は、ご相談ください。
+      </div>
+
+      <p>ポイントは3つです。理由を「初めてのお取引のため」と一般的な形で添えること。入金が着手の条件だとはっきり書くこと。そして、相手の事情に合わせる余地を残しておくことです。</p>
+
+      <h2>支払い条件の選択肢と、向いている場面</h2>
+
+      <p>前払いには全額前払い以外にもいくつかの形があります。金額や相手との関係に合わせて選びます。</p>
+
+      <div class="tbl-scroll">
+      <table class="tbl">
+        <tr>
+          <th>支払い条件</th>
+          <th>自分の未払いリスク</th>
+          <th>相手の受け入れやすさ</th>
+          <th>向いている場面</th>
+        </tr>
+        <tr>
+          <td><strong>全額前払い</strong></td>
+          <td>ほぼなし</td>
+          <td>低め</td>
+          <td>10万円前後までの小さな案件、作業範囲がはっきりしている依頼</td>
+        </tr>
+        <tr>
+          <td><strong>着手金＋残金（例：50%・50%）</strong></td>
+          <td>残金分のみ</td>
+          <td>高い</td>
+          <td>数十万円の単発制作。いちばん使いやすい形</td>
+        </tr>
+        <tr>
+          <td><strong>工程ごとの分割</strong></td>
+          <td>未払いになっても1工程分で済む</td>
+          <td>中くらい</td>
+          <td>50万円を超える案件、期間が長い案件</td>
+        </tr>
+        <tr>
+          <td><strong>納品後に一括</strong></td>
+          <td>全額</td>
+          <td>最も高い</td>
+          <td>継続取引で、支払い実績のある相手</td>
+        </tr>
+      </table>
+      </div>
+
+      <p>着手金の割合は30%から50%あたりがよく使われます。金額が大きいほど、未払いになったときの損失も大きくなるので、<strong>単発で50万円を超えるなら、分割を検討する価値があります</strong>。</p>
+
+      <h2>前払いを断られたら</h2>
+
+      <p>「弊社は請求書払いしかできない」と言われることもあります。法人によっては、前払いに社内の稟議が必要だったり、そもそも支払いの仕組みが後払いしか想定されていなかったりするためです。断られたときに、すぐ後払いに戻す必要はありません。次の手が使えます。</p>
+
+      <h3>1. 割合を下げる</h3>
+      <p>全額前払いが無理でも、着手金20〜30%なら通ることがあります。未払いになったときに、最低限の作業代を確保できます。</p>
+
+      <h3>2. 支払期日を書面で決める</h3>
+      <p>後払いにするなら、「納品後〇日以内に支払い」と期日を具体的に決め、メールなど残る形で合意しておきます。「月末締め翌月末払い」なら、どの月末なのかまで確認しておきます。</p>
+
+      <h3>3. 検収の期限を決める</h3>
+      <p>見落とされやすいのが、<strong>検収で止まる</strong>ケースです。納品したのに「社内で確認中です」が続き、検収が終わらないので請求もできない。これを防ぐには、「納品後〇日以内に連絡がない場合は、検収完了とみなす」という条件を最初に入れておきます。期間は7日から14日程度が現実的です。短すぎると相手が確認しきれず、長すぎると入金が遠のきます。</p>
+
+      <div class="note">
+        <b>実務のポイント</b>　前払いと検収期限は、セットで考えると効果が上がります。前払いは「払ってもらえない」を防ぎ、検収期限は「いつまでも払う段階に進まない」を防ぎます。どちらか一方だけでは、もう一方の穴が残ります。
+      </div>
+
+      <h2>フリーランス法で守られること、守られないこと</h2>
+
+      <p>2024年11月に施行されたフリーランス法（特定受託事業者に係る取引の適正化等に関する法律）は、従業員を使わずに一人で仕事を受けるフリーランスと、発注する事業者との取引を対象にしています。初めての法人案件に関係するのは、主に次の2つです。</p>
+
+      <ul>
+        <li><strong>取引条件の明示</strong>：発注者は、業務を委託したら直ちに、報酬の額や支払期日などの取引条件を書面やメールで示す義務があります。従業員のいない発注者も対象です</li>
+        <li><strong>60日以内の支払い</strong>：従業員を使っている発注者は、成果物を受け取った日から原則60日以内のできるだけ短い期間で支払期日を決め、その日までに支払う義務があります</li>
+      </ul>
+
+      <p>この法律のおかげで、条件があいまいなまま着手させられたり、支払いを何か月も先延ばしにされたりすることには、はっきり「法律違反です」と言えるようになりました。条件を書面で示してくれない発注者には、示すよう求めて構いません。</p>
+
+      <p>一方で、法律は<strong>払わない相手から自動的にお金を取り戻してくれる仕組みではありません</strong>。違反があれば行政に申し出ることはできますが、実際に回収するには、催促、内容証明、少額訴訟といった手間を自分で引き受けることになります。数十万円の案件で、そこまでの時間と労力をかけられるかどうか。法律は大事な後ろ盾ですが、<strong>いちばん確実な守りは、払ってもらってから作ること</strong>です。</p>
+
+      <div class="note">
+        <b>困ったときの相談先</b>　フリーランス・トラブル110番（0120-532-110、平日9:30〜16:30）では、弁護士に無料で相談できます。法律の詳しい内容は、厚生労働省・公正取引委員会の案内をご確認ください。
+      </div>
+
+      <h2>法人が気にする、もう一つのこと：適格請求書</h2>
+
+      <p>相手が法人だと、ほぼ確実に聞かれるのが「インボイスの登録番号はありますか」です。免税事業者からの仕入れは、法人側で消費税の仕入税額控除が一部しか受けられず、その割合は経過措置の終了に向けて段階的に小さくなっていきます。登録していない場合は、見積の段階でそのことを伝え、価格の扱いを相談しておくと、後のトラブルを防げます。</p>
+
+      <p>請求書の記載要件については<a class="inline-link" href="invoice-densho.html">インボイスと電子帳簿保存法の整理</a>にまとめています。</p>
+
+      <h2>見積を送る前のチェックリスト</h2>
+
+      <div class="checklist">
+        <h4>初めての法人に見積を出す前に決めておくこと</h4>
+        <ul>
+          <li><strong>支払い条件</strong>：全額前払い・着手金・分割・後払いのどれにするか。着手金なら割合も</li>
+          <li><strong>着手の条件</strong>：入金を確認してから着手する、と書いたか</li>
+          <li><strong>作業範囲と修正回数</strong>：どこまでが見積の範囲で、修正は何回までか</li>
+          <li><strong>検収の期限</strong>：納品後何日で検収完了とみなすか</li>
+          <li><strong>支払期日</strong>：後払い部分は、いつまでに支払われるか</li>
+          <li><strong>適格請求書</strong>：登録番号の有無を伝えたか</li>
+          <li><strong>住所と氏名の扱い</strong>：請求書に自宅住所を載せてよいか</li>
+        </ul>
+      </div>
+
+      <p>未払いになったときの対応や、契約書面の作り方は<a class="inline-link" href="unpaid.html">未払いを防ぐ、契約と支払いの設計</a>で詳しく扱っています。</p>
+
+      <p class="src">出典：内閣官房日本経済再生総合事務局「フリーランス実態調査結果」（2020年）、株式会社マイナビ「フリーランスの意識・就業実態調査2024年版」（2024年）、厚生労働省・公正取引委員会・中小企業庁「フリーランス・事業者間取引適正化等法」に関する案内。法令や制度の内容は変更される可能性があります。本記事は一般的な情報提供を目的としたもので、個別の取引についての法的助言ではありません。</p>
+
+      <div class="cta">
+        <h3>前払いを、言い出さなくても済む取引に</h3>
+        <p>ナカツギでは、お客さまの支払いは着手前に行われ、報酬は検収で確定します。検収の確認期間を過ぎると、完了とみなされます。見積・請書・適格請求書は一つの画面で発行でき、相手に見えるのは屋号だけです。利用料は取引額の8.6%（税抜）で、お客さまの負担はありません。<br>※ご利用いただけるのは、適格請求書発行事業者の登録がある事業者です（招待制・審査制）。</p>
+        <a class="btn" href="../index.html">ナカツギについて見る</a>
+        <a class="cta-sub" href="../index.html#price">料金を確認する →</a>
+      </div>
+
+      <div class="related">
+        <h4>あわせて読みたい</h4>
+        <a href="unpaid.html">未払いを防ぐ、契約と支払いの設計 →</a>
+        <a href="direct-deal.html">マーケットプレイスから直接取引へ。移行前に準備すべき5つのこと →</a>
+        <a href="crowdworks-fee.html">クラウドワークスの手数料は高い？契約ごとの段階制を計算し、外で取引する前の注意点を整理 →</a>
+        <a href="invoice-densho.html">インボイスと電子帳簿保存法。請求書まわりで、いま何が義務なのか →</a>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-top">
+    <div>
+      <div class="op">ナカツギ運営事務局</div>
+      <div style="margin-top:6px">運営：株式会社ナカホームズ</div>
+    </div>
+    <nav class="foot-links" aria-label="フッター">
+      <a href="../tokushoho.html">特定商取引法に基づく表記</a>
+      <a href="../kiyaku.html">利用規約</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../index.html#contact">お問い合わせ</a>
+    </nav>
+  </div>
+  <div class="cp">© 2026 株式会社ナカホームズ</div>
+</footer>
+
+</body>
+</html>
