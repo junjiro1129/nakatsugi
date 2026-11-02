@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VP7BQEZXYK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-VP7BQEZXYK');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SNSのDMで、企業から依頼が来たら。未払いと身元バレを防ぐ、取引の始め方｜ナカツギ</title>
+<meta name="description" content="XやInstagramのDMで企業から届いた制作依頼。相手は本当にその会社の人か、先に作らせて消えないか、本名や住所はどこから相手に伝わるのか。確かめること、身元が伝わる経路と対策、前払いの決め方を整理します。依頼主が個人の場合に変わる点も説明します。">
+<link rel="canonical" href="https://nakatsugi.co.jp/blog/sns-dm-request.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SNSのDMで、企業から依頼が来たら。未払いと身元バレを防ぐ、取引の始め方">
+<meta property="og:description" content="企業からのDM依頼で確かめること、本名や住所が相手に伝わる経路と対策、前払いの決め方。依頼主が個人の場合に変わる点も整理します。">
+<meta property="og:url" content="https://nakatsugi.co.jp/blog/sns-dm-request.html">
+<style>
+  :root{
+    --ink:#16263F;--ink-soft:#3A4A63;--muted:#5C6675;
+    --green:#137A57;--green-deep:#0C5A40;
+    --paper:#F4F3ED;--surface:#FFFFFF;
+    --line:rgba(22,38,63,.12);--line-soft:rgba(22,38,63,.07);
+    --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);
+    line-height:1.95;-webkit-font-smoothing:antialiased;font-size:16px}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+  :focus-visible{outline:2.5px solid var(--green);outline-offset:3px;border-radius:4px}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(244,243,237,.86);
+    backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line-soft)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px;
+    max-width:1080px;margin:0 auto;padding:0 24px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px;letter-spacing:.02em}
+  .nav-links{display:flex;align-items:center;gap:28px}
+  .nav-links a{font-size:14.5px;color:var(--ink-soft);font-weight:500}
+  .nav-links a:hover{color:var(--ink)}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;
+    padding:9px 20px;border-radius:999px;background:var(--ink);color:#fff;border:none;cursor:pointer}
+  .btn:hover{background:#0E1B30}
+  .nav-links a.btn{color:#fff}
+  .nav-links a.btn:hover{color:#fff}
+  @media(max-width:720px){.nav-links a:not(.btn){display:none}}
+
+  .head{padding:60px 0 22px}
+  .eyebrow{font-size:13px;letter-spacing:.14em;color:var(--green-deep);font-weight:600;margin:0 0 14px}
+  h1{font-size:clamp(25px,4.2vw,35px);font-weight:700;margin:0 0 16px;letter-spacing:.01em;line-height:1.5}
+  .meta{color:var(--muted);margin:0;font-size:14px}
+
+  .body{padding:8px 0 70px}
+  .lead{background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:24px 26px;margin-bottom:38px;font-size:15.5px;color:var(--ink-soft)}
+  h2{font-size:21px;font-weight:700;margin:46px 0 16px;padding-bottom:10px;
+    border-bottom:2px solid var(--green);line-height:1.5}
+  h3{font-size:17px;font-weight:700;margin:30px 0 10px;color:var(--ink)}
+  p{margin:0 0 16px;font-size:15.5px;color:var(--ink-soft)}
+  strong{color:var(--ink);font-weight:700}
+  ul,ol{margin:0 0 18px;padding-left:1.4em;font-size:15.5px;color:var(--ink-soft)}
+  li{margin-bottom:7px}
+
+  .note{background:var(--surface);border-left:3px solid var(--green);
+    padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0;font-size:15px;color:var(--ink-soft)}
+  .note b{color:var(--green-deep)}
+
+  .checklist{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:22px 26px;margin:24px 0}
+  .checklist h4{margin:0 0 12px;font-size:15px;font-weight:700;color:var(--green-deep)}
+  .checklist ul{margin:0;padding-left:1.3em;font-size:15px}
+
+  .tbl{width:100%;border-collapse:collapse;margin:22px 0;background:var(--surface);
+    border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:15px}
+  .tbl th,.tbl td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line-soft)}
+  .tbl th{background:var(--paper);font-weight:700;font-size:14px;color:var(--ink)}
+  .tbl tr:last-child td{border-bottom:none}
+  .tbl td{color:var(--ink-soft)}
+  .tbl td.num,.tbl th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+  .src{font-size:13.5px;color:var(--muted);margin-top:6px}
+
+  .inline-link{color:var(--green-deep);font-weight:600;border-bottom:1px solid rgba(19,122,87,.35)}
+  .inline-link:hover{border-bottom-color:var(--green-deep)}
+
+  .cta{background:var(--surface);border:1px solid var(--line);border-radius:18px;
+    padding:30px 30px;margin:52px 0 0;text-align:center}
+  .cta h3{margin:0 0 12px;font-size:19px}
+  .cta p{font-size:15px;margin-bottom:20px}
+  .cta .cta-sub{display:block;margin-top:14px;font-size:14px;color:var(--green-deep);font-weight:600}
+
+  .related{margin:40px 0 0;padding:22px 26px;background:var(--surface);
+    border:1px solid var(--line);border-radius:14px}
+  .related h4{margin:0 0 10px;font-size:14px;color:var(--green-deep);font-weight:700}
+  .related a{font-size:15.5px;font-weight:600;display:block;margin-bottom:8px}
+  .related a:last-child{margin-bottom:0}
+  .related a:hover{color:var(--green-deep)}
+
+  .foot{background:var(--paper);border-top:1px solid var(--line);padding:40px 0 38px;
+    font-size:13.5px;color:var(--muted)}
+  .foot-top{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-start;
+    max-width:1080px;margin:0 auto;padding:0 24px}
+  .foot-links{display:flex;gap:22px;flex-wrap:wrap}
+  .foot-links a:hover{color:var(--ink)}
+  .foot .op{font-weight:700;color:var(--ink);font-size:15px}
+  .foot .cp{max-width:1080px;margin:24px auto 0;padding:0 24px;font-size:12.5px}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="../index.html" aria-label="ナカツギ ホーム">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <circle cx="5" cy="13" r="3.4" fill="#16263F"/>
+        <circle cx="21" cy="13" r="3.4" fill="#16263F"/>
+        <path d="M5 13 Q13 1 21 13" fill="none" stroke="#137A57" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      ナカツギ
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html#how">仕組み</a>
+      <a href="../index.html#features">特徴</a>
+      <a href="../index.html#price">料金</a>
+      <a class="btn" href="../index.html#contact">使ってみる</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="head">
+    <div class="wrap">
+      <p class="eyebrow">実務ガイド</p>
+      <h1>SNSのDMで、企業から依頼が来たら。<br>未払いと身元バレを防ぐ、取引の始め方</h1>
+      <p class="meta">2026年11月2日　｜　ナカツギ運営事務局</p>
+    </div>
+  </section>
+
+  <section class="body">
+    <div class="wrap">
+
+      <div class="lead">
+        XやInstagramで作品を載せていると、ある日DMで「弊社のサイト用に、お仕事をお願いできませんか」と届きます。相手のアイコンとアカウント名しか分からない。本当にその会社の人なのかも分からない。それでも仕事にはつなげたい。企業や事業者からのDM依頼には、ふだんの取引にはない不安が二つ重なります。<strong>払ってもらえるか</strong>と、<strong>自分の本名や住所がどこまで相手に伝わるか</strong>です。この記事では、DM依頼で最初に確かめること、よくある危ないパターン、身元が相手に伝わる経路とその対策、前払いの決め方を順に整理します。あわせて、依頼主が個人の場合は前提が大きく変わる点も説明します。
+      </div>
+
+      <h2>DMの依頼で、最初に確かめる3つのこと</h2>
+
+      <p>DMは気軽に送れる分、依頼の中身も気軽に書かれがちです。返信で条件を詰める前に、次の3つを確かめておくと、その後の判断がぶれません。</p>
+
+      <h3>1. 相手は事業者か、個人か</h3>
+      <p>「会社のサイト用に」と言われたら、会社名を聞き、その会社のサイトや法人番号公表サイトで実在を確認します。最初にここを確かめるのは、<strong>相手が事業者か個人かで、守るべきルールも、身元の扱いも変わる</strong>からです。個人からの依頼が悪いわけではありませんが、この記事で説明する身元の守り方は、事業者との取引を前提にしています。個人からの依頼については、後の章で別に扱います。</p>
+
+      <h3>2. DMの相手は、その会社の人か</h3>
+      <p>実在する会社の名前を出していても、DMの送り主がその会社の担当者とは限りません。会社のドメインのメールアドレスでやり取りできるか、会社の公式サイトに載っている窓口から連絡がつくかを確かめます。正式な依頼なら、ここで嫌がられることはまずありません。</p>
+
+      <h3>3. 何に、どこまで使うのか</h3>
+      <p>Webサイト用か、印刷物か、商品のパッケージか。使い道によって適正な金額も、渡す権利の範囲も変わります。「とりあえず作ってほしい」のまま進めると、金額の交渉も、あとで使い方が広がったときの話し合いもできなくなります。</p>
+
+      <h2>DM依頼で、よくある危ないパターン</h2>
+
+      <p>DM経由の依頼の多くはまっとうなものです。そのうえで、次のような流れになったら一度立ち止まります。</p>
+
+      <ul>
+        <li><strong>先に作らせて、連絡が途絶える</strong>：「急ぎなので、まず作ってもらえますか。お支払いは後ほど」。納品した後に既読がつかなくなる</li>
+        <li><strong>ラフを出した後に消える</strong>：ラフや下書きだけ受け取って音信不通になり、似たデザインがどこかで使われている</li>
+        <li><strong>「まず無料でサンプルを」</strong>：本番の依頼を匂わせて、無償の制作を求める。本番の話が具体的にならない</li>
+        <li><strong>知らない支払いリンクに誘導される</strong>：「このサイトで受け取り手続きを」と外部のページに案内され、個人情報や口座情報を入力させられる</li>
+        <li><strong>条件を書面にしたがらない</strong>：金額や納期を聞いても「DMで決めたとおりで」とはぐらかされる</li>
+      </ul>
+
+      <p>どれにも共通するのは、<strong>お金より先に、こちらの作業や情報が出ていく</strong>ことです。逆に言えば、支払いを先に済ませてもらう形にすれば、ほとんどのパターンは成り立たなくなります。</p>
+
+      <h2>本名や住所は、どこから相手に伝わるのか</h2>
+
+      <p>SNSでは活動名やペンネームで仕事をしている人が多いはずです。ところが取引が始まると、思わぬところから本名や住所が相手に伝わります。<strong>事業者との取引</strong>について、経路ごとに整理すると次のとおりです。</p>
+
+      <div class="tbl-scroll">
+      <table class="tbl">
+        <tr>
+          <th style="width:24%">経路</th>
+          <th style="width:34%">相手に伝わるもの</th>
+          <th>対策</th>
+        </tr>
+        <tr>
+          <td><strong>請求書の記載</strong></td>
+          <td>氏名、住所（書いた場合）</td>
+          <td>適格請求書の記載事項に住所は含まれません。書く必要がない情報は書かない</td>
+        </tr>
+        <tr>
+          <td><strong>インボイスの登録番号</strong></td>
+          <td>国税庁の公表サイトで番号を検索すると、<strong>氏名（本名）</strong>が表示される</td>
+          <td>屋号や事務所の所在地は、申し出た場合にだけ追加で公表されます。氏名の公表は避けられません</td>
+        </tr>
+        <tr>
+          <td><strong>振込先の口座</strong></td>
+          <td>口座名義（本名のカナ）</td>
+          <td>屋号付きの口座を使う。ただし多くの場合、屋号と並んで本名も表示されます</td>
+        </tr>
+        <tr>
+          <td><strong>契約書・発注書の署名</strong></td>
+          <td>氏名、住所</td>
+          <td>署名欄に何を書くか、取引前に確認する</td>
+        </tr>
+      </table>
+      </div>
+
+      <p>見落とされやすいのが、<strong>登録番号</strong>と<strong>振込口座</strong>です。請求書を屋号だけで作っても、登録番号を載せれば公表サイトで本名が分かり、振り込んでもらえば口座名義で本名が分かります。相手が法人なら、適格請求書を求められることは多いので、この二つは避けて通れません。</p>
+
+      <div class="note">
+        <b>確認してください</b>　公表サイトの公表事項や、屋号・所在地の追加公表の手続きは、国税庁の「適格請求書発行事業者公表サイト」の案内で確認できます。旧姓の併記がある場合など、例外的な扱いもあります。
+      </div>
+
+      <p>身元を明かすこと自体が悪いわけではありません。気にしたいのは、<strong>素性の分からない相手に、取引の最初の段階で本名と住所が渡ってしまう</strong>ことです。相手が確かな事業者だと分かってから明かす、という順番を自分で選べるようにしておくと安心です。</p>
+
+      <h2>支払いは、DMの段階で決めてしまう</h2>
+
+      <p>DM依頼で前払いをお願いするのは、初めての法人案件のとき以上に自然なことです。相手もこちらのことをSNSでしか知らないので、条件をはっきり示したほうが、かえって信頼されます。</p>
+
+      <div class="note">
+        <b>文例</b>　ご依頼ありがとうございます。初めてのお取引の方には、お見積りにご同意いただいた後、着手前にお支払いをお願いしています。お見積りと進め方はメールでお送りしますので、ご担当者さまのメールアドレスを教えていただけますか。
+      </div>
+
+      <p>この文例は、前払いの条件を伝えると同時に、<strong>やり取りをDMからメールへ移す</strong>ことも兼ねています。DMは相手がアカウントを消せば履歴ごと見えなくなることがあり、条件の証拠として弱いからです。金額・納期・作業範囲・支払い条件は、メールなど残る形で合意しておきます。</p>
+
+      <p>支払い条件の選び方や、前払いを断られたときの代わりの手は<a class="inline-link" href="first-client-prepayment.html">初めての法人案件で、前払いをお願いしてもいいのか</a>で詳しく扱っています。</p>
+
+      <h2>相手が事業者なら：フリーランス法の守りがある</h2>
+
+      <p>2024年11月に施行されたフリーランス法は、<strong>事業者からの依頼</strong>を対象にした法律です。相手が事業者なら、取引条件を書面やメールで示す義務があり、従業員を使っている発注者には、成果物を受け取ってから原則60日以内に支払う義務もあります。</p>
+
+      <p>ただし、法律は払わない相手から自動的にお金を取り戻してくれる仕組みではありません。相手の素性が分かりにくいDM依頼では、<strong>払ってもらってから作る</strong>ことが、いちばん確実な守りです。</p>
+
+      <h2>相手が個人なら：ルールが変わる</h2>
+
+      <p>DMの依頼主が、趣味や私的な目的で依頼してくる<strong>個人（一般の消費者）</strong>だった場合は、前提が大きく変わります。</p>
+
+      <ul>
+        <li><strong>本名を伏せる前提が成り立たない</strong>：インターネットを通じて一般の消費者から依頼を受けて報酬を得る場合、特定商取引法の通信販売にあたり、事業者として氏名などを表示することが求められます。屋号やペンネームだけで取引を続けることはできません</li>
+        <li><strong>フリーランス法の対象外</strong>：フリーランス法が守るのは、事業者から依頼を受ける取引です。個人からの依頼には適用されません</li>
+        <li><strong>消費者を守るルールがかかる</strong>：消費者との契約では、事業者に一方的に有利な取り決めが無効になることがあります。キャンセルや返金の条件は、事業者同士の取引より慎重に決める必要があります</li>
+      </ul>
+
+      <p>個人からの依頼を受けること自体に問題はありません。ただ、<strong>「事業者との取引と同じように、本名を出さずに進める」ことはできない</strong>と理解したうえで、表示の準備をしてから受けるようにしてください。表示すべき事項や省略できる範囲は、消費者庁の特定商取引法ガイドで確認できます。</p>
+
+      <div class="note">
+        <b>困ったときの相談先</b>　フリーランス・トラブル110番（0120-532-110、平日9:30〜16:30）では、弁護士に無料で相談できます。不審な支払いリンクに個人情報を入力してしまった場合は、警察の相談窓口（#9110）にも相談できます。
+      </div>
+
+      <h2>DM依頼に返信する前のチェックリスト</h2>
+
+      <div class="checklist">
+        <h4>DMで依頼が来たら、条件を詰める前に確かめること</h4>
+        <ul>
+          <li><strong>相手の素性</strong>：事業者か個人か。会社名と、その会社が実在するか</li>
+          <li><strong>個人からの依頼なら</strong>：特定商取引法にもとづく表示（氏名など）を用意したか</li>
+          <li><strong>窓口</strong>：会社のメールアドレスや公式の窓口から連絡がつくか</li>
+          <li><strong>用途と範囲</strong>：何に、どこまで使うのか</li>
+          <li><strong>支払いのタイミング</strong>：着手前の支払いを条件にしたか</li>
+          <li><strong>合意の記録</strong>：金額・納期・作業範囲をメールなど残る形で合意したか</li>
+          <li><strong>身元の出し方</strong>：請求書・登録番号・振込口座から、何がいつ相手に伝わるか把握しているか</li>
+          <li><strong>支払いリンク</strong>：相手から案内された見知らぬサイトに、口座や個人情報を入力しようとしていないか</li>
+        </ul>
+      </div>
+
+      <p class="src">出典：国税庁「適格請求書発行事業者公表サイト」に関する案内、国税庁「消費税の仕入税額控除制度における適格請求書等保存方式に関するQ&amp;A」、厚生労働省・公正取引委員会・中小企業庁「フリーランス・事業者間取引適正化等法」に関する案内、消費者庁「特定商取引法ガイド」。制度の内容は変更される可能性があります。本記事は一般的な情報提供を目的としたもので、個別の取引についての法的助言ではありません。</p>
+
+      <div class="cta">
+        <h3>企業からの依頼を、本名を出さずに、先払いで</h3>
+        <p>ナカツギは、事業者間の取引のためのプラットフォームです。お客さまの支払いは着手前に行われ、報酬は検収で確定します。適格請求書は、消費税法の媒介者交付特例にもとづいて運営会社の名義と登録番号で発行するため、相手に見えるのは屋号だけです。お客さまの支払い先もナカツギなので、振込先の口座名義から本名が伝わることもありません。利用料は取引額の8.6%（税抜）で、お客さまの負担はありません。<br>※一般のお客さま（個人）からの依頼にはご利用いただけません。ご利用には、依頼主が事業者であること、出品者が適格請求書発行事業者であることが必要です（招待制・審査制）。</p>
+        <a class="btn" href="../index.html">ナカツギについて見る</a>
+        <a class="cta-sub" href="../index.html#price">料金を確認する →</a>
+      </div>
+
+      <div class="related">
+        <h4>あわせて読みたい</h4>
+        <a href="first-client-prepayment.html">初めての法人案件で、前払いをお願いしてもいいのか。切り出し方と、未払いを防ぐ取引条件の決め方 →</a>
+        <a href="unpaid.html">未払いを防ぐ、契約と支払いの設計 →</a>
+        <a href="invoice-densho.html">インボイスと電子帳簿保存法。請求書まわりで、いま何が義務なのか →</a>
+        <a href="direct-deal.html">マーケットプレイスから直接取引へ。移行前に準備すべき5つのこと →</a>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-top">
+    <div>
+      <div class="op">ナカツギ運営事務局</div>
+      <div style="margin-top:6px">運営：株式会社ナカホームズ</div>
+    </div>
+    <nav class="foot-links" aria-label="フッター">
+      <a href="../tokushoho.html">特定商取引法に基づく表記</a>
+      <a href="../kiyaku.html">利用規約</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../index.html#contact">お問い合わせ</a>
+    </nav>
+  </div>
+  <div class="cp">© 2026 株式会社ナカホームズ</div>
+</footer>
+
+</body>
+</html>
