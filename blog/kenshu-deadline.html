@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VP7BQEZXYK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-VP7BQEZXYK');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>納品したのに検収が終わらない。返事が来ない、修正が止まらないときの決め方｜ナカツギ</title>
+<meta name="description" content="納品後、確認の返事が来ない。修正が何度も続き、いつまでも完了にならない。検収で止まる典型的なパターンと、確認期間・みなし検収の決め方、修正と追加依頼の線引き、異議が出たときの考え方、取引の終わらせ方を整理します。">
+<link rel="canonical" href="https://nakatsugi.co.jp/blog/kenshu-deadline.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="納品したのに検収が終わらない。返事が来ない、修正が止まらないときの決め方">
+<meta property="og:description" content="確認期間とみなし検収の決め方、修正と追加依頼の線引き、異議が出たときの考え方、取引の終わらせ方を整理します。">
+<meta property="og:url" content="https://nakatsugi.co.jp/blog/kenshu-deadline.html">
+<style>
+  :root{
+    --ink:#16263F;--ink-soft:#3A4A63;--muted:#5C6675;
+    --green:#137A57;--green-deep:#0C5A40;
+    --paper:#F4F3ED;--surface:#FFFFFF;
+    --line:rgba(22,38,63,.12);--line-soft:rgba(22,38,63,.07);
+    --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);
+    line-height:1.95;-webkit-font-smoothing:antialiased;font-size:16px}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+  :focus-visible{outline:2.5px solid var(--green);outline-offset:3px;border-radius:4px}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(244,243,237,.86);
+    backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line-soft)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px;
+    max-width:1080px;margin:0 auto;padding:0 24px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px;letter-spacing:.02em}
+  .nav-links{display:flex;align-items:center;gap:28px}
+  .nav-links a{font-size:14.5px;color:var(--ink-soft);font-weight:500}
+  .nav-links a:hover{color:var(--ink)}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;
+    padding:9px 20px;border-radius:999px;background:var(--ink);color:#fff;border:none;cursor:pointer}
+  .btn:hover{background:#0E1B30}
+  .nav-links a.btn{color:#fff}
+  .nav-links a.btn:hover{color:#fff}
+  @media(max-width:720px){.nav-links a:not(.btn){display:none}}
+
+  .head{padding:60px 0 22px}
+  .eyebrow{font-size:13px;letter-spacing:.14em;color:var(--green-deep);font-weight:600;margin:0 0 14px}
+  h1{font-size:clamp(25px,4.2vw,35px);font-weight:700;margin:0 0 16px;letter-spacing:.01em;line-height:1.5}
+  .meta{color:var(--muted);margin:0;font-size:14px}
+
+  .body{padding:8px 0 70px}
+  .lead{background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:24px 26px;margin-bottom:38px;font-size:15.5px;color:var(--ink-soft)}
+  h2{font-size:21px;font-weight:700;margin:46px 0 16px;padding-bottom:10px;
+    border-bottom:2px solid var(--green);line-height:1.5}
+  h3{font-size:17px;font-weight:700;margin:30px 0 10px;color:var(--ink)}
+  p{margin:0 0 16px;font-size:15.5px;color:var(--ink-soft)}
+  strong{color:var(--ink);font-weight:700}
+  ul,ol{margin:0 0 18px;padding-left:1.4em;font-size:15.5px;color:var(--ink-soft)}
+  li{margin-bottom:7px}
+
+  .note{background:var(--surface);border-left:3px solid var(--green);
+    padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0;font-size:15px;color:var(--ink-soft)}
+  .note b{color:var(--green-deep)}
+
+  .checklist{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:22px 26px;margin:24px 0}
+  .checklist h4{margin:0 0 12px;font-size:15px;font-weight:700;color:var(--green-deep)}
+  .checklist ul{margin:0;padding-left:1.3em;font-size:15px}
+
+  .tbl{width:100%;border-collapse:collapse;margin:22px 0;background:var(--surface);
+    border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:15px}
+  .tbl th,.tbl td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line-soft)}
+  .tbl th{background:var(--paper);font-weight:700;font-size:14px;color:var(--ink)}
+  .tbl tr:last-child td{border-bottom:none}
+  .tbl td{color:var(--ink-soft)}
+  .tbl td.num,.tbl th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+  .src{font-size:13.5px;color:var(--muted);margin-top:6px}
+
+  .inline-link{color:var(--green-deep);font-weight:600;border-bottom:1px solid rgba(19,122,87,.35)}
+  .inline-link:hover{border-bottom-color:var(--green-deep)}
+
+  .cta{background:var(--surface);border:1px solid var(--line);border-radius:18px;
+    padding:30px 30px;margin:52px 0 0;text-align:center}
+  .cta h3{margin:0 0 12px;font-size:19px}
+  .cta p{font-size:15px;margin-bottom:20px}
+  .cta .cta-sub{display:block;margin-top:14px;font-size:14px;color:var(--green-deep);font-weight:600}
+
+  .related{margin:40px 0 0;padding:22px 26px;background:var(--surface);
+    border:1px solid var(--line);border-radius:14px}
+  .related h4{margin:0 0 10px;font-size:14px;color:var(--green-deep);font-weight:700}
+  .related a{font-size:15.5px;font-weight:600;display:block;margin-bottom:8px}
+  .related a:last-child{margin-bottom:0}
+  .related a:hover{color:var(--green-deep)}
+
+  .foot{background:var(--paper);border-top:1px solid var(--line);padding:40px 0 38px;
+    font-size:13.5px;color:var(--muted)}
+  .foot-top{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-start;
+    max-width:1080px;margin:0 auto;padding:0 24px}
+  .foot-links{display:flex;gap:22px;flex-wrap:wrap}
+  .foot-links a:hover{color:var(--ink)}
+  .foot .op{font-weight:700;color:var(--ink);font-size:15px}
+  .foot .cp{max-width:1080px;margin:24px auto 0;padding:0 24px;font-size:12.5px}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="../index.html" aria-label="ナカツギ ホーム">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <circle cx="5" cy="13" r="3.4" fill="#16263F"/>
+        <circle cx="21" cy="13" r="3.4" fill="#16263F"/>
+        <path d="M5 13 Q13 1 21 13" fill="none" stroke="#137A57" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      ナカツギ
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html#how">仕組み</a>
+      <a href="../index.html#features">特徴</a>
+      <a href="../index.html#price">料金</a>
+      <a class="btn" href="../index.html#contact">使ってみる</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="head">
+    <div class="wrap">
+      <p class="eyebrow">実務ガイド</p>
+      <h1>納品したのに検収が終わらない。<br>返事が来ない、修正が止まらないときの決め方</h1>
+      <p class="meta">2026年11月11日　｜　ナカツギ運営事務局</p>
+    </div>
+  </section>
+
+  <section class="body">
+    <div class="wrap">
+
+      <div class="lead">
+        納品のメールを送ってから、もう2週間。「社内で確認しています」のまま返事が来ない。あるいは、確認のたびに少しずつ修正が届き、いつまでも完了にならない。検収が終わらなければ請求もできず、報酬はいつまでも確定しません。前払いで「払ってもらえない」は防げても、<strong>「払う段階に進まない」</strong>は別の対策が必要です。この記事では、検収で止まる典型的なパターン、確認期間の決め方、修正と追加依頼の線引き、異議が出たときに誰が決めるのか、そして取引の終わり方まで、契約の段階で決めておくべきことを整理します。
+      </div>
+
+      <h2>検収で止まる、3つのパターン</h2>
+
+      <ul>
+        <li><strong>返事が来ない</strong>：納品後、確認の連絡がない。催促すると「確認中です」と返ってくるが、そこから先に進まない</li>
+        <li><strong>修正が止まらない</strong>：「ここだけ直してください」が何度も続く。一つひとつは小さいが、終わりが見えない</li>
+        <li><strong>社内の承認待ち</strong>：担当者は満足しているが、上司や別の部署の確認が必要で、いつ終わるか担当者にも分からない</li>
+      </ul>
+
+      <p>どのパターンも、相手に悪意があるとは限りません。忙しさや社内の事情で、後回しになっているだけのことがほとんどです。だからこそ、<strong>相手の善意に頼らずに進む仕組み</strong>を、最初の契約に入れておく必要があります。</p>
+
+      <h2>検収は、誰が、いつまでに、何を基準に</h2>
+
+      <p>検収とは、納品されたものが依頼どおりかを発注者が確かめ、完了と認めることです。多くの取引では、検収の完了が請求や支払いの起点になります。止まらないようにするには、次の3つを契約の段階で決めておきます。</p>
+
+      <div class="tbl-scroll">
+      <table class="tbl">
+        <tr>
+          <th style="width:28%">決めること</th>
+          <th>決めておかないと起きること</th>
+        </tr>
+        <tr>
+          <td><strong>基準</strong>：何をもって完了とするか</td>
+          <td>「イメージと違う」で、何度でもやり直しになる</td>
+        </tr>
+        <tr>
+          <td><strong>期限</strong>：納品後、何日以内に確認するか</td>
+          <td>確認がいつまでも終わらず、報酬が確定しない</td>
+        </tr>
+        <tr>
+          <td><strong>期限を過ぎたとき</strong>：連絡がなければどうなるか</td>
+          <td>期限を決めても、過ぎた後に何も起きない</td>
+        </tr>
+      </table>
+      </div>
+
+      <p>見落とされやすいのが3つ目です。「7日以内にご確認ください」と書いても、8日目に何も起きなければ、期限を書いた意味がありません。期限と一緒に、<strong>期限を過ぎたら検収が完了したものとみなす</strong>ところまで決めておきます。これを「みなし検収」と呼びます。</p>
+
+      <h2>確認期間は、何日にするか</h2>
+
+      <p>短すぎれば相手が確認しきれず、長すぎれば入金が遠のきます。目安として、期間ごとの性格を並べると次のとおりです。</p>
+
+      <div class="tbl-scroll">
+      <table class="tbl">
+        <tr>
+          <th>確認期間</th>
+          <th>発注者から見ると</th>
+          <th>受注者から見ると</th>
+        </tr>
+        <tr>
+          <td><strong>3日</strong></td>
+          <td>週末をまたぐと実質1日しかなく、急かされている印象</td>
+          <td>早く確定するが、相手が嫌がりやすい</td>
+        </tr>
+        <tr>
+          <td><strong>7日</strong></td>
+          <td>週末を1回はさみ、落ち着いて確認できる</td>
+          <td>1週間で確定し、次の段階に進める</td>
+        </tr>
+        <tr>
+          <td><strong>14日</strong></td>
+          <td>社内の確認が必要な案件でも、余裕がある</td>
+          <td>許容できる範囲だが、これ以上は長い</td>
+        </tr>
+        <tr>
+          <td><strong>30日以上</strong></td>
+          <td>確認を後回しにしやすい</td>
+          <td>入金がさらに1か月遠のく</td>
+        </tr>
+      </table>
+      </div>
+
+      <div class="note">
+        <b>ナカツギでの考え方</b>　ナカツギでは、確認期間を7日から14日の範囲で決めてもらう設計にしています。<strong>週末を最低1回はさめば、確認としては十分</strong>だろう、というのが出発点です。発注者を急かさず、かといって放っておかない。その境界線が、私たちの感覚では7日から14日でした。法律で決まった日数ではありませんが、迷ったら、担当者だけで確認できる案件は7日、社内の承認が必要な案件は14日、という分け方が使いやすいと思います。
+      </div>
+
+      <h2>「修正」と「追加依頼」の線を引いておく</h2>
+
+      <p>修正が止まらない問題の多くは、<strong>修正と追加依頼の区別があいまい</strong>なことから起きます。見積の段階で、次の2つを書いておきます。</p>
+
+      <ul>
+        <li><strong>修正の回数</strong>：見積の範囲で対応する修正は何回までか（例：2回まで）</li>
+        <li><strong>修正の範囲</strong>：当初の依頼内容に沿った調整を「修正」とし、依頼内容そのものの変更や、新しい要素の追加は「追加依頼」として別途見積もる</li>
+      </ul>
+
+      <p>「ロゴの色味を少し明るく」は修正です。「やはり別の案も見たい」「名刺用のデザインも」は追加依頼です。線を引いておけば、追加の作業を断る必要はなく、<strong>別の見積として受ければよい</strong>だけになります。</p>
+
+      <h2>異議が出たとき、誰が決めるのか</h2>
+
+      <p>確認期間の中で「依頼と違う」と言われることもあります。このとき大切なのは、<strong>判断するのは契約の当事者どうし</strong>だということです。</p>
+
+      <p>受注者と発注者が、見積や契約に書いた基準に照らして話し合い、修正で解決するのか、金額を見直すのか、取引をやめるのかを決めます。そのためにも、異議は口頭ではなく、<strong>どこが依頼と違うのかを具体的に書いてもらう</strong>形にしておくと、話し合いが進みます。</p>
+
+      <div class="note">
+        <b>ナカツギでの考え方</b>　ナカツギは取引の場を提供していますが、契約の当事者ではありません。そのため、どちらの言い分が正しいかを運営が判断することは、なるべく避けるべきだと考えています。これは異議が出たときに限らず、取引のどの場面でも同じです。異議が出た場合も、代金はそのまま留めておき、当事者どうしの話し合いを待つことができる設計にしています。
+      </div>
+
+      <h2>取引の「終わり方」も決めておく</h2>
+
+      <p>検収の期限と並んで、もう一つ決めておきたいのが、<strong>何も動かなくなった取引をどう終わらせるか</strong>です。発注者からの連絡が途絶え、受注者も手を止めたまま、どちらも何も言わない。こうした取引は、はっきりした結論がないまま、宙に浮いた状態で残り続けます。</p>
+
+      <p>契約書に「最終の連絡から〇日が過ぎた場合は、この契約は終了したものとする」と一文入れておけば、宙に浮いた取引を整理できます。着手金を受け取っている場合は、それまでの作業分の扱いも合わせて決めておきます。</p>
+
+      <div class="note">
+        <b>ナカツギでの考え方</b>　ナカツギでは、代金の支払いから90日が過ぎても、受注者から完了の申告がなく、どちらからも何の動きもない場合は、取引を終了して代金を発注者に返金します。両者が90日も何も言わなければ、その話はもう終わっている、という判断です。期間は肌感覚より少し長めにとっています。運営が判断したくない、という考えもあって、<strong>誰かが決めなくても取引が自動で終わる</strong>ルールにしました。いちばん避けたいのは、何の動きもない取引が、いつまでも残り続けることだからです。
+      </div>
+
+      <h2>フリーランス法の60日と、検収の関係</h2>
+
+      <p>2024年11月に施行されたフリーランス法では、従業員を使っている発注者は、フリーランスから<strong>成果物を受け取った日から原則60日以内</strong>のできるだけ短い期間で支払期日を定め、その日までに支払う必要があります。</p>
+
+      <p>ここで知っておきたいのは、60日の起算点が<strong>検収が終わった日ではなく、成果物を受け取った日</strong>だということです。発注者が検収を終えていなくても、受け取った日から60日の期限は進みます。検収を長引かせても、支払期日を先に延ばすことはできません。</p>
+
+      <p>ただし、これは法律上の上限の話です。60日という期限は、受注者にとっては決して短くありません。契約の段階で確認期間とみなし検収を決めておけば、<strong>法律の上限よりずっと早く</strong>報酬を確定させられます。</p>
+
+      <div class="note">
+        <b>確認してください</b>　フリーランス法の支払期日のルールには、再委託の場合などの例外があります。詳しくは、厚生労働省・公正取引委員会の案内をご確認ください。
+      </div>
+
+      <h2>見積や契約に入れておく文例</h2>
+
+      <div class="note">
+        <b>文例</b>　納品物の確認期間は、納品日から7日間とします。確認期間内に、依頼内容と異なる点を具体的に示したご連絡がない場合は、検収が完了したものとみなします。見積に含まれる修正は2回までとし、依頼内容の変更や追加は、別途お見積りします。最終のご連絡から90日が過ぎた場合は、本件は終了したものとします。
+      </div>
+
+      <h2>納品前のチェックリスト</h2>
+
+      <div class="checklist">
+        <h4>検収で止まらないために、見積の段階で決めておくこと</h4>
+        <ul>
+          <li><strong>完了の基準</strong>：何をもって検収完了とするか</li>
+          <li><strong>確認期間</strong>：納品後何日以内に確認してもらうか（目安は7〜14日）</li>
+          <li><strong>みなし検収</strong>：期間内に連絡がなければ、完了とみなすと書いたか</li>
+          <li><strong>修正の回数と範囲</strong>：何回まで、どこまでが修正か</li>
+          <li><strong>異議の出し方</strong>：依頼と違う点を、具体的に書いてもらう形にしたか</li>
+          <li><strong>取引の終わり方</strong>：連絡が途絶えたとき、何日で終了とするか</li>
+          <li><strong>支払期日</strong>：検収完了から、いつまでに支払われるか</li>
+        </ul>
+      </div>
+
+      <p>前払いや着手金の決め方は<a class="inline-link" href="first-client-prepayment.html">初めての法人案件で、前払いをお願いしてもいいのか</a>に、未払いになったときの対応は<a class="inline-link" href="unpaid.html">未払いを防ぐ、契約と支払いの設計</a>にまとめています。</p>
+
+      <p class="src">出典：厚生労働省・公正取引委員会・中小企業庁「フリーランス・事業者間取引適正化等法」に関する案内。法令や制度の内容は変更される可能性があります。本記事は一般的な情報提供を目的としたもので、個別の取引についての法的助言ではありません。</p>
+
+      <div class="cta">
+        <h3>確認期間とみなし完了が、最初から組み込まれた取引を</h3>
+        <p>ナカツギでは、請書に確認期間（7〜14日）を書き込み、受注者が完了を申告すると、期間内に異議がなければ自動で完了となって報酬が確定します。発注者はいつでも完了を確認でき、異議がある場合は理由を添えて申し出ます。お客さまの支払いは着手前に行われ、利用料は取引額の8.6%（税抜）で、お客さまの負担はありません。<br>※ご利用には、依頼主が事業者であること、出品者が適格請求書発行事業者であることが必要です（招待制・審査制）。</p>
+        <a class="btn" href="../index.html">ナカツギについて見る</a>
+        <a class="cta-sub" href="../index.html#price">料金を確認する →</a>
+      </div>
+
+      <div class="related">
+        <h4>あわせて読みたい</h4>
+        <a href="first-client-prepayment.html">初めての法人案件で、前払いをお願いしてもいいのか。切り出し方と、未払いを防ぐ取引条件の決め方 →</a>
+        <a href="unpaid.html">未払いを防ぐ、契約と支払いの設計 →</a>
+        <a href="lancers-fee.html">ランサーズの手数料16.5%は高い？発注側5.5%も含めた実質負担と、外で取引する前の注意点 →</a>
+        <a href="sns-dm-request.html">SNSのDMで、企業から依頼が来たら。未払いと身元バレを防ぐ、取引の始め方 →</a>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-top">
+    <div>
+      <div class="op">ナカツギ運営事務局</div>
+      <div style="margin-top:6px">運営：株式会社ナカホームズ</div>
+    </div>
+    <nav class="foot-links" aria-label="フッター">
+      <a href="../tokushoho.html">特定商取引法に基づく表記</a>
+      <a href="../kiyaku.html">利用規約</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../index.html#contact">お問い合わせ</a>
+    </nav>
+  </div>
+  <div class="cp">© 2026 株式会社ナカホームズ</div>
+</footer>
+
+</body>
+</html>
