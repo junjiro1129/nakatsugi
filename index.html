@@ -432,6 +432,9 @@
     background-repeat:no-repeat;background-position:right 15px center}
   .field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--green);background:#fff}
   .field .hint-s{display:block;font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6}
+  .invoice-note{margin:-4px 0 16px;padding:12px 14px;background:var(--surface);border-left:3px solid var(--green);
+    border-radius:0 8px 8px 0;font-size:13px;line-height:1.7;color:var(--ink)}
+  .invoice-note b{color:var(--green-deep)}
   .field .req{display:inline-block;background:#C2402F;color:#fff;font-size:11px;font-weight:700;
     border-radius:999px;padding:0 8px;margin-left:8px;vertical-align:1px}
   .contact-card .btn-primary{width:100%;margin-top:6px}
@@ -973,6 +976,7 @@
             <option value="その他・未定">その他・未定</option>
           </select>
         </div>
+        <p class="invoice-note" id="invoiceNote" role="status" hidden><b>ご確認ください</b>　受け取る側（出品者）としてのご利用には、適格請求書発行事業者の登録が必要です。登録のご予定がある方は「申請中・これから登録予定」を選んで送信いただければ、登録後にご利用開始のご案内をお送りします。</p>
         <div class="field">
           <label for="biz">事業内容・ご職業（任意）</label>
           <input id="biz" name="business" type="text" placeholder="例：フリーランスのデザイナー">
@@ -1034,6 +1038,15 @@
   }else{els.forEach(function(el){el.classList.add('in');});}
 
   var cf=document.getElementById('contactForm');
+  var invSel=document.getElementById('invoice'),roleSel=document.getElementById('role'),invNote=document.getElementById('invoiceNote');
+  if(invSel&&roleSel&&invNote){
+    var updateInvNote=function(){
+      invNote.hidden=!(invSel.value==='未登録'&&roleSel.value==='受け取る側として使いたい');
+    };
+    invSel.addEventListener('change',updateInvNote);
+    roleSel.addEventListener('change',updateInvNote);
+    updateInvNote();
+  }
   if(cf){
     cf.addEventListener('submit',function(e){
       e.preventDefault();
