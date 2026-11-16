@@ -58,6 +58,11 @@
 
   .reg{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px}
   .reg.attn{background:#FDF8EC;border-color:var(--amber-bd)}
+  .reg.kyc-alert{background:#FDECEC;border-color:#E8B4B4}
+  .kyc-warn{margin:10px 0 0;padding:10px 14px;background:#FFF;border:1px solid #E8B4B4;
+    border-left:3px solid #C0392B;border-radius:8px;font-size:13.5px;color:#7A2A1E;line-height:1.7}
+  .kyc-warn b{color:#C0392B}
+  .kyc-warn .kdt{color:#6B6B6B;font-size:12.5px;margin-top:4px;display:block}
   .reg-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
   .reg-name{font-weight:700;font-size:15.5px}
   .reg-sub{font-size:12px;color:var(--muted);margin-top:2px}
@@ -234,7 +239,7 @@
 
     // wire actions
     Array.prototype.forEach.call(document.querySelectorAll("[data-approve]"), function(b){
-      b.addEventListener("click", function(){ setStatus(b.getAttribute("data-approve"),"approved","この出品者を承認します。よろしいですか？"); });
+      b.addEventListener("click", function(){ setStatus(b.getAttribute("data-approve"),"approved","国税庁の公表サイトで、登録番号が有効であること、名義が事業主氏名・法人名と一致することを確認しましたか？\n確認済みであれば、この出品者を承認します。"); });
     });
     Array.prototype.forEach.call(document.querySelectorAll("[data-reject]"), function(b){
       b.addEventListener("click", function(){ setStatus(b.getAttribute("data-reject"),"rejected","この申込を却下します。よろしいですか？"); });
@@ -315,11 +320,28 @@
   function renderReg(r){
     var s=STATUS[r.status]||{label:r.status,cls:"b-reviewing"};
     var attn = r.status==="submitted";
+    var kycAlert = !!r.kyc_alert;
     var name = r.business_name || (r.status==="invited" ? "（未提出）" : "（無名）");
-    var out = '<div class="reg'+(attn?" attn":"")+'">';
+    var out = '<div class="reg'+(attn?" attn":"")+(kycAlert?" kyc-alert":"")+'">';
     out += '<div class="reg-head"><div><div class="reg-name">'+esc(name)+'</div>'+
            '<div class="reg-sub">'+esc(r.token)+' ／ 招待 '+fmt(r.created)+(r.submitted_at?' ／ 提出 '+fmt(r.submitted_at):'')+'</div></div>'+
            '<span class="badge '+s.cls+'">'+s.label+'</span></div>';
+
+    if(kycAlert && r.kyc){
+      var k = r.kyc;
+      var reasons = [];
+      if(k.disabled_reason) reasons.push('入金停止：'+esc(String(k.disabled_reason)));
+      if(k.past_due > 0)    reasons.push('期限切れの提出項目：'+k.past_due+'件');
+      if(!k.payouts_enabled) reasons.push('出金無効');
+      if(k.currently_due > 0 && !reasons.length) reasons.push('提出待ちの項目：'+k.currently_due+'件');
+      var dl = k.current_deadline ? new Date(k.current_deadline*1000).toLocaleDateString('ja-JP') : null;
+      out += '<div class="kyc-warn"><b>Stripeから追加情報の要求があります。</b>'+
+             ' 出品者に対応を促してください。'+
+             '<br>' + reasons.join(' ／ ') +
+             (dl ? '<span class="kdt">期限：'+esc(dl)+' ／ 検知：'+fmt(k.updated_at)+'</span>'
+                 : '<span class="kdt">検知：'+fmt(k.updated_at)+'</span>')+
+             '</div>';
+    }
 
     if(r.status==="invited"){
       out += '<div class="acts"><button class="sm" data-copylink="'+r.token+'">招待リンクをコピー</button></div>';
@@ -329,7 +351,7 @@
     var inv = r.invoice_registered
       ? '<span class="flag-ok">登録あり</span> ／ '+esc(r.invoice_number||"(番号未入力)")
       : '<span class="flag-no">未登録</span>';
-    var ev = {invoice:"① インボイス番号",kaigyo:"② 開業届（後日提出）",kakutei:"③ 確定申告（後日提出）"}[r.evidence_type] || esc(r.evidence_type||"—");
+    var invOk = !!(r.invoice_registered && /^T\d{13}$/.test(r.invoice_number||""));
     var verify = (r.invoice_registered && r.invoice_number)
       ? ' <a class="verify" target="_blank" href="https://www.invoice-kohyo.nta.go.jp/regno-search/detail?selRegNo='+encodeURIComponent((r.invoice_number||"").replace(/^T/,""))+'">国税庁で確認</a>'
       : '';
@@ -341,14 +363,18 @@
       '<dt>連絡先</dt><dd>'+esc(r.contact_email||"—")+(r.contact_phone?' ／ '+esc(r.contact_phone):'')+'</dd>'+
       '<dt>事業内容</dt><dd>'+esc(r.business_desc||"—")+'</dd>'+
       '<dt>インボイス</dt><dd>'+inv+verify+'</dd>'+
-      '<dt>確認書類</dt><dd>'+ev+'</dd>'+
       '<dt>同意</dt><dd>規約 '+(r.agree_terms?'<span class="flag-ok">✓</span>':'<span class="flag-no">未</span>')+' ／ 適格請求書 '+(r.agree_invoice?'<span class="flag-ok">✓</span>':'<span class="flag-no">未</span>')+'</dd>'+
       (r.review_note?'<dt>審査メモ</dt><dd>'+esc(r.review_note)+'</dd>':'')+
       '</dl>';
 
     if(r.status==="submitted" || r.status==="reviewing"){
-      out += '<div class="acts"><button class="sm go" data-approve="'+r.token+'">承認する</button>'+
-             '<button class="sm warn" data-reject="'+r.token+'">却下する</button></div>';
+      if(invOk){
+        out += '<div class="acts"><button class="sm go" data-approve="'+r.token+'">承認する</button>'+
+               '<button class="sm warn" data-reject="'+r.token+'">却下する</button></div>';
+      }else{
+        out += '<div class="kyc-warn"><b>インボイス登録番号がないため、承認できません。</b> ナカツギは適格請求書発行事業者のみが対象です。却下し、登録後に改めて招待してください。</div>'+
+               '<div class="acts"><button class="sm warn" data-reject="'+r.token+'">却下する</button></div>';
+      }
     } else if(r.status==="approved" || r.status==="onboarding" || r.status==="active"){
       out += renderStripe(r);
     }

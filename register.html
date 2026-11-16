@@ -159,26 +159,9 @@
         '<div class="hint">どのような役務を提供されるか。決済画面の説明や請求書の品目にも使われます。</div>'+
         '<textarea id="business_desc" placeholder="例：ロゴ・グラフィックデザインの制作"></textarea></div>'+
 
-        '<div class="fld"><label>適格請求書発行事業者（インボイス）の登録<span class="req">必須</span></label>'+
-        '<div class="hint">登録済みの場合、購入者へ適格請求書を発行できます（あなたの登録番号は購入者に開示されません）。</div>'+
-        '<div class="radio">'+
-          '<label><input type="radio" name="inv" value="yes" onchange="onInv()">登録している</label>'+
-          '<label><input type="radio" name="inv" value="no" onchange="onInv()">登録していない</label>'+
-        '</div>'+
-        '<div class="warn" id="invWarn">未登録の場合、あなたの役務についての適格請求書は発行できません（購入者が仕入税額控除を受けられない場合があります）。事業者向けのお取引が多い場合は、登録をご検討ください。</div>'+
-        '</div>'+
-
-        '<div class="fld" id="invNumFld" style="display:none"><label>インボイス登録番号（T＋13桁）<span class="req">必須</span></label>'+
-        '<input type="text" id="invoice_number" placeholder="T1234567890123" maxlength="14"></div>'+
-
-        '<div class="fld"><label>事業者であることの確認書類<span class="req">必須</span></label>'+
-        '<div class="hint">いずれかを選択してください。②③は、後ほど運営よりご案内する方法（メール等）でご提出いただきます。</div>'+
-        '<select id="evidence_type">'+
-          '<option value="">選択してください</option>'+
-          '<option value="invoice">① インボイス登録番号（上記の番号で確認）</option>'+
-          '<option value="kaigyo">② 開業届の控え（後日提出）</option>'+
-          '<option value="kakutei">③ 確定申告書の控え（後日提出）</option>'+
-        '</select></div>'+
+        '<div class="fld"><label>インボイス登録番号（T＋13桁）<span class="req">必須</span></label>'+
+        '<div class="hint">ナカツギのご利用には、適格請求書発行事業者の登録が必要です。運営が国税庁の公表サイトで登録番号と名義を確認します。<b>あなたの登録番号は購入者に開示されません。</b></div>'+
+        '<input type="text" id="invoice_number" placeholder="T1234567890123" maxlength="20" autocomplete="off"></div>'+
 
         '<div style="border-top:1px solid var(--line-soft);margin:22px 0 16px"></div>'+
 
@@ -217,18 +200,10 @@
     }
   }
 
-  window.onInv = function(){
-    var yes = document.querySelector('input[name=inv]:checked');
-    var v = yes ? yes.value : "";
-    $("invNumFld").style.display = (v === "yes") ? "" : "none";
-    $("invWarn").style.display = (v === "no") ? "block" : "none";
-  };
-
   function fail(m){ var e=$("err"); e.textContent=m; e.style.display="block"; }
 
   async function submitForm(){
     $("err").style.display="none";
-    var inv = document.querySelector('input[name=inv]:checked');
     var bizType = (document.querySelector('input[name=biz_type]:checked')||{}).value || "individual";
     var payload = {
       token: token,
@@ -238,9 +213,9 @@
       contact_email: $("contact_email").value.trim(),
       contact_phone: $("contact_phone").value.trim(),
       business_desc: $("business_desc").value.trim(),
-      invoice_registered: inv ? inv.value === "yes" : false,
-      invoice_number: $("invoice_number").value.trim(),
-      evidence_type: $("evidence_type").value,
+      invoice_registered: true,                       // 適格請求書発行事業者のみ受付
+      invoice_number: $("invoice_number").value.trim().toUpperCase().replace(/[\s-]/g,""),
+      evidence_type: "invoice",
       agree_terms: $("agree_terms").checked,
       agree_invoice: $("agree_invoice").checked,
     };
@@ -249,12 +224,8 @@
     if(!payload.rep_name) return fail(bizType==="company" ? "代表者氏名をご入力ください。" : "事業主のお名前をご入力ください。");
     if(!payload.contact_email) return fail("連絡先メールをご入力ください。");
     if(!payload.business_desc) return fail("事業内容をご入力ください。");
-    if(!inv) return fail("インボイス登録の有無をお選びください。");
-    if(payload.invoice_registered && !/^T\d{13}$/.test(payload.invoice_number))
-      return fail("登録番号は T＋13桁でご入力ください（例：T1234567890123）。");
-    if(!payload.evidence_type) return fail("確認書類の種類をお選びください。");
-    if(payload.evidence_type === "invoice" && !payload.invoice_registered)
-      return fail("確認書類で「インボイス登録番号」を選ぶ場合は、上でインボイス登録「している」をお選びください。");
+    if(!/^T\d{13}$/.test(payload.invoice_number))
+      return fail("インボイス登録番号は T＋13桁でご入力ください（例：T1234567890123）。");
     if(!payload.agree_terms) return fail("利用規約への同意が必要です。");
     if(!payload.agree_invoice) return fail("適格請求書の取扱いへの同意が必要です。");
 
