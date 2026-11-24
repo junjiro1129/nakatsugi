@@ -398,6 +398,19 @@
   .price-meta strong{font-family:var(--round);font-size:19px;display:block;margin-bottom:6px}
   .price-meta p{margin:0;color:var(--ink-soft);font-size:14.5px}
   .price-zero{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px}
+  .price-sub{margin:12px 2px 0;text-align:center;font-size:13.5px;color:var(--ink-soft)}
+  .price-sub b{color:var(--green-deep)}
+  .monthly{margin-top:34px;background:var(--mint);border-radius:28px;padding:28px 30px;
+    display:grid;grid-template-columns:.9fr 1.8fr;gap:26px;align-items:center}
+  .monthly .m-tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--green-deep);
+    background:#fff;border-radius:999px;padding:3px 12px;margin-bottom:10px}
+  .monthly h3{font-size:clamp(20px,2.4vw,24px);font-weight:700;margin:0 0 8px;line-height:1.4}
+  .monthly .m-lead{margin:0;color:var(--ink-soft);font-size:14.5px}
+  .m-points{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .m-pt{background:#fff;border-radius:18px;padding:16px 16px 14px}
+  .m-pt b{display:block;font-family:var(--round);font-size:15.5px;margin-bottom:4px}
+  .m-pt span{font-size:13px;color:var(--muted);line-height:1.6;display:block}
+  @media(max-width:860px){ .monthly{grid-template-columns:1fr;padding:24px 22px} .m-points{grid-template-columns:1fr} }
   .zero{flex:1;min-width:180px;background:var(--mint);border-radius:20px;padding:18px 20px;text-align:center}
   .zero b{display:block;font-family:var(--round);font-size:18px;color:var(--green-deep);margin-bottom:2px}
   .zero span{color:var(--ink-soft);font-size:13px}
@@ -570,7 +583,7 @@
           <span class="unit"><span class="tag t-ink">報酬を</span><span class="w">踏み倒されない<i>、</i></span></span>
           <span class="unit"><span class="tag t-mid">適格請求書が</span><span class="w">出る<i>。</i></span></span>
         </div>
-        <p class="lead">ナカツギには集客・マッチング機能はありません。魅力的な手数料率。前払い方式で踏み倒しを防止。屋号だけを見せることもできる。契約関係書類と決済周りをスムーズに連携させる、フリーランスのための新しいプラットフォームです。</p>
+        <p class="lead">ナカツギには集客・マッチング機能はありません。魅力的な手数料率。前払い方式で踏み倒しを防止。屋号だけを見せることもできる。単発の取引も、月額の継続契約も。契約関係書類と決済周りをスムーズに連携させる、フリーランスのための新しいプラットフォームです。</p>
         <div class="hero-cta">
           <a class="btn btn-primary" href="#contact">利用を申し込む</a>
           <a class="btn btn-ghost" href="#position">ナカツギとは</a>
@@ -806,6 +819,19 @@
         </div>
         <div class="tl-legend"><span class="lg-box"></span>この区間は検収前のため、報酬の分配は行われません。決済処理と資金の移動は決済事業者が行い、当社が代金を保有することはありません。相手が払い渋ることも、あなたが取り立てることもありません。</div>
       </div>
+
+      <div class="monthly reveal" aria-label="月額の継続契約">
+        <div>
+          <span class="m-tag">月額の継続契約にも対応</span>
+          <h3>毎月つづくお仕事は、<br class="br-pc">継続契約で。</h3>
+          <p class="m-lead">保守・運用・定期的な制作など、月額のお仕事もナカツギで。一度契約すれば、毎月の請求書づくりも催促も要りません。</p>
+        </div>
+        <div class="m-points">
+          <div class="m-pt"><b>毎月1日に、自動で請求</b><span>その月分の請書を自動で発行。お客さまは毎月同じページから、登録なしでお支払いいただけます。</span></div>
+          <div class="m-pt"><b>月末に、自動で申告</b><span>完了の申告も自動。確認期間のあと、利用料を引いた額があなたの口座へ届きます。</span></div>
+          <div class="m-pt"><b>未払いは、自動で停止</b><span>お支払いがないまま14日たつと契約を停止。払われない月に、働き続けることはありません。</span></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -877,6 +903,7 @@
         <div class="zero"><b>月額 0円</b><span>使わない月の費用はありません</span></div>
         <div class="zero"><b>相手の負担 0円</b><span>支払う側に手数料はありません</span></div>
       </div>
+      <p class="price-sub reveal">月額の継続契約も、料率は同じ <b>8.6%</b>。月ごとの取引に、それぞれかかります。</p>
     </div>
   </section>
 
