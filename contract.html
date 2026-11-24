@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>継続契約 ｜ ナカツギ</title>
+<style>
+  :root{
+    --ink:#16263F;--ink-soft:#3A4A63;--muted:#5C6675;--green:#137A57;--green-deep:#0C5A40;--green-soft:#E4F0EA;
+    --amber:#9A6B12;--amber-soft:#F7EDD6;--red:#A3352B;--red-soft:#F5E1DE;--blue:#2B5A9A;--blue-soft:#E1E9F5;
+    --paper:#F4F3ED;--surface:#FFFFFF;--line:rgba(22,38,63,.12);--line-soft:rgba(22,38,63,.07);
+    --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+    --mono:"SFMono-Regular",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.65;
+    display:flex;flex-direction:column;align-items:center;padding:36px 16px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:20px;max-width:560px;width:100%;
+    padding:28px;box-shadow:0 12px 40px rgba(22,38,63,.07);margin-bottom:16px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:16px;margin-bottom:20px}
+  .eyebrow{font-size:12px;color:var(--muted);letter-spacing:.04em;margin-bottom:4px}
+  .title{font-size:20px;font-weight:700;margin:0 0 6px}
+  .desc{font-size:14px;white-space:pre-wrap;margin:0 0 6px;color:var(--ink-soft)}
+  .who{font-size:13.5px;margin:0 0 16px}
+  .amount{background:var(--green-soft);border-radius:14px;padding:16px 20px;text-align:center;margin:14px 0 6px}
+  .amount .l{font-size:12px;color:var(--green-deep);font-weight:600}
+  .amount .v{font-size:30px;font-weight:700;color:var(--green-deep);line-height:1.25}
+  .badge{display:inline-block;font-size:12px;font-weight:700;padding:3px 11px;border-radius:999px;vertical-align:middle}
+  .b-active{background:var(--green-soft);color:var(--green-deep)}
+  .b-pending,.b-scheduled{background:var(--blue-soft);color:var(--blue)}
+  .b-paused{background:var(--amber-soft);color:var(--amber)}
+  .b-ended{background:var(--line-soft);color:var(--ink-soft)}
+  .box{border-radius:12px;padding:13px 16px;margin:14px 0;font-size:13.5px;line-height:1.7}
+  .box.info{background:var(--green-soft);color:var(--green-deep)}
+  .box.warn{background:var(--amber-soft);color:#6E4C0D}
+  .box.bad{background:var(--red-soft);color:var(--red)}
+  .box b{font-weight:700}
+  h2{font-size:15px;margin:0 0 12px}
+  dl.terms{display:grid;grid-template-columns:118px 1fr;gap:7px 14px;margin:0;font-size:13.5px}
+  dl.terms dt{color:var(--muted)}
+  dl.terms dd{margin:0}
+  .per{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
+  .per:last-child{border-bottom:none}
+  .per .m{font-weight:700;font-size:14px}
+  .per .s{font-size:12px;color:var(--muted)}
+  .per .acts{display:flex;gap:6px;flex-wrap:wrap}
+  button{width:100%;font-family:var(--sans);font-size:15px;font-weight:700;cursor:pointer;
+    background:var(--ink);color:#fff;border:none;padding:14px;border-radius:12px}
+  button:hover{background:#0E1B30}
+  button:disabled{opacity:.55;cursor:default}
+  button.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);font-weight:600;margin-top:10px;padding:12px}
+  button.ghost:hover{background:var(--paper);border-color:var(--ink)}
+  button.go{background:var(--green)}
+  button.go:hover{background:var(--green-deep)}
+  button.sm{width:auto;font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:999px;background:var(--surface);color:var(--ink);border:1.5px solid var(--line)}
+  button.sm:hover{border-color:var(--ink)}
+  button.danger{background:transparent;color:var(--red);border:1.5px solid rgba(163,53,43,.35);font-weight:600;padding:12px;margin-top:4px}
+  button.danger:hover{background:var(--red-soft)}
+  .cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0 12px}
+  .cmp > div{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13px}
+  .cmp .k{font-size:11.5px;color:var(--muted);font-weight:600}
+  .cmp .v{font-weight:700;font-size:16px;font-family:var(--mono)}
+  .msg{font-size:13px;color:var(--muted);text-align:center;margin-top:12px}
+  .state{text-align:center;padding:14px 0}
+  .state .big{font-size:19px;font-weight:700;margin:10px 0 6px;color:var(--red)}
+  .ftr{max-width:560px;width:100%;margin-top:6px;padding:18px 22px;text-align:center;
+    border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;line-height:1.75}
+  .ftr-n{color:var(--ink);font-weight:700;font-size:13.5px}
+  .ftr a{color:var(--green-deep);font-weight:600;text-decoration:none}
+  @media(max-width:520px){ .card{padding:22px 18px} dl.terms{grid-template-columns:96px 1fr} .cmp{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand">
+      <svg width="20" height="20" viewBox="0 0 26 26" aria-hidden="true">
+        <circle cx="5" cy="13" r="3.4" fill="#16263F"/><circle cx="21" cy="13" r="3.4" fill="#16263F"/>
+        <path d="M5 13 Q13 1 21 13" fill="none" stroke="#137A57" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      ナカツギ
+    </div>
+    <div id="content"><div class="msg">読み込み中…</div></div>
+  </div>
+  <div id="more"></div>
+
+  <footer class="ftr">
+    <div>この契約に関するお問い合わせ</div>
+    <div class="ftr-n">ナカツギ 運営事務局（株式会社ナカホームズ）</div>
+    <div><a href="mailto:jnaka@nakahomes.com">jnaka@nakahomes.com</a>　／　<a href="tel:082-548-9746">082-548-9746</a></div>
+    <div style="margin-top:6px;font-size:11.5px">継続契約の条件は <a href="kiyaku.html">利用規約</a> 第６条の２に定めています。</div>
+  </footer>
+
+<script>
+  /* ▼ デプロイ済み Worker の URL（末尾スラッシュなし） */
+  var WORKER_URL = "https://nakatsugi-stripe.junjiro1129.workers.dev";
+
+  var params = new URLSearchParams(location.search);
+  var id = params.get("id") || "";
+  var KEY = params.get("k") || ""; // 発注者の鍵。ない場合は閲覧のみ（解約・変更への同意はできない）
+  var content = document.getElementById("content");
+  var more = document.getElementById("more");
+  var C = null;
+
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  function yen(n){ return "¥" + Number(n||0).toLocaleString("ja-JP"); }
+  function ymd(s){ if(!s) return ""; var d=new Date(s); return d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日"; }
+  function ymLabel(ym){ if(!ym) return ""; var a=ym.split("-"); return a[0]+"年"+Number(a[1])+"月"; }
+  function monthEndLabel(ym){ if(!ym) return ""; var a=ym.split("-").map(Number); var d=new Date(a[0], a[1], 0); return a[0]+"年"+a[1]+"月"+d.getDate()+"日"; }
+
+  async function api(path, payload, method){
+    var opts = { method: method || "POST", headers: {} };
+    if(payload){ opts.headers["Content-Type"]="application/json"; opts.body=JSON.stringify(payload); }
+    var res = await fetch(WORKER_URL.replace(/\/+$/,"") + path, opts);
+    var data = await res.json();
+    if(!res.ok) throw new Error(data.error || "エラー");
+    return data;
+  }
+
+  var ST = {
+    pending:        { label:"初月のお支払い待ち", cls:"b-pending" },
+    scheduled:      { label:"開始待ち",           cls:"b-scheduled" },
+    active:         { label:"契約中",             cls:"b-active" },
+    paused_unpaid:  { label:"停止中（未払い）",   cls:"b-paused" },
+    paused_dispute: { label:"停止中（確認中）",   cls:"b-paused" },
+    ended:          { label:"終了",               cls:"b-ended" },
+  };
+  var PST = {
+    pending:        "お支払い待ち",
+    awaiting_funds: "ご入金待ち（振込）",
+    paid:           "お支払い済み・完了確認待ち",
+    released:       "完了",
+    refunded:       "返金済み",
+    void:           "失効",
+  };
+  var END_REASON = {
+    canceled: "解約により終了しました。",
+    canceled_before_start: "初月のお支払い前に解約されたため、終了しました。",
+    unpaid: "お支払いがないまま60日が経過したため、終了しました。",
+    unpaid_first: "初月のお支払いがないまま60日が経過したため、終了しました。",
+  };
+
+  function quoteUrl(qid){ return "quote.html?id=" + encodeURIComponent(qid); }
+  function docUrl(qid, kind){ return "doc.html?id=" + encodeURIComponent(qid) + "&kind=" + kind; }
+
+  function render(c){
+    C = c;
+    var st = ST[c.status] || { label:c.status, cls:"b-ended" };
+    document.title = (c.status==="ended" ? "終了した継続契約" : "継続契約") + " ｜ ナカツギ";
+    var h =
+      '<div class="eyebrow">継続契約（毎月・自動更新）　<span class="badge '+st.cls+'">'+st.label+'</span></div>'+
+      '<h1 class="title">'+esc(c.title)+'</h1>'+
+      (c.description ? '<p class="desc">'+esc(c.description)+'</p>' : '')+
+      '<p class="who">'+(c.buyer_name ? esc(c.buyer_name)+' 様　／　' : '')+'役務提供者：<b>'+esc(c.seller_name)+'</b></p>'+
+      '<div class="amount"><div class="l">月額（税込）</div><div class="v">'+yen(c.amount_inc)+'</div>'+
+        '<div class="l" style="margin-top:4px">税抜 '+yen(c.amount_ex)+'　＋　消費税('+c.tax_rate+'%) '+yen(c.tax)+'</div></div>';
+
+    // 状態ごとの案内
+    if(c.status === "ended"){
+      h += '<div class="box bad"><b>この継続契約は終了しています。</b><br>'+esc(END_REASON[c.end_reason] || "")+
+        (c.ended_at ? '（'+ymd(c.ended_at)+'）' : '')+'</div>';
+      if(c.replaced_by){
+        h += '<div class="box info">条件を変更した新しい継続契約に切り替わりました。</div>'+
+             '<button class="go" id="toNew">新しい継続契約を開く</button>';
+      }
+    } else if(c.status === "scheduled"){
+      h += '<div class="box info"><b>'+ymLabel(c.start_month)+'1日から開始します。</b><br>開始日に、初月分のお支払いのご案内がこのページに表示されます。</div>';
+    } else if(c.status === "paused_unpaid"){
+      h += '<div class="box warn"><b>お支払いが確認できないため、契約を停止しています。</b><br>下の「今月のお支払い」からお支払いいただくと再開します。請書の発行から60日を過ぎると、契約は終了します。</div>';
+    } else if(c.status === "paused_dispute"){
+      h += '<div class="box warn"><b>お申し出の内容を確認中のため、翌月以降のご請求を止めています。</b><br>運営事務局が確認し、解決後に再開します。</div>';
+    }
+
+    // 解約の予定
+    if(c.cancel && c.cancel.end_month && c.status !== "ended"){
+      var by = c.cancel.by==="buyer" ? "お客様" : (c.cancel.by==="seller" ? "役務提供者" : "双方の合意");
+      h += '<div class="box warn"><b>'+monthEndLabel(c.cancel.end_month)+' で終了します。</b><br>'+
+        ymd(c.cancel.at)+' に'+by+'から'+(c.cancel.by==="mutual"?'条件変更に伴う終了が合意されました。':'解約のお申し出がありました。')+
+        ' それまでの月は通常どおりご請求します。</div>';
+    }
+
+    // 今月のお支払い
+    if(c.due_quote){
+      var dq = c.due_quote;
+      h += '<div class="box info" style="margin-top:18px"><b>'+esc(dq.label)+' のお支払い</b>　'+yen(dq.amount_inc)+'<br>'+
+        (dq.status==="awaiting_funds" ? 'お振込みの手続き中です。専用の振込先へお振込みください。' : 'お支払いは、次のボタンから行えます。')+'</div>'+
+        '<button id="payNow">'+(dq.status==="awaiting_funds" ? '振込先を確認する' : esc(dq.label)+' を確認して支払う')+'</button>';
+    }
+
+    content.innerHTML = h;
+    var p = document.getElementById("payNow");
+    if(p) p.addEventListener("click", function(){ location.href = quoteUrl(c.due_quote.quote_id); });
+    var tn = document.getElementById("toNew");
+    if(tn) tn.addEventListener("click", function(){
+      location.href = "contract.html?id=" + encodeURIComponent(c.replaced_by) + (KEY ? "&k=" + encodeURIComponent(KEY) : "");
+    });
+
+    // 下段：条件変更の提案／契約条件／月ごとの履歴／解約
+    var m = "";
+    if(c.change && c.change.status === "proposed" && c.status === "active"){
+      var ch = c.change;
+      m += '<div class="card"><h2>条件変更のご提案があります</h2>'+
+        '<p class="desc" style="margin-bottom:4px">'+ymd(ch.proposed_at)+' に、役務提供者から次の条件への変更が提案されました。</p>'+
+        '<div class="cmp"><div><div class="k">現在</div><div>'+esc(c.title)+'</div><div class="v">'+yen(c.amount_inc)+'</div></div>'+
+          '<div><div class="k">変更後</div><div>'+esc(ch.title)+'</div><div class="v">'+yen(ch.amount_inc)+'</div></div></div>'+
+        (ch.description ? '<p class="desc">'+esc(ch.description)+'</p>' : '')+
+        '<div class="box info">同意すると、<b>今月末で現在の契約を終え、翌月1日から変更後の条件</b>で継続します。予告期間はかかりません。</div>'+
+        (KEY ? '<button class="go" id="accept">この変更に同意する</button>'
+             : '<p class="msg">同意は、役務提供者から届いた契約ページのリンク（お客様専用）から行えます。</p>')+
+        '</div>';
+    }
+
+    m += '<div class="card"><h2>契約の条件</h2><dl class="terms">'+
+      '<dt>開始月</dt><dd>'+ymLabel(c.start_month)+'</dd>'+
+      '<dt>ご請求</dt><dd>毎月1日に、その月分の請書を発行します（日割りはありません）</dd>'+
+      '<dt>更新</dt><dd>1か月ごとに自動で更新します</dd>'+
+      '<dt>完了の確認</dt><dd>毎月末日に役務の完了が申告されたものとし、そこから'+c.confirm_days+'日以内にご確認ください。確認もお申し出もない場合は、確認されたものとみなします</dd>'+
+      (c.delivery_place ? '<dt>提供場所</dt><dd>'+esc(c.delivery_place)+'</dd>' : '')+
+      '<dt>未払いのとき</dt><dd>請書の発行から'+c.unpaid_pause_days+'日で停止、'+c.unpaid_end_days+'日で終了します</dd>'+
+      '<dt>解約</dt><dd>お申し出から'+c.notice_days+'日を経過する日の属する月の末日で終了します。お支払い済みの月の返金はありません</dd>'+
+      '<dt>条件の変更</dt><dd>双方の合意により、今月末で切り替えられます</dd>'+
+      '</dl></div>';
+
+    if(c.periods && c.periods.length){
+      m += '<div class="card"><h2>月ごとの状況</h2>';
+      c.periods.slice().reverse().forEach(function(p){
+        var note = PST[p.status] || p.status;
+        if(p.status==="paid" && p.disputed) note = "お申し出を確認中";
+        else if(p.status==="paid" && p.deemed_due) note += "（"+ymd(p.deemed_due)+" までにご確認ください）";
+        m += '<div class="per"><div><div class="m">'+esc(p.label)+'　'+yen(p.amount_inc)+'</div><div class="s">'+esc(note)+'</div></div>'+
+          '<div class="acts">'+
+            ((p.status==="pending"||p.status==="awaiting_funds"||p.status==="paid") ? '<button class="sm" data-open="'+p.quote_id+'">開く</button>' : '')+
+            (p.status!=="void" ? '<button class="sm" data-doc="'+p.quote_id+':quote">請書</button>' : '')+
+            ((p.status==="paid"||p.status==="released") ? '<button class="sm" data-doc="'+p.quote_id+':invoice">適格請求書</button>' : '')+
+          '</div></div>';
+      });
+      m += '</div>';
+    }
+
+    if(KEY && c.status !== "ended" && !c.cancel){
+      m += '<div class="card"><h2>解約</h2>'+
+        '<p class="desc">'+(c.status==="pending"
+          ? '初月のお支払い前のため、解約するとすぐに終了します。'
+          : 'お申し出から'+c.notice_days+'日を経過する日の属する月の末日で終了します。それまでの月は通常どおりご請求します。お支払い済みの月の返金はありません。')+'</p>'+
+        '<button class="danger" id="cancel">解約を申し出る</button></div>';
+    }
+    more.innerHTML = m;
+
+    var acc = document.getElementById("accept");
+    if(acc) acc.addEventListener("click", acceptChange);
+    var cn = document.getElementById("cancel");
+    if(cn) cn.addEventListener("click", cancelContract);
+    Array.prototype.forEach.call(document.querySelectorAll("[data-open]"), function(b){
+      b.addEventListener("click", function(){ location.href = quoteUrl(b.getAttribute("data-open")); });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-doc]"), function(b){
+      b.addEventListener("click", function(){ var a=b.getAttribute("data-doc").split(":"); window.open(docUrl(a[0], a[1]), "_blank"); });
+    });
+  }
+
+  async function acceptChange(){
+    var ch = C.change;
+    if(!confirm("条件の変更に同意します。\n\n・今月末で現在の契約を終了します\n・翌月1日から「"+ch.title+"」月額 "+yen(ch.amount_inc)+"（税込）で継続します\n\nよろしいですか？")) return;
+    var b = document.getElementById("accept"); b.disabled = true; b.textContent = "処理中…";
+    try{
+      var d = await api("/contracts/change/accept", { id: id, key: KEY });
+      alert(ymLabel(d.old_end_month)+"末で現在の契約を終了し、"+ymLabel(d.start_month)+"1日から新しい条件で継続します。");
+      load();
+    }catch(e){ b.disabled=false; b.textContent="この変更に同意する"; alert(e.message); }
+  }
+
+  async function cancelContract(){
+    var msg = C.status==="pending"
+      ? "この継続契約を解約します。初月のお支払い前のため、すぐに終了します。\nよろしいですか？"
+      : "この継続契約の解約を申し出ます。\nお申し出から30日を経過する日の属する月の末日で終了します。\nお支払い済みの月の返金はありません。\n\nよろしいですか？";
+    if(!confirm(msg)) return;
+    var b = document.getElementById("cancel"); b.disabled = true; b.textContent = "処理中…";
+    try{
+      await api("/contracts/cancel", { id: id, key: KEY });
+      load();
+    }catch(e){ b.disabled=false; b.textContent="解約を申し出る"; alert(e.message); }
+  }
+
+  async function load(){
+    try{
+      var c = await api("/contracts/get?id=" + encodeURIComponent(id), null, "GET");
+      render(c);
+    }catch(e){
+      content.innerHTML = '<div class="state"><div class="big">表示できません</div><div class="msg">'+esc(e.message)+'</div></div>';
+      more.innerHTML = "";
+    }
+  }
+
+  if(!id){ content.innerHTML = '<div class="state"><div class="big">表示できません</div><div class="msg">契約のリンクが正しくありません。</div></div>'; }
+  else load();
+</script>
+</body>
+</html>

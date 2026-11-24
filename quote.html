@@ -101,6 +101,7 @@
     paid:           "完了確認のお願い",
     released:       "お取引完了",
     refunded:       "返金済み",
+    void:           "失効",
   };
   function setTitle(arg){
     // arg は請書オブジェクト or ステータス文字列。振込返金（手続き中）はタブも出し分ける。
@@ -123,11 +124,20 @@
     return data;
   }
 
+  // 継続契約の月次分なら、どの契約の何月分かを示す帯を出す
+  function contractBand(q){
+    if(!q || !q.contract) return "";
+    var a = (q.period||"").split("-");
+    var lab = a.length===2 ? a[0]+"年"+Number(a[1])+"月分" : "";
+    return '<div class="due" style="margin:0 0 14px">継続契約（毎月・自動更新）の <b>'+lab+'</b> です。'+
+      '<a href="contract.html?id='+encodeURIComponent(q.contract)+'" style="color:inherit;font-weight:700;margin-left:6px">契約の内容を見る</a></div>';
+  }
+
   function checkMark(){ return '<div class="check"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#0C5A40" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'; }
 
   // 支払い済み。出品者の完了申告の有無で表示が変わる。
   function showAwaiting(q){
-    var head =
+    var head = contractBand(q) +
       '<div class="eyebrow">お取引の状況</div>'+
       '<h1 class="title">'+escapeHtml(q.title)+'</h1>'+
       '<div class="amount"><div class="l">完了確認待ちの金額</div><div class="v">'+yen(q.amount)+'</div></div>';
@@ -159,6 +169,7 @@
 
     // 完了申告なし：役務提供中
     content.innerHTML = head +
+      (q.contract ? '<p class="note">継続契約の月次分は、その月の末日に役務の完了が申告されたものとして扱われ、そこから確認期間が始まります。</p>' : '')+
       '<p class="note">お支払いは完了しています。提供者へのお渡しは、お客様が役務の完了をご確認いただいた後です。ただいま提供者が役務を進めています。完了の申告があり次第、この画面でご確認いただけます。</p>'+
       '<div class="due">代金は、役務の完了が確認されるまでお渡しされません。<br>'+
       'すでに役務を受け取っている場合は、下のボタンで完了を確定していただけます。</div>'+
@@ -271,7 +282,13 @@
       if(q.status === "paid"){ showAwaiting(q); return; }
       if(q.status === "released"){ showDone(); return; }
       if(q.status === "refunded"){ showRefunded(q); return; }
-      content.innerHTML =
+      if(q.status === "void"){
+        content.innerHTML = contractBand(q) +
+          '<div class="state err"><div class="big">この請書は失効しています</div>'+
+          '<div class="msg">継続契約が終了したため、この月分のお支払いは受け付けていません。ご不明な点は、役務提供者または下記の運営事務局までご連絡ください。</div></div>';
+        return;
+      }
+      content.innerHTML = contractBand(q) +
         '<div class="eyebrow">ご注文内容</div>'+
         '<h1 class="title">'+escapeHtml(q.title)+'</h1>'+
         (q.buyer_name ? '<p class="desc">'+escapeHtml(q.buyer_name)+' 様</p>' : '')+
@@ -282,7 +299,9 @@
           ? '<div class="l" style="margin-top:6px">税抜 '+yen(q.amount_ex)+'　＋　消費税(10%) '+yen(q.tax)+'　＝　税込 '+yen(q.amount_inc)+'</div>'
           : '<div class="l">お支払い金額（税込）</div>')+
         '</div>'+
-        (q.valid_until ? '<p class="msg" style="text-align:center">有効期限：'+ymd(q.valid_until)+'</p>' : '')+
+        (q.contract
+          ? '<p class="msg" style="text-align:center">'+ymd(q.valid_until)+' までにお支払いください。過ぎると継続契約は停止します。</p>'
+          : (q.valid_until ? '<p class="msg" style="text-align:center">有効期限：'+ymd(q.valid_until)+'</p>' : ''))+
         '<p class="note">お支払いいただいた代金は、お客様が役務の完了をご確認いただくまで提供者へお渡しされません。完了確認をきっかけにお支払いが実行されるため、前払いのご不安なくお取引いただけます。</p>'+
         '<button id="pay">承認して支払う</button>'+
         '<button id="doc" class="ghost">請書を保存・印刷（PDF可）</button>';

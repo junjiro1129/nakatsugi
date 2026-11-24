@@ -154,6 +154,14 @@
   function ymd(s){ if(!s) return "—"; var d=new Date(s);
     return d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日"; }
 
+  // 継続契約の月次分：対象期間（その月の1日〜末日）
+  function periodText(d){
+    if(!d.period) return "";
+    var a = d.period.split("-").map(Number);
+    var last = new Date(a[0], a[1], 0).getDate();
+    return a[0]+"年"+a[1]+"月1日〜"+a[0]+"年"+a[1]+"月"+last+"日";
+  }
+
   document.getElementById("print").addEventListener("click", function(){ window.print(); });
 
   function err(m){ app.innerHTML = '<div class="sheet"><div class="state"><div class="big">表示できません</div><div>'+esc(m)+'</div></div></div>'; }
@@ -177,12 +185,14 @@
       (isInv ? '<div><span class="stamp">適格請求書</span></div>' : '')+
       '<div class="no">No. '+esc(d.id)+'</div></div>'+
       '<div class="dates">';
-    if (d.kind === "quote" || isEst) {
+    if (d.kind === "quote" && d.period) {
+      html += '発行日：<b>'+ymd(d.created)+'</b><br>対象期間：<b>'+periodText(d)+'</b><br>お支払い期限：<b>'+ymd(d.valid_until)+'</b>';
+    } else if (d.kind === "quote" || isEst) {
       html += '発行日：<b>'+ymd(d.created)+'</b><br>有効期限：<b>'+ymd(d.valid_until)+'</b>';
     } else if (isInv) {
       var invDate = d.completed_at || d.paid_at || d.created;
       html += '発行日：<b>'+ymd(invDate)+'</b><br>'+
-              '取引年月日：<b>'+ymd(invDate)+'</b>';
+              (d.period ? '取引年月日（対象期間）：<b>'+periodText(d)+'</b>' : '取引年月日：<b>'+ymd(invDate)+'</b>');
     } else {
       var stmDate = d.completed_at || d.paid_at || d.created;
       html += '発行日：<b>'+ymd(stmDate)+'</b><br>送金日：<b>'+ymd(stmDate)+'</b>';
@@ -273,6 +283,17 @@
       if (d.delivery_place) terms.push(['役務の提供を受ける場所', esc(d.delivery_place)]);
       terms.push(['確認期間', d.confirm_days + '日（役務完了のご申告後、この期間内にご確認ください）']);
       terms.push(['支払期日', '役務の完了確認日（確認期間の満了日までにお支払いされます）']);
+      // 継続契約の月次分：契約の条件を併記（利用規約 第６条の２）
+      if (d.period) {
+        var ct = d.contract_terms || {};
+        terms.unshift(['対象期間', periodText(d)]);
+        terms.unshift(['契約の種類', '継続契約（毎月1日に請書を発行・1か月ごとに自動更新・日割りなし）']);
+        if (ct.monthly_inc) terms.push(['月額', yen(ct.monthly_inc)+'（税込）']);
+        terms.push(['完了の申告', '対象期間の末日に、役務提供者が完了の申告をしたものとみなします']);
+        terms.push(['未払いのとき', '本請書の発行から'+(ct.unpaid_pause_days||14)+'日で継続契約を停止し、'+(ct.unpaid_end_days||60)+'日で終了します']);
+        terms.push(['解約', 'お申し出から'+(ct.notice_days||30)+'日を経過する日の属する月の末日で終了（お支払い済みの月の返金はありません）'+
+          (ct.cancel_end_month ? '。本契約は '+ct.cancel_end_month.replace(/^(\d+)-0?(\d+)$/, '$1年$2月')+'末で終了予定です' : '')]);
+      }
       html += '<div class="terms"><div class="terms-h">取引条件</div><dl>';
       for (var ti = 0; ti < terms.length; ti++) {
         html += '<dt>'+terms[ti][0]+'</dt><dd>'+terms[ti][1]+'</dd>';
@@ -294,7 +315,8 @@
       html += '<b>本書は、'+esc(d.issuer.name)+'が、上記の役務提供者から委託を受け、媒介者交付特例（消費税法施行令第70条の12第1項）に基づき交付するものです。</b>'+
         '役務提供契約の当事者は役務提供者であり、当社は当該契約の当事者ではありません。<br>';
       if (isInv) html += '本書は適格請求書です。仕入税額控除の適用にあたっては、法令に定める期間、保存してください。<br>';
-      if (d.kind === "quote") html += '本書は請書です。ご承認いただいた時点で、記載の内容により役務提供契約が成立します。有効期限は '+ymd(d.valid_until)+' です。お支払い後、役務の完了が確認されるまで、代金は決済事業者にて留保されます。<br>';
+      if (d.kind === "quote" && d.period) html += '本書は、継続契約に基づく'+periodText(d)+'分の請書です。お支払い後、役務の完了が確認されるまで、代金は決済事業者にて留保されます。継続契約の条件は、利用規約第６条の２によります。<br>';
+      else if (d.kind === "quote") html += '本書は請書です。ご承認いただいた時点で、記載の内容により役務提供契約が成立します。有効期限は '+ymd(d.valid_until)+' です。お支払い後、役務の完了が確認されるまで、代金は決済事業者にて留保されます。<br>';
       html += 'お支払いいただいた代金は、役務の完了が確認された後に役務提供者へ引き渡されます。';
     }
     html += '</div></div>';

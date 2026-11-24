@@ -84,6 +84,10 @@
   .b-paid{background:var(--amber-soft);color:var(--amber)}
   .b-released{background:var(--green-soft);color:var(--green-deep)}
   .b-refunded{background:var(--red-soft);color:var(--red)}
+  .b-void{background:var(--line-soft);color:var(--muted)}
+  .b-con{background:#E1E9F5;color:#2B5A9A}
+  .kc{border-bottom:1px solid var(--line-soft);padding:12px 2px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start}
+  .kc:last-child{border-bottom:none}
   .acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
   .empty{text-align:center;color:var(--muted);padding:34px 20px;font-size:14px}
   .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;
@@ -184,6 +188,12 @@
     <tbody id="rows"></tbody>
   </table>
   <div class="empty" id="empty" hidden>まだ請書がありません。「新規請書を作成」から始めてください。</div>
+
+  <div class="card" style="margin-top:22px">
+    <h2>継続契約（月額）</h2>
+    <p class="sub2" style="margin:-6px 0 10px">毎月の請書は上の一覧に「継続」の印つきで並びます。ここでは契約単位の状態を確認し、異議で停止した契約を再開します。</p>
+    <div id="kList"><div class="sub2">読み込み中…</div></div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -212,6 +222,7 @@
     paid:           { label:"入金済・要送金",    cls:"b-paid" },
     released:       { label:"送金済",           cls:"b-released" },
     refunded:       { label:"返金済",           cls:"b-refunded" },
+    void:           { label:"失効",             cls:"b-void" },
   };
   var TABS = [
     { key:"all",      label:"すべて" },
@@ -265,7 +276,42 @@
     if(!d) return;
     quotes = d.quotes || [];
     render();
+    loadContracts();
   }
+
+  // ===== 継続契約 =====
+  var KST = {
+    pending:"初月未払い", scheduled:"開始待ち（条件変更）", active:"契約中",
+    paused_unpaid:"停止中（未払い）", paused_dispute:"停止中（異議）", ended:"終了",
+  };
+  var KEND = { canceled:"解約", canceled_before_start:"開始前に解約", unpaid:"未払い60日", unpaid_first:"初月未払い60日" };
+  async function loadContracts(){
+    var d = await api("/contracts/admin-list", null, "GET");
+    if(!d) return;
+    var cs = d.contracts || [];
+    var el = $("kList");
+    if(!cs.length){ el.innerHTML = '<div class="sub2">まだ継続契約はありません。</div>'; return; }
+    el.innerHTML = cs.map(function(c){
+      var flags = '';
+      if(c.status==="paused_dispute") flags += '<div class="dsp"><b>異議により停止中</b>　異議の取引を処理（送金・返金・留保）し、当事者間の解決を確認したら再開してください。'+
+        '<div class="dsp-a"><button class="sm go" data-kresume="'+esc(c.id)+'">再開する</button></div></div>';
+      if(c.needs_review) flags += '<div class="dsp"><b>要確認</b>　契約終了時に振込の手続き中の請書がありました。着金していれば、送金または返金の対応をしてください。</div>';
+      if(c.change && c.change.status==="proposed") flags += '<div class="sub2">条件変更を提案中（'+yen(c.change.amount_inc)+'/月）</div>';
+      return '<div class="kc"><div><div class="ttl">'+esc(c.title)+'　<span class="badge b-con">'+(KST[c.status]||c.status)+'</span></div>'+
+        '<div class="sub2">'+esc(c.id)+'　／　出品者：'+esc(c.seller_name)+'　／　買い手：'+esc(c.buyer_name||"—")+'　／　開始 '+esc(c.start_month)+
+          (c.cancel&&c.cancel.end_month?'　／　'+esc(c.cancel.end_month)+'末で終了予定':'')+
+          (c.status==="ended"?'　／　終了理由：'+(KEND[c.end_reason]||esc(c.end_reason)):'')+'</div>'+flags+'</div>'+
+        '<div class="amt">'+yen(c.amount_inc)+'/月<div class="sub2">'+(c.periods||[]).length+'か月分</div></div></div>';
+    }).join("");
+  }
+  $("kList").addEventListener("click", async function(e){
+    var b = e.target.closest("[data-kresume]"); if(!b) return;
+    if(!confirm("この継続契約を再開します。\n当月分の請書が未発行なら、すぐに発行されます。\nよろしいですか？")) return;
+    b.disabled = true;
+    var r = await api("/contracts/resume", { id: b.getAttribute("data-kresume") });
+    if(r) toast("再開しました");
+    load();
+  });
 
   function counts(){
     var c = { all:quotes.length, pending:0, awaiting_funds:0, paid:0, released:0, refunded:0 };
@@ -312,6 +358,8 @@
                '<button class="sm warn" data-refund="'+q.id+'">返金</button>';
       }else if(q.status==="released"){
         acts = '<span class="sub2">出品者 '+yen(payout)+' ／ 利用料 '+yen(fee)+'</span>';
+      }else if(q.status==="void"){
+        acts = '<span class="sub2">継続契約の終了により失効</span>';
       }else if(q.status==="refunded"){
         acts = q.refund_pending
           ? '<span class="sub2 warn">返金手続き中（買い手の口座入力待ち）</span>'
@@ -346,6 +394,7 @@
       tr.innerHTML =
         '<td><div class="ttl">'+esc(q.title)+
           (q.from_estimate?' <span class="badge b-pending" title="出品者が見積書ツールから作成した請書">出品者作成</span>':'')+
+          (q.contract?' <span class="badge b-con" title="継続契約 '+esc(q.contract)+'">継続 '+esc((q.period||"").replace(/^(\d+)-0?(\d+)$/,"$2月分"))+'</span>':'')+
           '</div><div class="sub2">'+esc(q.id)+(q.seller_name?'　／　出品者：'+esc(q.seller_name):'')+'</div></td>'+
         '<td class="amt">'+yen(inc)+(q.amount_ex!=null?'<div class="sub2">税抜 '+yen(q.amount_ex)+'＋税 '+yen(q.tax)+'</div>':'')+'</td>'+
         '<td class="hide-sp sub2">'+esc(q.buyer_name||"")+(q.buyer_name&&q.buyer_email?'<br>':'')+esc(q.buyer_email||(q.buyer_name?"":"—"))+'</td>'+
