@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VP7BQEZXYK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-VP7BQEZXYK');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>発行した請求書の控え、保存は必要？保存期間と、PDFで送った場合のルール｜ナカツギ</title>
+<meta name="description" content="自分が発行した請求書の控えも保存が必要です。個人事業主と法人の保存期間、インボイス登録者の7年の数え方、紙とPDFでの残し方、電子帳簿保存法の電子取引の決まり、プラットフォーム経由の取引の扱いを整理します。">
+<link rel="canonical" href="https://nakatsugi.co.jp/blog/invoice-copy-storage.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="発行した請求書の控え、保存は必要？保存期間と、PDFで送った場合のルール">
+<meta property="og:description" content="発行した請求書の控えの保存期間、7年の数え方、紙とPDFでの残し方、電子取引の決まり、プラットフォーム経由の取引の扱いを整理します。">
+<meta property="og:url" content="https://nakatsugi.co.jp/blog/invoice-copy-storage.html">
+<style>
+  :root{
+    --ink:#16263F;--ink-soft:#3A4A63;--muted:#5C6675;
+    --green:#137A57;--green-deep:#0C5A40;
+    --paper:#F4F3ED;--surface:#FFFFFF;
+    --line:rgba(22,38,63,.12);--line-soft:rgba(22,38,63,.07);
+    --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);
+    line-height:1.95;-webkit-font-smoothing:antialiased;font-size:16px}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+  :focus-visible{outline:2.5px solid var(--green);outline-offset:3px;border-radius:4px}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(244,243,237,.86);
+    backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line-soft)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px;
+    max-width:1080px;margin:0 auto;padding:0 24px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px;letter-spacing:.02em}
+  .nav-links{display:flex;align-items:center;gap:28px}
+  .nav-links a{font-size:14.5px;color:var(--ink-soft);font-weight:500}
+  .nav-links a:hover{color:var(--ink)}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;
+    padding:9px 20px;border-radius:999px;background:var(--ink);color:#fff;border:none;cursor:pointer}
+  .btn:hover{background:#0E1B30}
+  .nav-links a.btn{color:#fff}
+  .nav-links a.btn:hover{color:#fff}
+  @media(max-width:720px){.nav-links a:not(.btn){display:none}}
+
+  .head{padding:60px 0 22px}
+  .eyebrow{font-size:13px;letter-spacing:.14em;color:var(--green-deep);font-weight:600;margin:0 0 14px}
+  h1{font-size:clamp(25px,4.2vw,35px);font-weight:700;margin:0 0 16px;letter-spacing:.01em;line-height:1.5}
+  .meta{color:var(--muted);margin:0;font-size:14px}
+
+  .body{padding:8px 0 70px}
+  .lead{background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:24px 26px;margin-bottom:38px;font-size:15.5px;color:var(--ink-soft)}
+  h2{font-size:21px;font-weight:700;margin:46px 0 16px;padding-bottom:10px;
+    border-bottom:2px solid var(--green);line-height:1.5}
+  h3{font-size:17px;font-weight:700;margin:30px 0 10px;color:var(--ink)}
+  p{margin:0 0 16px;font-size:15.5px;color:var(--ink-soft)}
+  strong{color:var(--ink);font-weight:700}
+  ul,ol{margin:0 0 18px;padding-left:1.4em;font-size:15.5px;color:var(--ink-soft)}
+  li{margin-bottom:7px}
+
+  .note{background:var(--surface);border-left:3px solid var(--green);
+    padding:18px 22px;margin:22px 0;border-radius:0 10px 10px 0;font-size:15px;color:var(--ink-soft)}
+  .note b{color:var(--green-deep)}
+
+  .checklist{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:22px 26px;margin:24px 0}
+  .checklist h4{margin:0 0 12px;font-size:15px;font-weight:700;color:var(--green-deep)}
+  .checklist ul{margin:0;padding-left:1.3em;font-size:15px}
+
+  .tbl{width:100%;border-collapse:collapse;margin:22px 0;background:var(--surface);
+    border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:15px}
+  .tbl th,.tbl td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line-soft)}
+  .tbl th{background:var(--paper);font-weight:700;font-size:14px;color:var(--ink)}
+  .tbl tr:last-child td{border-bottom:none}
+  .tbl td{color:var(--ink-soft)}
+  .tbl td.num,.tbl th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+  .src{font-size:13.5px;color:var(--muted);margin-top:6px}
+
+  .inline-link{color:var(--green-deep);font-weight:600;border-bottom:1px solid rgba(19,122,87,.35)}
+  .inline-link:hover{border-bottom-color:var(--green-deep)}
+
+  .cta{background:var(--surface);border:1px solid var(--line);border-radius:18px;
+    padding:30px 30px;margin:52px 0 0;text-align:center}
+  .cta h3{margin:0 0 12px;font-size:19px}
+  .cta p{font-size:15px;margin-bottom:20px}
+  .cta .cta-sub{display:block;margin-top:14px;font-size:14px;color:var(--green-deep);font-weight:600}
+
+  .related{margin:40px 0 0;padding:22px 26px;background:var(--surface);
+    border:1px solid var(--line);border-radius:14px}
+  .related h4{margin:0 0 10px;font-size:14px;color:var(--green-deep);font-weight:700}
+  .related a{font-size:15.5px;font-weight:600;display:block;margin-bottom:8px}
+  .related a:last-child{margin-bottom:0}
+  .related a:hover{color:var(--green-deep)}
+
+  .foot{background:var(--paper);border-top:1px solid var(--line);padding:40px 0 38px;
+    font-size:13.5px;color:var(--muted)}
+  .foot-top{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-start;
+    max-width:1080px;margin:0 auto;padding:0 24px}
+  .foot-links{display:flex;gap:22px;flex-wrap:wrap}
+  .foot-links a:hover{color:var(--ink)}
+  .foot .op{font-weight:700;color:var(--ink);font-size:15px}
+  .foot .cp{max-width:1080px;margin:24px auto 0;padding:0 24px;font-size:12.5px}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="../index.html" aria-label="ナカツギ ホーム">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <circle cx="5" cy="13" r="3.4" fill="#16263F"/>
+        <circle cx="21" cy="13" r="3.4" fill="#16263F"/>
+        <path d="M5 13 Q13 1 21 13" fill="none" stroke="#137A57" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      ナカツギ
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html#how">仕組み</a>
+      <a href="../index.html#features">特徴</a>
+      <a href="../index.html#price">料金</a>
+      <a class="btn" href="../index.html#contact">使ってみる</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="head">
+    <div class="wrap">
+      <p class="eyebrow">実務ガイド</p>
+      <h1>発行した請求書の控え、保存は必要？<br>保存期間と、PDFで送った場合のルール</h1>
+      <p class="meta">2026年11月26日　｜　ナカツギ運営事務局</p>
+    </div>
+  </section>
+
+  <section class="body">
+    <div class="wrap">
+
+      <div class="lead">
+        受け取った請求書は保存するとして、<strong>自分が発行した請求書の控え</strong>はどうするのか。紙の控えは取っていない、PDFをメールで送ったきり、という方も多いはずです。結論から言うと、<strong>発行した請求書の控えも保存が必要</strong>です。インボイスに登録しているなら、目安は<strong>7年</strong>。PDFで送った請求書は、<strong>データのまま</strong>保存します。この記事では、何年・何を・どう保存するのかを、個人事業主と法人に分けて整理します。マーケットプレイスなど、第三者が代わりに請求書を出している場合の扱いも最後に説明します。
+      </div>
+
+      <h2>結論：発行した請求書の控えも、保存が必要</h2>
+
+      <p>発行した請求書の控えには、3つの決まりが関わります。</p>
+
+      <ul>
+        <li><strong>所得税・法人税</strong>：取引に関して作成した書類として、帳簿と一緒に保存します</li>
+        <li><strong>消費税（インボイス制度）</strong>：適格請求書発行事業者は、<strong>交付した適格請求書の写し</strong>を保存する義務があります</li>
+        <li><strong>電子帳簿保存法</strong>：PDFなどデータで送った請求書は、<strong>データのまま</strong>保存します</li>
+      </ul>
+
+      <p>つまり、紙で出したか、データで出したかで「どう残すか」が変わり、インボイスに登録しているかどうかで「何年残すか」が変わります。</p>
+
+      <h2>何年保存するか</h2>
+
+      <div class="tbl-scroll">
+      <table class="tbl">
+        <tr>
+          <th style="width:34%">立場</th>
+          <th>発行した請求書の控えの保存期間</th>
+        </tr>
+        <tr>
+          <td><strong>個人事業主（青色申告）</strong></td>
+          <td>5年（請求書・見積書・納品書などの「その他の書類」）</td>
+        </tr>
+        <tr>
+          <td><strong>法人</strong></td>
+          <td>7年（確定申告書の提出期限の翌日から。青色欠損金が生じた事業年度は10年）</td>
+        </tr>
+        <tr>
+          <td><strong>適格請求書発行事業者（個人・法人とも）</strong></td>
+          <td><strong>交付した適格請求書の写しは7年</strong></td>
+        </tr>
+      </table>
+      </div>
+
+      <p>個人事業主の場合、所得税の上では請求書の控えは5年ですが、<strong>インボイスに登録していれば、交付した適格請求書の写しは消費税の決まりで7年</strong>になります。登録している方は、迷ったら<strong>7年</strong>を基準にしておけば足ります。</p>
+
+      <h3>7年は、いつから数えるか</h3>
+
+      <p>適格請求書の写しの7年は、<strong>交付した日の属する課税期間の末日の翌日から2か月を経過した日</strong>から数えます。個人事業主（課税期間は1月〜12月）で、2026年中に交付した請求書なら、2027年3月1日から7年間、<strong>2034年2月末まで</strong>が目安です。年ごとにフォルダを分けておくと、捨ててよい時期がひと目で分かります。</p>
+
+      <h2>「控え」として、何を残せばいいのか</h2>
+
+      <h3>紙で出した場合</h3>
+      <p>相手に渡した請求書の<strong>写し</strong>を残します。複写式の控え、コピー、スキャンなど、相手に渡したものと同じ内容が確認できれば足ります。</p>
+
+      <h3>パソコンで作って、紙で出した場合</h3>
+      <p>自分のパソコンで作成した請求書は、印刷した控えの代わりに、<strong>作成したデータのまま保存</strong>することもできます。2022年1月からは、そのための税務署への事前の承認も要らなくなりました。紙の控えを取っていなかった場合も、作成したデータが残っていれば、それを保存しておきましょう。</p>
+
+      <div class="note">
+        <b>注意</b>　あとから請求書の作成ツールを解約すると、過去のデータが見られなくなることがあります。<strong>ツールの中に残っている＝保存している、ではありません</strong>。PDFに書き出して、自分のフォルダに置いておくのが確実です。
+      </div>
+
+      <h2>PDFで送った請求書は、データのまま保存する</h2>
+
+      <p>請求書をPDFにしてメールで送った、チャットで送った、請求書の作成サービスから相手に送信した。こうしたやり取りは、電子帳簿保存法の<strong>「電子取引」</strong>にあたります。2024年1月からは、受け取ったデータだけでなく、<strong>自分が送ったデータもそのまま保存する</strong>必要があります。紙に印刷して保管するだけでは足りません。</p>
+
+      <p>データの保存には、次の2つの決まりがあります。</p>
+
+      <div class="tbl-scroll">
+      <table class="tbl">
+        <tr>
+          <th style="width:28%">決まり</th>
+          <th>内容と、小規模な事業者の対応の目安</th>
+        </tr>
+        <tr>
+          <td><strong>改ざんされないこと</strong></td>
+          <td>4つの方法のどれかで対応します。もっとも始めやすいのは、<strong>「不当な訂正削除の防止に関する事務処理規程」</strong>を作って守ることです。国税庁がひな形を公開しています</td>
+        </tr>
+        <tr>
+          <td><strong>見られること・探せること</strong></td>
+          <td>画面で内容を確認できる状態にしておきます。取引年月日・金額・取引先で探せることも求められますが、<strong>基準期間（2年前）の売上高が5,000万円以下</strong>で、税務署からデータの提出を求められたら応じられる場合は、探せる仕組みは不要です</td>
+        </tr>
+      </table>
+      </div>
+
+      <p>フリーランスや小さな会社なら、現実的な対応は次の3つで足ります。</p>
+
+      <ol>
+        <li><strong>送ったPDFを、ひとつのフォルダに集める</strong>（年ごとにフォルダを分ける）</li>
+        <li><strong>ファイル名を「日付_取引先_金額」にそろえる</strong>（例：20261126_株式会社ミライ_55000.pdf）。検索の仕組みが不要な場合でも、あとで探すときに助かります</li>
+        <li><strong>事務処理規程を作っておく</strong>（国税庁のひな形を、自分の名前に書き換える程度で足ります）</li>
+      </ol>
+
+      <div class="note">
+        <b>猶予措置もあります</b>　システムや手順の準備が間に合わないなど「相当な理由」があり、税務調査などでデータのダウンロードや印刷した書面の提示に応じられる場合は、上の決まりに沿った対応をしなくても、データを保存しておくだけでよいとされています。事前の申請は要りません。ただし、<strong>データそのものは消さずに残しておく</strong>必要があります。
+      </div>
+
+      <h2>第三者が代わりに請求書を出している場合</h2>
+
+      <p>マーケットプレイスや決済の仲介サービスでは、運営会社が自社の名義と登録番号で、出品者に代わって適格請求書を発行することがあります。消費税の<strong>媒介者交付特例</strong>という仕組みです。</p>
+
+      <p>この場合も、<strong>出品者自身の保存義務はなくなりません</strong>。運営会社は、発行した適格請求書の写しを出品者に渡す決まりになっており、出品者はその<strong>写しを保存</strong>します。写しの代わりに、売上の金額や消費税額が分かる<strong>精算書</strong>などが渡されることもあり、その場合は精算書を保存します。</p>
+
+      <div class="checklist">
+        <h4>プラットフォーム経由の取引で、確認しておくこと</h4>
+        <ul>
+          <li>運営会社が発行した適格請求書の<strong>写し、または精算書</strong>を受け取っているか</li>
+          <li>それを<strong>自分のフォルダに保存</strong>しているか（サービスの画面に残っているだけにしない）</li>
+          <li>データで受け取った写しや精算書は、<strong>データのまま</strong>保存しているか</li>
+        </ul>
+      </div>
+
+      <p>ナカツギでも、適格請求書は媒介者交付特例にもとづき運営会社の名義で発行され、出品者には、写しに代えて<strong>精算書</strong>をお渡ししています。精算書は、送金のあと、見積書ツールの画面からいつでもPDFで保存できます。</p>
+
+      <h2>保存のチェックリスト</h2>
+
+      <div class="checklist">
+        <h4>発行した請求書の控えについて</h4>
+        <ul>
+          <li><strong>期間</strong>：インボイスに登録しているなら、交付した請求書の写しは7年を基準にしているか</li>
+          <li><strong>紙で出した分</strong>：写し（コピー・複写式の控え・スキャン）を残しているか</li>
+          <li><strong>PDFで送った分</strong>：送ったデータを、印刷ではなくデータのまま保存しているか</li>
+          <li><strong>探しやすさ</strong>：年ごとのフォルダと、「日付_取引先_金額」のファイル名にそろえているか</li>
+          <li><strong>事務処理規程</strong>：国税庁のひな形をもとに作ってあるか</li>
+          <li><strong>プラットフォーム経由の分</strong>：運営会社から受け取った写し・精算書を、自分で保存しているか</li>
+          <li><strong>ツールの解約</strong>：解約する前に、過去の請求書をPDFで書き出したか</li>
+        </ul>
+      </div>
+
+      <p class="src">出典：国税庁「記帳や帳簿等保存・青色申告」、国税庁タックスアンサー No.5930「帳簿書類等の保存期間」、国税庁「消費税の仕入税額控除制度における適格請求書等保存方式に関するQ&amp;A」、財務省「電子帳簿保存法の電子取引データの保存について」。制度の内容は変更される可能性があります。本記事は一般的な情報提供を目的としたもので、個別の取引についての税務上の助言ではありません。具体的な保存方法は、税理士または所轄の税務署にご確認ください。</p>
+
+      <div class="cta">
+        <h3>請求書も、控えも、一つの画面でそろう</h3>
+        <p>ナカツギでは、見積書・請書・適格請求書・精算書が取引ごとに発行され、いつでもPDFで保存できます。お客さまの支払いは着手前に行われ、代金は検収まで決済事業者のもとで留保されます。利用料は取引額の8.6%（税抜）で、受注者が負担します。<br>※ご利用には、依頼主が事業者であること、出品者が適格請求書発行事業者であることが必要です（招待制・審査制）。</p>
+        <a class="btn" href="../index.html">ナカツギについて見る</a>
+        <a class="cta-sub" href="../index.html#price">料金を確認する →</a>
+      </div>
+
+      <div class="related">
+        <h4>あわせて読みたい</h4>
+        <a href="invoice-densho.html">インボイス制度と電子帳簿保存法、それぞれ何をすればいいのか →</a>
+        <a href="client-payment-proposal.html">発注者に「この方法で払ってください」と頼むには。支払い方法の提案の仕方と、そのまま使える文例 →</a>
+        <a href="first-client-prepayment.html">初めての法人案件で、前払いをお願いしてもいいのか。切り出し方と、未払いを防ぐ取引条件の決め方 →</a>
+        <a href="kenshu-deadline.html">納品したのに検収が終わらない。返事が来ない、修正が止まらないときの決め方 →</a>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-top">
+    <div>
+      <div class="op">ナカツギ運営事務局</div>
+      <div style="margin-top:6px">運営：株式会社ナカホームズ</div>
+    </div>
+    <nav class="foot-links" aria-label="フッター">
+      <a href="../tokushoho.html">特定商取引法に基づく表記</a>
+      <a href="../kiyaku.html">利用規約</a>
+      <a href="../privacy.html">プライバシーポリシー</a>
+      <a href="../index.html#contact">お問い合わせ</a>
+    </nav>
+  </div>
+  <div class="cp">© 2026 株式会社ナカホームズ</div>
+</footer>
+
+</body>
+</html>
